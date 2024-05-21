@@ -1,0 +1,35 @@
+$color_error: #f61d18;
+.error-message {
+  color: $color_error;
+  font-size: 1em;
+  margin-top: 0.25rem;
+}
+
+/* Kiểu cho toàn bộ scroll bar */
+::-webkit-scrollbar {
+  width: 10px; /* Độ rộng của scroll bar */
+}
+
+/* Kiểu cho phần track (phần nền của scroll bar) */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Màu nền */
+}
+
+/* Kiểu cho phần thumb (phần có thể di chuyển của scroll bar) */
+::-webkit-scrollbar-thumb {
+  background: #f79400; /* Màu của thumb */
+}
+
+/* Kiểu cho phần thumb khi hover hoặc click vào */
+::-webkit-scrollbar-thumb:hover {
+  background: #c37500; /* Màu của thumb khi hover */
+}
+
+.ant-table-thead .ant-table-cell {
+  text-align: center !important;
+}
+
+.ck-editor__editable{
+  height: 250px;
+}
+
