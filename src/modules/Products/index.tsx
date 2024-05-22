@@ -19,6 +19,8 @@ import {
   createProduct,
   deleteProduct,
   getListProducts,
+  getProductDetail,
+  updateProduct,
 } from "./apis";
 import DrawerProduct from "./components/DrawerProduct";
 import { startLoading, stopLoading } from "../../redux/reducers/loadingReducer";
@@ -40,6 +42,8 @@ const Products = (props: Props) => {
     total: 0,
   });
   const [dataTable, setDataTable] = useState<IProductTable[]>([]);
+  const [dataDetail, setDataDetail] = useState<IProduct | any>({});
+  const [idDataDetail, setIdDataDetail] = useState<string>("");
   const [openType, setOpenType] = useState<string>("");
   const [open, setOpen] = useState(false);
   const [images, setImages] = useState<any>([]);
@@ -47,10 +51,51 @@ const Products = (props: Props) => {
   const [imagesPreview, setImagesPreview] = useState<any>([]);
   const [refresh, refecth] = useRefresh();
 
-  const onUpdate = () => {
-    setOpenType("update");
-    setOpen(true);
+  const onClose = () => {
+    form.resetFields();
+    setImages([]);
+    setImagesPreview([]);
+    setOpenType("");
+    setOpen(false);
+    setDataDetail({});
+    setIdDataDetail("");
   };
+
+  const onUpdate = async (id: string) => {
+    setOpenType("update");
+
+    try {
+      dispatch(startLoading());
+      const rp = await getProductDetail(id);
+      if (rp.status) {
+        setDataDetail(rp.result);
+        setOpen(true);
+        setIdDataDetail(id);
+      } else {
+        setOpen(false);
+        setOpenType("");
+        setIdDataDetail("");
+        dispatch(
+          showNotification({
+            message: `${rp.message}`,
+            type: "error",
+          })
+        );
+      }
+    } catch (err) {
+      setOpen(false);
+      setOpenType("");
+      dispatch(
+        showNotification({
+          message: "Vui lòng thử lại.",
+          type: "error",
+        })
+      );
+    } finally {
+      dispatch(stopLoading());
+    }
+  };
+
   const handleDelete = async (id: string) => {
     dispatch(startLoading());
     await deleteProduct(id)
@@ -284,7 +329,6 @@ const Products = (props: Props) => {
       width: 250,
       align: "left",
       render: (_, record: any) => {
-        console.log(record, "dđ");
         return <p>{splitText(record.name, 70)}</p>;
       },
     },
@@ -335,7 +379,7 @@ const Products = (props: Props) => {
       render: (_, record: any) => {
         return (
           <Switch
-            defaultChecked={record.isNew}
+            value={record.isNew}
             onChange={(e) => onChangeIsNew(e, record._id)}
           />
         );
@@ -348,9 +392,10 @@ const Products = (props: Props) => {
       width: 100,
       align: "center",
       render: (_, record: any) => {
+        console.log(record.todayDeal);
         return (
           <Switch
-            defaultChecked={record.todayDeal}
+            value={record.todayDeal}
             onChange={(e) => onChangeTodayDeal(e, record._id)}
           />
         );
@@ -365,7 +410,7 @@ const Products = (props: Props) => {
       render: (_, record: any) => {
         return (
           <Switch
-            defaultChecked={record.featured}
+            value={record.featured}
             onChange={(e) => onChangeFeatured(e, record._id)}
           />
         );
@@ -380,7 +425,7 @@ const Products = (props: Props) => {
       render: (_, record: any) => {
         return (
           <Switch
-            defaultChecked={record.flashDeal}
+            value={record.flashDeal}
             onChange={(e) => onChangeFlashDeal(e, record._id)}
           />
         );
@@ -395,7 +440,7 @@ const Products = (props: Props) => {
       render: (_, record: any) => {
         return (
           <Switch
-            defaultChecked={record.status}
+            value={record.status}
             onChange={(e) => onChangeStatus(e, record._id)}
           />
         );
@@ -409,7 +454,10 @@ const Products = (props: Props) => {
       fixed: "right",
       render: (_, record: any) => (
         <Space>
-          <EditOutlined style={{fontSize: 20}} onClick={onUpdate}/>
+          <EditOutlined
+            style={{ fontSize: 20 }}
+            onClick={() => onUpdate(record._id)}
+          />
           <Tooltip title="Delete">
             <Popconfirm
               title="Delete the Brand"
@@ -424,13 +472,7 @@ const Products = (props: Props) => {
       ),
     },
   ];
-  const onClose = () => {
-    form.resetFields();
-    setImages([]);
-    setImagesPreview([]);
-    setOpenType("");
-    setOpen(false);
-  };
+
   const onAdd = () => {
     setOpenType("add");
     setOpen(true);
@@ -492,6 +534,44 @@ const Products = (props: Props) => {
         });
     }
   };
+  const handleUpdateProduct = async (values: any) => {
+    dispatch(startLoading());
+    if (images.length < 1) {
+      dispatch(
+        showNotification({
+          message: "Vui lòng chọn ảnh.",
+          type: "error",
+        })
+      );
+    } else {
+      values.images = images;
+      await updateProduct(idDataDetail, values)
+        .then((res: any) => {
+          if (res.status) {
+            dispatch(
+              showNotification({
+                message: `${res.message}`,
+                type: "success",
+              })
+            );
+            onClose();
+            refecth();
+          }
+        })
+        .catch((err) => {
+          dispatch(
+            showNotification({
+              message: "Oop! Something wrong, try later!",
+              type: "error",
+            })
+          );
+        })
+        .finally(() => {
+          dispatch(stopLoading());
+          setIdDataDetail("");
+        });
+    }
+  };
   useEffect(() => {
     const getList = async () => {
       dispatch(startLoading());
@@ -533,6 +613,7 @@ const Products = (props: Props) => {
     });
     setPagination(pagination);
   };
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
       <Card
@@ -558,7 +639,13 @@ const Products = (props: Props) => {
         onClose={onClose}
         open={open}
         form={form}
-        onSubmit={handleAddProduct}
+        onSubmit={
+          openType === "add"
+            ? handleAddProduct
+            : openType === "update"
+            ? handleUpdateProduct
+            : null
+        }
         oldImages={oldImages}
         setOldImages={setOldImages}
         setImages={setImages}
@@ -566,6 +653,7 @@ const Products = (props: Props) => {
         setImagesPreview={setImagesPreview}
         imagesPreview={imagesPreview}
         createProductImagesChange={createProductImagesChange}
+        dataDetail={dataDetail && dataDetail}
       />
     </div>
   );

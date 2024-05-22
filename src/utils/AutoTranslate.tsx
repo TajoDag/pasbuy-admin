@@ -1,51 +1,52 @@
-import React, { useEffect } from "react";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 
-declare global {
-  interface Window {
-    googleTranslateElementInit: () => void;
-    google: any;
-  }
-}
+import React, { useEffect } from "react";
 
 const AutoTranslate: React.FC = () => {
   useEffect(() => {
     const addGoogleTranslateScript = () => {
-      const script = document.createElement("script");
-      script.type = "text/javascript";
-      script.src =
-        "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
-      document.body.appendChild(script);
+      return new Promise<void>((resolve) => {
+        const script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src =
+          "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+        script.onload = () => resolve();
+        document.head.appendChild(script);
+      });
     };
 
-    window.googleTranslateElementInit = () => {
-      new window.google.translate.TranslateElement(
-        {
-          pageLanguage: "en",
-          includedLanguages: "en,vi,zh-CN", // Thay đổi các ngôn ngữ bạn muốn hỗ trợ
-          layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
-        },
-        "google_translate_element"
-      );
-    };
-
-    addGoogleTranslateScript();
-
-    const handleLanguageChange = () => {
+    const googleTranslateElementInit = () => {
       const lang = localStorage.getItem("language") || "en";
-      const googleTranslateElement = document.querySelector(
-        ".goog-te-combo"
-      ) as HTMLSelectElement;
-      if (googleTranslateElement) {
-        googleTranslateElement.value = lang;
-        googleTranslateElement.dispatchEvent(new Event("change"));
+      console.log("Selected language:", lang); // Log the selected language
+      if (window.google && window.google.translate) {
+        new window.google.translate.TranslateElement(
+          {
+            pageLanguage: lang,
+            includedLanguages: "vi,en,zh-CN", // Include the languages you want to support
+            layout:
+              window.google.translate.TranslateElement.InlineLayout.SIMPLE,
+            autoDisplay: false,
+          },
+          "google_translate_element"
+        );
       }
     };
 
-    window.addEventListener("languageChange", handleLanguageChange);
+    if (!(window as any).googleTranslateInitialized) {
+      (window as any).googleTranslateElementInit = googleTranslateElementInit;
+      addGoogleTranslateScript().then(() => {
+        (window as any).googleTranslateElementInit();
+        (window as any).googleTranslateInitialized = true;
+      });
+    } else {
+      googleTranslateElementInit();
+    }
 
-    // Clean up event listener
+    window.addEventListener("languageChange", googleTranslateElementInit);
+
     return () => {
-      window.removeEventListener("languageChange", handleLanguageChange);
+      window.removeEventListener("languageChange", googleTranslateElementInit);
     };
   }, []);
 

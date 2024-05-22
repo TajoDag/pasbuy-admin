@@ -12,4 +12,10 @@ export const deleteProduct = (id: string) =>
   request<any>("delete", `${API}/${endpoints.product.delete}/${id}`,);
 
 export const changeProductStatus = (id: string, url: string, body: any) =>
-  request<any>("put", `${API}/product/${id}/${url}`,body);
+  request<any>("put", `${API}/product/${id}/${url}`, body);
+
+export const getProductDetail = (id: string) =>
+  request<any>("get", `${API}/${endpoints.product.getDetail}/${id}`);
+
+export const updateProduct = (id: string, body: IProduct) =>
+  request<any>("put", `${API}/${endpoints.product.getDetail}/${id}`, body);

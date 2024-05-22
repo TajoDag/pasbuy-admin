@@ -25,7 +25,6 @@ const AppRoutes = () => {
 
   return (
     <Suspense fallback={<h1>Loading....</h1>}>
- 
       {notificationProps && <AppNotification {...notificationProps} />}
       {loading && <AppLoading />}
       <Routes>
@@ -50,6 +49,7 @@ const AppRoutes = () => {
         <Route path="/login" element={<AuthLayout />} />
         <Route path="/register" element={<AuthLayout />} />
       </Routes>
+     
     </Suspense>
   );
 };

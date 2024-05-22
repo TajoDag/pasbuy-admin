@@ -21,20 +21,22 @@ import { showNotification } from "../../../../redux/reducers/notificationReducer
 import { useDispatch } from "react-redux";
 import { getAllProductType } from "../../../ProductType/utils/services";
 import { getAllBrand } from "../../../Brand/utils/services";
+import { IProduct } from "../../interfaces";
 type Props = {
   title: string;
   onClose: () => void;
   open: boolean;
   width?: string | number;
-  onSubmit?: (values: any) => void;
+  onSubmit?: any;
   form: FormInstance<any>;
   oldImages?: string[];
   setOldImages?: Dispatch<SetStateAction<any[]>> | undefined;
   setImages?: Dispatch<SetStateAction<any[]>> | undefined;
   images?: string[];
-  setImagesPreview?: Dispatch<SetStateAction<any[]>> | undefined;
+  setImagesPreview?: Dispatch<SetStateAction<any[]>> | undefined | any;
   imagesPreview?: string[];
   createProductImagesChange?: (e: any) => void;
+  dataDetail?: IProduct;
 };
 const DrawerProduct = (props: Props) => {
   const {
@@ -51,6 +53,7 @@ const DrawerProduct = (props: Props) => {
     setImagesPreview,
     imagesPreview,
     createProductImagesChange,
+    dataDetail,
   } = props;
   const dispatch = useDispatch();
   const [listCate, setListCate] = useState([]);
@@ -158,6 +161,31 @@ const DrawerProduct = (props: Props) => {
     getListProductType();
     getListCategories();
   }, []);
+
+  useEffect(() => {
+    if (title === "update" && dataDetail) {
+      form.setFieldsValue({
+        name: dataDetail.name,
+        category: dataDetail.category?._id,
+        brand: dataDetail.brand?._id,
+        price: dataDetail.price,
+        importPrice: dataDetail.importPrice,
+        Stock: dataDetail.Stock,
+        description: dataDetail.description,
+        featured: dataDetail.featured,
+        todayDeal: dataDetail.todayDeal,
+        flashDeal: dataDetail.flashDeal,
+      });
+
+      if (dataDetail.images && setImagesPreview) {
+        const imagesURLs = dataDetail.images.map((image: any) => image.url);
+        setImagesPreview(imagesURLs);
+      }
+    }
+  }, [title, dataDetail, form, setImagesPreview]);
+
+  console.log(dataDetail);
+
   return (
     <div>
       <Drawer
@@ -178,6 +206,7 @@ const DrawerProduct = (props: Props) => {
           layout="vertical"
           hideRequiredMark
           form={form}
+          // initialValues={dataDetail}
           onFinish={onSubmit}
         >
           <Row gutter={16}>
@@ -197,7 +226,7 @@ const DrawerProduct = (props: Props) => {
                   label="Featured"
                   initialValue={false}
                 >
-                  <Switch defaultChecked={false} />
+                  <Switch defaultChecked />
                 </Form.Item>
                 <Form.Item
                   name="todayDeal"
@@ -300,6 +329,7 @@ const DrawerProduct = (props: Props) => {
                   onChange={(event, editor) => {
                     form.setFieldsValue({ description: editor.getData() });
                   }}
+                  data={dataDetail ? dataDetail.description : ""}
                 />
               </Form.Item>
             </Col>

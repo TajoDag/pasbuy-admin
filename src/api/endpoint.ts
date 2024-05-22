@@ -7,7 +7,8 @@ export const endpoints = {
   product: {
     list: `admin/products/all`,
     create: `admin/products`,
-    delete: `admin/product`
+    delete: `product`,
+    getDetail: `product`
   },
   category: {
     getAll: `admin/categories/all`,

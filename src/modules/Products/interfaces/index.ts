@@ -13,6 +13,10 @@ export interface IProduct {
   brand?: any;
   Stock: number;
   status: boolean;
+  flashDeal: boolean;
+  featured: boolean;
+  isNew: boolean;
+  todayDeal: boolean;
 }
 
 export interface ISearchProduct {

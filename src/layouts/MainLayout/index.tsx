@@ -19,6 +19,7 @@ import flagEn from "../../assets/images/flags/en.png";
 import flagCn from "../../assets/images/flags/cn.png";
 import flagVn from "../../assets/images/flags/vn.png";
 import user from "../../assets/images/user.png";
+import AutoTranslate from "../../utils/AutoTranslate";
 const { Header, Content, Footer, Sider } = Layout;
 
 const MainLayout = (props: any) => {
@@ -65,11 +66,21 @@ const MainLayout = (props: any) => {
     navigate("/login");
   };
 
+  // const handleChangeLanguages = (value: any) => {
+  //   setLanguage(value);
+  //   localStorage.setItem("language", value);
+  //   const event = new Event("languageChange");
+  //   window.dispatchEvent(event);
+  // };
   const handleChangeLanguages = (value: any) => {
     setLanguage(value);
     localStorage.setItem("language", value);
     const event = new Event("languageChange");
     window.dispatchEvent(event);
+    console.log("Language changed to:", value); // Log the language change
+    if ((window as any).googleTranslateElementInit) {
+      (window as any).googleTranslateElementInit();
+    }
   };
 
   const languageMenu = (
@@ -198,9 +209,6 @@ const MainLayout = (props: any) => {
                   </Space>
                 </div>
               </Dropdown>
-              {/* <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-
-              </div> */}
             </div>
           </div>
         </Header>
@@ -208,6 +216,7 @@ const MainLayout = (props: any) => {
           <Breadcrumb style={{ margin: "16px 0" }}>
             {/* <Breadcrumb.Item>User</Breadcrumb.Item>
             <Breadcrumb.Item>Bill</Breadcrumb.Item> */}
+            {/* <AutoTranslate /> */}
           </Breadcrumb>
           <div
             style={{
@@ -220,6 +229,7 @@ const MainLayout = (props: any) => {
             {children}
           </div>
         </Content>
+
         <Footer style={{ textAlign: "center" }}>
           Ant Design ©{new Date().getFullYear()} Created by Ant UED
         </Footer>
