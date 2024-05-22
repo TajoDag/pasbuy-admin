@@ -20,13 +20,13 @@ export interface ISearchProduct {
   productType?: string;
   category?: string;
   brand?: string;
-  page: number | string;
-  size: number | string;
+  page?: any;
+  size?: any;
 }
 
 export interface IProductTable {
   products: IProduct[];
-  pagination?: {
+  pagination: {
     page: number;
     size: number;
     total: number;

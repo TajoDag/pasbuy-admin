@@ -10,3 +10,6 @@ export const createProduct = (body: IProduct) =>
 
 export const deleteProduct = (id: string) =>
   request<any>("delete", `${API}/${endpoints.product.delete}/${id}`,);
+
+export const changeProductStatus = (id: string, url: string, body: any) =>
+  request<any>("put", `${API}/product/${id}/${url}`,body);

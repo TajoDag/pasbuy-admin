@@ -4,6 +4,7 @@ import {
   Form,
   Popconfirm,
   Space,
+  Switch,
   Table,
   Tag,
   Tooltip,
@@ -13,10 +14,15 @@ import { IProduct, IProductTable, ISearchProduct } from "./interfaces";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { showNotification } from "../../redux/reducers/notificationReducer";
-import { createProduct, deleteProduct, getListProducts } from "./apis";
+import {
+  changeProductStatus,
+  createProduct,
+  deleteProduct,
+  getListProducts,
+} from "./apis";
 import DrawerProduct from "./components/DrawerProduct";
 import { startLoading, stopLoading } from "../../redux/reducers/loadingReducer";
-import { QuestionCircleOutlined } from "@ant-design/icons";
+import { EditOutlined, QuestionCircleOutlined } from "@ant-design/icons";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import useRefresh from "../../hooks/useRefresh";
 import { splitText } from "../../utils";
@@ -28,6 +34,11 @@ const Products = (props: Props) => {
     page: 0,
     size: 10,
   });
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 10,
+    total: 0,
+  });
   const [dataTable, setDataTable] = useState<IProductTable[]>([]);
   const [openType, setOpenType] = useState<string>("");
   const [open, setOpen] = useState(false);
@@ -36,7 +47,12 @@ const Products = (props: Props) => {
   const [imagesPreview, setImagesPreview] = useState<any>([]);
   const [refresh, refecth] = useRefresh();
 
+  const onUpdate = () => {
+    setOpenType("update");
+    setOpen(true);
+  };
   const handleDelete = async (id: string) => {
+    dispatch(startLoading());
     await deleteProduct(id)
       .then((res) => {
         if (res.status) {
@@ -56,22 +72,202 @@ const Products = (props: Props) => {
             type: "error",
           })
         );
+      })
+      .finally(() => {
+        dispatch(stopLoading());
       });
+  };
+  const onChangeIsNew = async (status: any, id: string) => {
+    const url = `is-new`;
+    let payload = {
+      isNew: status,
+    };
+    try {
+      dispatch(startLoading());
+      const rp = await changeProductStatus(id, url, payload);
+      if (rp.status) {
+        dispatch(
+          showNotification({
+            message: `${rp.message}`,
+            type: "success",
+          })
+        );
+        refecth();
+      } else {
+        dispatch(
+          showNotification({
+            message: `${rp.message}`,
+            type: "error",
+          })
+        );
+      }
+    } catch (err) {
+      dispatch(
+        showNotification({
+          message: "Vui lòng thử lại.",
+          type: "error",
+        })
+      );
+    } finally {
+      dispatch(stopLoading());
+    }
+  };
+  const onChangeTodayDeal = async (status: any, id: string) => {
+    const url = `today-deal`;
+    let payload = {
+      todayDeal: status,
+    };
+    try {
+      dispatch(startLoading());
+      const rp = await changeProductStatus(id, url, payload);
+      if (rp.status) {
+        dispatch(
+          showNotification({
+            message: `${rp.message}`,
+            type: "success",
+          })
+        );
+        refecth();
+      } else {
+        dispatch(
+          showNotification({
+            message: `${rp.message}`,
+            type: "error",
+          })
+        );
+      }
+    } catch (err) {
+      dispatch(
+        showNotification({
+          message: "Vui lòng thử lại.",
+          type: "error",
+        })
+      );
+    } finally {
+      dispatch(stopLoading());
+    }
+  };
+  const onChangeFeatured = async (status: any, id: string) => {
+    const url = `featured`;
+    let payload = {
+      featured: status,
+    };
+    try {
+      dispatch(startLoading());
+      const rp = await changeProductStatus(id, url, payload);
+      if (rp.status) {
+        dispatch(
+          showNotification({
+            message: `${rp.message}`,
+            type: "success",
+          })
+        );
+        refecth();
+      } else {
+        dispatch(
+          showNotification({
+            message: `${rp.message}`,
+            type: "error",
+          })
+        );
+      }
+    } catch (err) {
+      dispatch(
+        showNotification({
+          message: "Vui lòng thử lại.",
+          type: "error",
+        })
+      );
+    } finally {
+      dispatch(stopLoading());
+    }
+  };
+  const onChangeFlashDeal = async (status: any, id: string) => {
+    const url = `flash-deal`;
+    let payload = {
+      flashDeal: status,
+    };
+    try {
+      dispatch(startLoading());
+      const rp = await changeProductStatus(id, url, payload);
+      if (rp.status) {
+        dispatch(
+          showNotification({
+            message: `${rp.message}`,
+            type: "success",
+          })
+        );
+        refecth();
+      } else {
+        dispatch(
+          showNotification({
+            message: `${rp.message}`,
+            type: "error",
+          })
+        );
+      }
+    } catch (err) {
+      dispatch(
+        showNotification({
+          message: "Vui lòng thử lại.",
+          type: "error",
+        })
+      );
+    } finally {
+      dispatch(stopLoading());
+    }
+  };
+  const onChangeStatus = async (status: any, id: string) => {
+    const url = `status`;
+    let payload = {
+      status: status,
+    };
+    try {
+      dispatch(startLoading());
+      const rp = await changeProductStatus(id, url, payload);
+      if (rp.status) {
+        dispatch(
+          showNotification({
+            message: `${rp.message}`,
+            type: "success",
+          })
+        );
+        refecth();
+      } else {
+        dispatch(
+          showNotification({
+            message: `${rp.message}`,
+            type: "error",
+          })
+        );
+      }
+    } catch (err) {
+      dispatch(
+        showNotification({
+          message: "Vui lòng thử lại.",
+          type: "error",
+        })
+      );
+    } finally {
+      dispatch(stopLoading());
+    }
   };
   const columns: TableProps<IProductTable>["columns"] = [
     {
       title: "STT",
       dataIndex: "stt",
       key: "stt",
-      width: "3%",
+      width: 60,
       align: "center",
+      fixed: "left",
     },
     {
       title: "Images",
       dataIndex: "images",
       key: "images",
-      width: "10%",
+      width: 90,
       align: "center",
+
       render: (images) => (
         <img
           key={images[0].public_id}
@@ -85,27 +281,25 @@ const Products = (props: Props) => {
       title: "Name",
       dataIndex: "name",
       key: "name",
-      width: "20%",
+      width: 250,
       align: "left",
       render: (_, record: any) => {
-        console.log(record,'dđ')
-        return (
-          <p>{splitText(record.name, 70)}</p>
-        )
+        console.log(record, "dđ");
+        return <p>{splitText(record.name, 70)}</p>;
       },
     },
     {
       title: "Price",
       dataIndex: "price",
       key: "price",
-      width: "7%",
+      width: 120,
       align: "center",
     },
     {
       title: "Brand",
       dataIndex: "brand",
       key: "brand",
-      width: "10%",
+      width: 100,
       align: "center",
       render: (text) => <>{text.name}</>,
     },
@@ -113,7 +307,7 @@ const Products = (props: Props) => {
       title: "Category",
       dataIndex: "category",
       key: "category",
-      width: "10%",
+      width: 100,
       align: "center",
       render: (text) => <>{text.name}</>,
     },
@@ -129,37 +323,104 @@ const Products = (props: Props) => {
       title: "Stock",
       dataIndex: "Stock",
       key: "Stock",
-      width: "6%",
+      width: 100,
       align: "center",
+    },
+    {
+      title: "New product",
+      dataIndex: "isNew",
+      key: "isNew",
+      width: 100,
+      align: "center",
+      render: (_, record: any) => {
+        return (
+          <Switch
+            defaultChecked={record.isNew}
+            onChange={(e) => onChangeIsNew(e, record._id)}
+          />
+        );
+      },
+    },
+    {
+      title: "Todays Deal",
+      dataIndex: "todayDeal",
+      key: "todayDeal",
+      width: 100,
+      align: "center",
+      render: (_, record: any) => {
+        return (
+          <Switch
+            defaultChecked={record.todayDeal}
+            onChange={(e) => onChangeTodayDeal(e, record._id)}
+          />
+        );
+      },
+    },
+    {
+      title: "Featured",
+      dataIndex: "featured",
+      key: "featured",
+      width: 100,
+      align: "center",
+      render: (_, record: any) => {
+        return (
+          <Switch
+            defaultChecked={record.featured}
+            onChange={(e) => onChangeFeatured(e, record._id)}
+          />
+        );
+      },
+    },
+    {
+      title: "Flash deal",
+      dataIndex: "flashDeal",
+      key: "flashDeal",
+      width: 100,
+      align: "center",
+      render: (_, record: any) => {
+        return (
+          <Switch
+            defaultChecked={record.flashDeal}
+            onChange={(e) => onChangeFlashDeal(e, record._id)}
+          />
+        );
+      },
     },
     {
       title: "Status",
       key: "status",
       dataIndex: "status",
-      width: "10%",
+      width: 100,
       align: "center",
-      render: (text) => (
-        <Tag color={text ? "green" : "volcano"}>
-          {text ? "ACTIVE" : "INACTIVE"}
-        </Tag>
-      ),
+      render: (_, record: any) => {
+        return (
+          <Switch
+            defaultChecked={record.status}
+            onChange={(e) => onChangeStatus(e, record._id)}
+          />
+        );
+      },
     },
     {
       title: "Action",
       key: "action",
-      width: "10%",
+      width: 100,
       align: "center",
+      fixed: "right",
       render: (_, record: any) => (
-        <Tooltip title="Delete">
-          <Popconfirm
-            title="Delete the Brand"
-            description="Are you sure to delete this Brand?"
-            icon={<QuestionCircleOutlined style={{ color: "red" }} />}
-            onConfirm={() => handleDelete(record._id)}
-          >
-            <Button icon={<RiDeleteBin5Line />} />
-          </Popconfirm>
-        </Tooltip>
+        <Space>
+          <EditOutlined style={{fontSize: 20}} onClick={onUpdate}/>
+          <Tooltip title="Delete">
+            <Popconfirm
+              title="Delete the Brand"
+              description="Are you sure to delete this Brand?"
+              icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+              onConfirm={() => handleDelete(record._id)}
+            >
+              <RiDeleteBin5Line style={{ color: "red", fontSize: 20 }} />
+            </Popconfirm>
+          </Tooltip>
+        </Space>
       ),
     },
   ];
@@ -174,6 +435,7 @@ const Products = (props: Props) => {
     setOpenType("add");
     setOpen(true);
   };
+
   const createProductImagesChange = (e: any) => {
     const files = Array.from(e.target.files);
 
@@ -232,6 +494,7 @@ const Products = (props: Props) => {
   };
   useEffect(() => {
     const getList = async () => {
+      dispatch(startLoading());
       try {
         const response = await getListProducts(searchParams);
         if (response.status) {
@@ -239,10 +502,14 @@ const Products = (props: Props) => {
           const updatedProducts: any = response.result.products.map(
             (item, i) => ({
               ...item,
-              stt: i + 1,
+              stt: i + 1 + searchParams.page * searchParams.size,
             })
           );
           setDataTable(updatedProducts);
+          setPagination((prev) => ({
+            ...prev,
+            total: response.result.pagination?.total,
+          }));
         }
       } catch (err) {
         setDataTable([]);
@@ -252,10 +519,20 @@ const Products = (props: Props) => {
             type: "error",
           })
         );
+      } finally {
+        dispatch(stopLoading());
       }
     };
     getList();
   }, [searchParams, refresh]);
+  const handleTableChange = (pagination: any) => {
+    setSearchParams({
+      ...searchParams,
+      page: pagination.current - 1,
+      size: pagination.pageSize,
+    });
+    setPagination(pagination);
+  };
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
       <Card
@@ -267,7 +544,13 @@ const Products = (props: Props) => {
         columns={columns}
         dataSource={dataTable}
         bordered
-        scroll={{ x: 1000 }}
+        scroll={{ x: 1300 }}
+        pagination={{
+          current: pagination.current,
+          pageSize: pagination.pageSize,
+          total: pagination.total,
+        }}
+        onChange={handleTableChange}
       />
       <DrawerProduct
         width={700}
