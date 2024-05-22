@@ -23,3 +23,14 @@ export const useLocalStorage = (keyName: any, defaultValue: any) => {
 
   return { value: storedValue, setValue };
 };
+
+
+export function splitText(string:string, length: any) {
+  const count = string?.length;
+  if (count > length) {
+    const text = string.substring(0, length + 1).concat("...");
+    return text;
+  } else {
+    return string;
+  }
+}

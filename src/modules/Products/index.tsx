@@ -19,6 +19,7 @@ import { startLoading, stopLoading } from "../../redux/reducers/loadingReducer";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import useRefresh from "../../hooks/useRefresh";
+import { splitText } from "../../utils";
 type Props = {};
 const Products = (props: Props) => {
   const dispatch = useDispatch();
@@ -71,23 +72,28 @@ const Products = (props: Props) => {
       key: "images",
       width: "10%",
       align: "center",
-      render: (images) =>
-        images.map((image: any) => (
-          <img
-            key={image.public_id}
-            src={image.url}
-            alt="Product"
-            style={{ width: 50 }}
-          />
-        )),
+      render: (images) => (
+        <img
+          key={images[0].public_id}
+          src={images[0].url}
+          alt="Product"
+          style={{ width: 50 }}
+        />
+      ),
     },
-    // {
-    //   title: "Name",
-    //   dataIndex: "name",
-    //   key: "name",
-    //   width: "20%",
-    //   align: "center",
-    // },
+    {
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
+      width: "20%",
+      align: "left",
+      render: (_, record: any) => {
+        console.log(record,'dđ')
+        return (
+          <p>{splitText(record.name, 70)}</p>
+        )
+      },
+    },
     {
       title: "Price",
       dataIndex: "price",
@@ -95,22 +101,22 @@ const Products = (props: Props) => {
       width: "7%",
       align: "center",
     },
-    // {
-    //   title: "Brand",
-    //   dataIndex: "brand",
-    //   key: "brand",
-    //   width: "10%",
-    //   align: "center",
-    //   render: (text) => <>{text.name}</>,
-    // },
-    // {
-    //   title: "Category",
-    //   dataIndex: "category",
-    //   key: "category",
-    //   width: "10%",
-    //   align: "center",
-    //   render: (text) => <>{text.name}</>,
-    // },
+    {
+      title: "Brand",
+      dataIndex: "brand",
+      key: "brand",
+      width: "10%",
+      align: "center",
+      render: (text) => <>{text.name}</>,
+    },
+    {
+      title: "Category",
+      dataIndex: "category",
+      key: "category",
+      width: "10%",
+      align: "center",
+      render: (text) => <>{text.name}</>,
+    },
     // {
     //   title: "Product Type",
     //   dataIndex: "productType",
@@ -229,7 +235,7 @@ const Products = (props: Props) => {
       try {
         const response = await getListProducts(searchParams);
         if (response.status) {
-            // console.log(response)
+          // console.log(response)
           const updatedProducts: any = response.result.products.map(
             (item, i) => ({
               ...item,

@@ -9,6 +9,7 @@ import {
   Row,
   Select,
   Space,
+  Switch,
   Upload,
 } from "antd";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
@@ -190,21 +191,29 @@ const DrawerProduct = (props: Props) => {
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item
-                name="productType"
-                label="Product Type"
-                rules={[
-                  { required: true, message: "Please select a product type" },
-                ]}
-              >
-                <Select
-                  showSearch
-                  placeholder="Select a product type"
-                  optionFilterProp="children"
-                  filterOption={filterOption}
-                  options={listProductType}
-                />
-              </Form.Item>
+              <Space>
+                <Form.Item
+                  name="featured"
+                  label="Featured"
+                  initialValue={false}
+                >
+                  <Switch defaultChecked={false} />
+                </Form.Item>
+                <Form.Item
+                  name="todayDeal"
+                  label="Today Deal"
+                  initialValue={false}
+                >
+                  <Switch defaultChecked={false} />
+                </Form.Item>
+                <Form.Item
+                  name="flashDeal"
+                  label="Flash Deal"
+                  initialValue={false}
+                >
+                  <Switch defaultChecked={false} />
+                </Form.Item>
+              </Space>
             </Col>
           </Row>
           <Row gutter={16}>
