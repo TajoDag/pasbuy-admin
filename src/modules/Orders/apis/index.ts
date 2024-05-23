@@ -8,3 +8,6 @@ export const createOrder = (body: any) =>
 export const getOrders = (body: any) =>
   request<any>("post", `${API}/${endpoints.order.getList}`, body);
 
+export const updateStatusOrders = (id: string, body: any) =>
+  request<any>("put", `${API}/${endpoints.order.updateStatus}/${id}`, body);
+

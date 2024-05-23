@@ -38,5 +38,7 @@ export const endpoints = {
   order: {
     create: `admin/order/create`,
     getList: `order/all`,
+    updateStatus: `admin/order/status`,
+
   },
 };
