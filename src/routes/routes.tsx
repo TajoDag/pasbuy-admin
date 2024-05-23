@@ -4,12 +4,13 @@ const Products = lazy(() => import("../modules/Products"));
 const Category = lazy(() => import("../modules/Categories"));
 const ProductType = lazy(() => import("../modules/ProductType"));
 const Brand = lazy(() => import("../modules/Brand"));
+const Size = lazy(() => import("../modules/Sizes"));
+const Orders = lazy(() => import("../modules/Orders"));
 import { MdFormatSize, MdOutlineDashboard } from "react-icons/md";
 import { FaShoppingCart } from "react-icons/fa";
 import { MdCategory } from "react-icons/md";
 import { AiFillProduct } from "react-icons/ai";
 import { MdBrandingWatermark } from "react-icons/md";
-import Size from "../modules/Sizes";
 
 export const routes_url = [
   {
@@ -19,6 +20,15 @@ export const routes_url = [
     element: <Dashboard />,
     isPrivate: true,
     icon: <MdOutlineDashboard />,
+    // children:
+  },
+  {
+    key: "6",
+    path: "/order",
+    label: "Orders",
+    element: <Orders />,
+    isPrivate: true,
+    icon: <FaShoppingCart />,
     // children:
   },
   {

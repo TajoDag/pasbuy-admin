@@ -34,4 +34,8 @@ export const endpoints = {
     delete: `admin/size/delete`,
     update: `admin/size/edit`,
   },
+  order: {
+    create: `admin/order/create`,
+    getList: `order/all`,
+  },
 };

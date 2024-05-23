@@ -283,21 +283,21 @@ const DrawerProduct = (props: Props) => {
             <Col span={12}>
               <Form.Item
                 name="price"
-                label="Price"
+                label="Price ($)"
                 rules={[{ required: true, message: "Please enter price" }]}
               >
-                <Input placeholder="Please enter price" />
+                <Input placeholder="Please enter price ($)" />
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item
-                name="importPrice"
+                name="importPrice ($)"
                 label="Import price"
                 rules={[
                   { required: true, message: "Please center import price" },
                 ]}
               >
-                <Input placeholder="Please enter import price" />
+                <Input placeholder="Please enter import price ($)" />
               </Form.Item>
             </Col>
           </Row>
