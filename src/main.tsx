@@ -14,7 +14,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <BrowserRouter>
         {/* <AutoTranslate /> */}
         <AppRoutes />
-        <CrispWidget />
+        {/* <CrispWidget /> */}
       </BrowserRouter>
     </Provider>
   </React.StrictMode>
