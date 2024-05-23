@@ -6,7 +6,6 @@ import { BrowserRouter } from "react-router-dom";
 import store from "./stores/index.js";
 import AppRoutes from "./routes/index.js";
 import AutoTranslate from "./utils/AutoTranslate.js";
-import CrispWidget from "./utils/CrispWidget.js";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -14,7 +13,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <BrowserRouter>
         {/* <AutoTranslate /> */}
         <AppRoutes />
-        {/* <CrispWidget /> */}
       </BrowserRouter>
     </Provider>
   </React.StrictMode>
