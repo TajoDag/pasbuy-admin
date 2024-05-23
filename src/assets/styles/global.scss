@@ -29,7 +29,97 @@ $color_error: #f61d18;
   text-align: center !important;
 }
 
-.ck-editor__editable{
+.ck-editor__editable {
   height: 250px;
 }
 
+//
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -5px;
+  margin-left: -5px;
+}
+
+.col-6 {
+  position: relative;
+  width: 100%;
+  padding-right: 5px;
+  padding-left: 5px;
+  max-width: 50%;
+  flex: 0 0 50%;
+}
+
+.bg-grad-1 {
+  background-color: #875fc0;
+  background-image: linear-gradient(315deg, #875fc0 0%, #5346ba 74%);
+
+  // background: linear-gradient(45deg, #f3ec78, #af4261);
+}
+
+.bg-grad-2 {
+  background-color: #eb4786;
+  background-image: linear-gradient(315deg, #eb4786 0%, #b854a6 74%);
+  // background: linear-gradient(45deg, #f093fb, #f5576c);
+}
+
+.bg-grad-3 {
+  background-color: #47c5f4;
+  background-image: linear-gradient(315deg, #47c5f4 0%, #6791d9 74%);
+  // background: linear-gradient(45deg, #4facfe, #00f2fe);
+}
+
+.bg-grad-4 {
+  background-color: #ffb72c;
+  background-image: linear-gradient(315deg, #ffb72c 0%, #f57f59 74%);
+  // background: linear-gradient(45deg, #43e97b, #38f9d7);
+}
+
+.text-white {
+  color: #fff;
+}
+
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
+.mb-4 {
+  margin-bottom: 1.5rem;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.px-3 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.pt-3 {
+  padding-top: 1rem;
+}
+
+.opacity-50 {
+  opacity: 0.5;
+}
+
+.fs-12 {
+  font-size: 12px;
+}
+
+.d-block {
+  display: block;
+}
+
+.h3 {
+  font-size: 1.75rem;
+  margin: 0.5rem 0;
+}
+
+.fw-700 {
+  font-weight: 700;
+}
+
+//
