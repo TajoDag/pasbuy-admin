@@ -6,23 +6,28 @@ import { useDispatch } from "react-redux";
 import { getListTotal } from "../../modules/Products/apis";
 import { getAllBrand } from "../../modules/Brand/utils/services";
 import { getAllCategory } from "../../modules/Categories/utils/services";
+import { getListUser, getListUserAll } from "../../modules/Accounts/api";
+import { getOrders } from "../../modules/Orders/apis";
 
 const Dashboard = () => {
   const [totalProduct, setTotalProduct] = useState(0);
   const [totalBrand, setTotalBrand] = useState(0);
   const [totalCate, setTotalCate] = useState(0);
+  const [totalAgency, setTotalAgency] = useState(0);
+  const [totalUsers, setTotalUsers] = useState(0);
+  const [totalOrders, setTotalOrders] = useState(0);
   const dispatch = useDispatch();
   useEffect(() => {
     const getList = async () => {
       dispatch(startLoading());
       try {
-        let payload :any
-        const rp = await getListTotal(payload)
+        let payload: any;
+        const rp = await getListTotal(payload);
         if (rp.status) {
-          setTotalProduct(rp.result.pagination.total)
+          setTotalProduct(rp.result.pagination.total);
         }
       } catch (err) {
-        setTotalProduct(0)
+        setTotalProduct(0);
         dispatch(
           showNotification({
             message: "Lấy dữ liệu thất bại.",
@@ -36,13 +41,13 @@ const Dashboard = () => {
     const getListBrand = async () => {
       dispatch(startLoading());
       try {
-        const rp = await getAllBrand()
-  
+        const rp = await getAllBrand();
+
         if (rp.status) {
-          setTotalBrand(rp.result.length)
+          setTotalBrand(rp.result.length);
         }
       } catch (err) {
-        setTotalBrand(0)
+        setTotalBrand(0);
         dispatch(
           showNotification({
             message: "Lấy dữ liệu thất bại.",
@@ -53,16 +58,81 @@ const Dashboard = () => {
         dispatch(stopLoading());
       }
     };
-    const getListCate= async () => {
+    const getListCate = async () => {
       dispatch(startLoading());
       try {
-        const rp = await getAllCategory()
+        const rp = await getAllCategory();
 
         if (rp.status) {
-          setTotalCate(rp.result.length)
+          setTotalCate(rp.result.length);
         }
       } catch (err) {
-        setTotalCate(0)
+        setTotalCate(0);
+        dispatch(
+          showNotification({
+            message: "Lấy dữ liệu thất bại.",
+            type: "error",
+          })
+        );
+      } finally {
+        dispatch(stopLoading());
+      }
+    };
+    const getListUserAlla = async () => {
+      dispatch(startLoading());
+      try {
+        const rp = await getListUserAll();
+
+        if (rp.status) {
+          setTotalUsers(rp.result.length);
+        }
+      } catch (err) {
+        setTotalUsers(0);
+        dispatch(
+          showNotification({
+            message: "Lấy dữ liệu thất bại.",
+            type: "error",
+          })
+        );
+      } finally {
+        dispatch(stopLoading());
+      }
+    };
+    const getListAgency = async () => {
+      dispatch(startLoading());
+      try {
+        let payload = {
+          role: "agency",
+        };
+        const rp = await getListUser(payload);
+
+        if (rp.status) {
+          setTotalAgency(rp.result.pagination.total);
+          // setTotalAgency(rp.result.length);
+        }
+      } catch (err) {
+        setTotalAgency(0);
+        dispatch(
+          showNotification({
+            message: "Lấy dữ liệu thất bại.",
+            type: "error",
+          })
+        );
+      } finally {
+        dispatch(stopLoading());
+      }
+    };
+    const getListOrders = async () => {
+      dispatch(startLoading());
+      try {
+        let payload: any;
+        const rp = await getOrders(payload);
+
+        if (rp.status) {
+          setTotalOrders(rp.result.pagination?.total);
+        }
+      } catch (err) {
+        setTotalOrders(0);
         dispatch(
           showNotification({
             message: "Lấy dữ liệu thất bại.",
@@ -76,16 +146,30 @@ const Dashboard = () => {
     getList();
     getListBrand();
     getListCate();
+    getListUserAlla();
+    getListAgency();
+    getListOrders();
+    getListOrders();
   }, []);
 
   const data = [
     {
-      count: totalProduct,
+      count: totalUsers,
       label: "Customer",
       className: "bg-grad-2",
     },
     {
-      count: 214,
+      count: totalAgency,
+      label: "Total Agency",
+      className: "bg-grad-5",
+    },
+    {
+      count: totalProduct,
+      label: "Total Products",
+      className: "bg-grad-6",
+    },
+    {
+      count: totalOrders,
       label: "Order",
       className: "bg-grad-3",
     },

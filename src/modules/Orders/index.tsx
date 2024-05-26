@@ -138,10 +138,11 @@ const Orders = () => {
     },
     {
       title: "Name customer",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "customer",
+      key: "customer",
       width: 200,
       align: "left",
+      render: (text) => <>{text.name}</>,
     },
     {
       title: "Phone number customer",
@@ -149,13 +150,6 @@ const Orders = () => {
       key: "phone",
       width: 100,
       align: "center",
-    },
-    {
-      title: "Email customer",
-      dataIndex: "email",
-      key: "email",
-      width: 100,
-      align: "left",
     },
     {
       title: "Note customer",
@@ -207,7 +201,7 @@ const Orders = () => {
                 setDataItems(record.orderItems);
               }}
             />
-            <Tooltip title="Delete">
+            <Tooltip title="Change order status">
               <Popconfirm
                 title="Change order status"
                 description={`Do you want to change order status to ${keyC}?`}

@@ -76,6 +76,16 @@ $color_error: #f61d18;
   // background: linear-gradient(45deg, #43e97b, #38f9d7);
 }
 
+.bg-grad-5 {
+  background-color: #34e89e;
+  background-image: linear-gradient(315deg, #34e89e 0%, #0f3443 74%);
+}
+
+.bg-grad-6 {
+  background-color: #ff9966;
+  background-image: linear-gradient(315deg, #ff9966 0%, #ff5e62 74%);
+}
+
 .text-white {
   color: #fff;
 }

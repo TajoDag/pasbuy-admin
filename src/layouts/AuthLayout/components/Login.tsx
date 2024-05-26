@@ -15,10 +15,10 @@ const Login = () => {
   const { setValue: setIsLogin } = useLocalStorage("isLogin", "");
   const { setValue: setUserData } = useLocalStorage("userData", "");
   const validationSchema = Yup.object().shape({
-    email: Yup.string().required("Vui lòng nhập tên đăng nhập"),
+    username: Yup.string().required("Vui lòng nhập tên đăng nhập"),
     password: Yup.string().required("Vui lòng nhập mật khẩu"),
   });
-  const onFinish = async (values: ILogin) => {
+  const onFinish = async (values: any) => {
     try {
       const response = await loginUser(values);
       if (response.status) {
@@ -28,7 +28,7 @@ const Login = () => {
         dispatch(
           showNotification({ message: response.message, type: "success" })
         );
-        if(response.result.user.role !== "admin"){
+        if (response.result.user.role !== "admin") {
           dispatch(
             showNotification({
               message: "Tài khoản của bạn không có quyền truy cập",
@@ -68,7 +68,7 @@ const Login = () => {
       </div>
       <div className="login-form">
         <Formik
-          initialValues={{ email: "", password: "" }}
+          initialValues={{ username: "", password: "" }}
           validationSchema={validationSchema}
           onSubmit={(values, { setSubmitting }) => {
             onFinish(values);
@@ -78,14 +78,14 @@ const Login = () => {
           {({ isSubmitting }) => (
             <Form>
               <div className="form-group">
-                <label htmlFor="email">Tên đăng nhập</label>
+                <label htmlFor="username">Tên đăng nhập</label>
                 <Field
-                  type="email"
-                  name="email"
-                  placeholder="Email đăng nhập"
+                  type="text"
+                  name="username"
+                  placeholder="Tên đăng nhập"
                 />
                 <ErrorMessage
-                  name="email"
+                  name="username"
                   component="div"
                   className="error-message"
                 />
@@ -98,9 +98,6 @@ const Login = () => {
                   component="div"
                   className="error-message"
                 />
-                {/* <a href="#" className="forgot-password">
-                  Quên mật khẩu?
-                </a> */}
               </div>
               <div className="form-group">
                 <label className="checkbox-container">

@@ -121,7 +121,7 @@ const MainLayout = (props: any) => {
           selectedKeys={[`${location.pathname}`]}
           mode="inline"
         >
-          {routes_url.map((item) => (
+          {/* {routes_url.map((item) => (
             <Menu.Item
               key={item.key}
               icon={item.icon}
@@ -131,7 +131,38 @@ const MainLayout = (props: any) => {
             >
               <Link to={item.path}>{item.label}</Link>
             </Menu.Item>
-          ))}
+          ))} */}
+          {routes_url.map((group) =>
+            group.children ? (
+              <Menu.ItemGroup key={group.key} title={group.label}>
+                {group.children.map((item) => (
+                  <Menu.Item
+                    key={item.key}
+                    icon={item.icon}
+                    className={
+                      location.pathname === item.path
+                        ? "ant-menu-item-selected"
+                        : ""
+                    }
+                  >
+                    <Link to={item.path}>{item.label}</Link>
+                  </Menu.Item>
+                ))}
+              </Menu.ItemGroup>
+            ) : (
+              <Menu.Item
+                key={group.key}
+                icon={group.icon}
+                className={
+                  location.pathname === group.path
+                    ? "ant-menu-item-selected"
+                    : ""
+                }
+              >
+                <Link to={group.path}>{group.label}</Link>
+              </Menu.Item>
+            )
+          )}
         </Menu>
       </Sider>
       <Layout>

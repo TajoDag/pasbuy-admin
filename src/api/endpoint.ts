@@ -4,6 +4,10 @@ export const endpoints = {
   auth: {
     login: `login`,
   },
+  user: {
+    list: `admin/findAllUsers`,
+    all: `admin/users`,
+  },
   product: {
     list: `admin/products/all`,
     create: `admin/products`,
@@ -37,7 +41,7 @@ export const endpoints = {
   },
   order: {
     create: `admin/order/create`,
-    getList: `order/all`,
+    getList: `admin/order/all`,
     updateStatus: `admin/order/status`,
   },
 };

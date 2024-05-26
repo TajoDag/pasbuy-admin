@@ -11,6 +11,7 @@ import {
   Table,
   Tooltip,
   Popconfirm,
+  Select,
 } from "antd";
 import {
   CloseOutlined,
@@ -28,6 +29,7 @@ import {
 import { getListProducts } from "../../Products/apis";
 import { showNotification } from "../../../redux/reducers/notificationReducer";
 import { useDispatch } from "react-redux";
+import { getListUserAll } from "../../Accounts/api";
 
 type Props = {
   title: string;
@@ -74,7 +76,7 @@ const ModalOrder = (props: Props) => {
     total: 0,
   });
   const [dataProduct, setDataProduct] = useState<any[]>([]);
-
+  const [dataUser, setDataUser] = useState<any[]>([]);
   let newTitle = "";
   if (title === "add") {
     newTitle = "Add order";
@@ -298,6 +300,27 @@ const ModalOrder = (props: Props) => {
         dispatch(stopLoading());
       }
     };
+    const getListUser = async () => {
+      try {
+        const response: any = await getListUserAll();
+        if (response.status) {
+          const users = response.result.map((user: any) => ({
+            label: user.name,
+            value: user._id,
+          }));
+          setDataUser(users);
+        }
+      } catch (err) {
+        setDataUser([]);
+        dispatch(
+          showNotification({
+            message: "Lấy dữ liệu thất bại.",
+            type: "error",
+          })
+        );
+      }
+    };
+    getListUser();
     getList();
   }, [searchParams]);
   const handleTableChange = (pagination: any) => {
@@ -308,10 +331,14 @@ const ModalOrder = (props: Props) => {
     });
     setPagination(pagination);
   };
+  const filterOption = (
+    input: string,
+    option?: { label: string; value: string }
+  ) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
   const onFinish = (values: any) => {
     onSubmit(values, selectedRows, totalPrice);
   };
-
+  console.log(dataUser);
   return (
     <div>
       <Modal
@@ -340,44 +367,25 @@ const ModalOrder = (props: Props) => {
               <Row gutter={16}>
                 <Col span={12}>
                   <Form.Item
-                    label="Full Name"
-                    name="name"
+                    label="Customer"
+                    name="customer"
                     rules={[
                       {
                         required: true,
-                        message: "Please input your fullName!",
+                        message: "Please input your customer!",
                       },
                     ]}
                   >
-                    <Input />
-                  </Form.Item>
-
-                  <Form.Item
-                    label="Email"
-                    name="email"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please input your phone email!",
-                      },
-                    ]}
-                  >
-                    <Input />
+                    <Select
+                      showSearch
+                      placeholder="Select a person"
+                      optionFilterProp="children"
+                      filterOption={filterOption}
+                      options={dataUser}
+                    />
                   </Form.Item>
                 </Col>
                 <Col span={12}>
-                  <Form.Item
-                    label="Address"
-                    name="address"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please input your address!",
-                      },
-                    ]}
-                  >
-                    <Input />
-                  </Form.Item>
                   <Form.Item
                     label="Phone number"
                     name="phone"
