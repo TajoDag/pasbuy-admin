@@ -1,7 +1,68 @@
-import { Card, Image } from "antd";
-import React from "react";
+import { Button, Card, Image, Input, Row, Space } from "antd";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { startLoading, stopLoading } from "../../redux/reducers/loadingReducer";
+import { showNotification } from "../../redux/reducers/notificationReducer";
+import { changeKeyChat, getKeyChat } from "./apis";
 
 const Settings = () => {
+  const dispatch = useDispatch();
+  const [keyLiveChat, setKeyLiveChat] = useState("");
+
+  useEffect(() => {
+    const getKey = async () => {
+      dispatch(startLoading());
+      try {
+        const rp = await getKeyChat("665461c54715f752a552f7a2");
+        if (rp.status) {
+          setKeyLiveChat(rp.result.keyLive);
+        }
+      } catch (err) {
+        dispatch(
+          showNotification({
+            message: "Retrieving live chat key data failed.",
+            type: "error",
+          })
+        );
+      } finally {
+        dispatch(stopLoading());
+      }
+    };
+
+    getKey();
+  }, [dispatch]);
+
+  const handleInputChange = (e: any) => {
+    setKeyLiveChat(e.target.value);
+  };
+
+  const handleSubmit = async () => {
+    let payload = {
+      keyLive: keyLiveChat,
+    };
+    dispatch(startLoading());
+    try {
+      const rp = await changeKeyChat("665461c54715f752a552f7a2", payload);
+      if (rp.status) {
+        dispatch(
+          showNotification({
+            message: "Retrieving live chat key data success.",
+            type: "success",
+          })
+        );
+      }
+    } catch (err) {
+      dispatch(
+        showNotification({
+          message: "Retrieving live chat key data failed.",
+          type: "error",
+        })
+      );
+    } finally {
+      dispatch(stopLoading());
+    }
+  };
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
       <Card title="Logos" style={{ width: "100%" }}>
@@ -24,7 +85,18 @@ const Settings = () => {
       </Card>
       <Card title="Banners" style={{ width: "100%" }}></Card>
       <Card title="Images advertisement" style={{ width: "100%" }}></Card>
-      <Card title="Config live chat" style={{ width: "100%" }}></Card>
+      <Card title="Config live chat" style={{ width: "100%" }}>
+        <Space.Compact style={{ width: "100%" }}>
+          <Input
+            placeholder="Enter key live chat"
+            value={keyLiveChat}
+            onChange={handleInputChange}
+          />
+          <Button type="primary" onClick={handleSubmit}>
+            Submit
+          </Button>
+        </Space.Compact>
+      </Card>
     </div>
   );
 };

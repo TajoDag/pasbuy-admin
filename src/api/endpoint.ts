@@ -44,4 +44,8 @@ export const endpoints = {
     getList: `admin/order/all`,
     updateStatus: `admin/order/status`,
   },
+  keyChat: {
+    get: `configLiveChat`,
+    put: `admin/configLiveChat`
+  }
 };
