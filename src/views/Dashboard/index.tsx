@@ -8,6 +8,7 @@ import { getAllBrand } from "../../modules/Brand/utils/services";
 import { getAllCategory } from "../../modules/Categories/utils/services";
 import { getListUser, getListUserAll } from "../../modules/Accounts/api";
 import { getOrders } from "../../modules/Orders/apis";
+import TranslateTing from "../../components/Common/TranslateTing";
 
 const Dashboard = () => {
   const [totalProduct, setTotalProduct] = useState(0);
@@ -160,12 +161,12 @@ const Dashboard = () => {
     },
     {
       count: totalAgency,
-      label: "Total Agency",
+      label: "Agency",
       className: "bg-grad-5",
     },
     {
       count: totalProduct,
-      label: "Total Products",
+      label: "Products",
       className: "bg-grad-6",
     },
     {
@@ -194,8 +195,10 @@ const Dashboard = () => {
             >
               <div className="px-3 pt-3">
                 <div className="opacity-50">
-                  <span className="fs-12 d-block">Total</span>
-                  {item.label}
+                  <span className="fs-12 d-block">
+                    <TranslateTing text="Total" />
+                  </span>
+                  <TranslateTing text={item.label} />
                 </div>
                 <div className="h3 fw-700 mb-3">{item.count}</div>
               </div>

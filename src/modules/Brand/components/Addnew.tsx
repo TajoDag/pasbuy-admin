@@ -10,6 +10,7 @@ import {
   stopLoading,
 } from "../../../redux/reducers/loadingReducer";
 import { createBrand, updateBrand } from "../utils/services";
+import TranslateTing from "../../../components/Common/TranslateTing";
 interface IProps {
   open: boolean;
   onCancel: () => void;
@@ -84,7 +85,14 @@ export const Addnew = (props: IProps) => {
 
   return (
     <Modal width={500} open={open} onCancel={onCancel} footer={false} centered>
-      <h2>{!detail._id ? "Add new a" : "Edit the"} Brand</h2>
+      <h2>
+        {!detail._id ? (
+          <TranslateTing text="Add new a " />
+        ) : (
+          <TranslateTing text="Edit the " />
+        )}
+        <TranslateTing text="Brand" />
+      </h2>
       <Formik
         initialValues={{ name: "", address: "", phone: "" }}
         onSubmit={(values: any) => handleSubmit(values)}
@@ -96,7 +104,9 @@ export const Addnew = (props: IProps) => {
             <Form>
               <Row gutter={[15, 10]}>
                 <Col xs={24} sm={12} lg={8} xl={12}>
-                  <b>Brand name</b>
+                  <b>
+                    <TranslateTing text="Brand name" />
+                  </b>
                   <Field name="name">
                     {({ field }: any) => <Input {...field} />}
                   </Field>
@@ -107,7 +117,9 @@ export const Addnew = (props: IProps) => {
                   )}
                 </Col>
                 <Col xs={24} sm={12} lg={8} xl={12}>
-                  <b>Phone number</b>
+                  <b>
+                    <TranslateTing text="Phone number" />
+                  </b>
                   <Field name="phone">
                     {({ field }: any) => <Input {...field} />}
                   </Field>
@@ -118,7 +130,10 @@ export const Addnew = (props: IProps) => {
                   )}
                 </Col>
                 <Col xs={24} sm={12} lg={8} xl={24}>
-                  <b> Address</b>
+                  <b>
+                    {" "}
+                    <TranslateTing text="Address" />
+                  </b>
                   <Field name="address">
                     {({ field }: any) => <Input {...field} />}
                   </Field>
@@ -137,14 +152,16 @@ export const Addnew = (props: IProps) => {
                   style={{ display: "flex", justifyContent: "center" }}
                 >
                   <Space size="small">
-                    <Button htmlType="submit">Save</Button>
+                    <Button htmlType="submit">
+                      <TranslateTing text="Save" />
+                    </Button>
                     <Button
                       htmlType="reset"
                       onClick={() => {
                         onCancel();
                       }}
                     >
-                      Cancel
+                      <TranslateTing text="Cancel" />
                     </Button>
                   </Space>
                 </Col>

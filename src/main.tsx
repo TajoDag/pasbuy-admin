@@ -6,14 +6,17 @@ import { BrowserRouter } from "react-router-dom";
 import store from "./stores/index.js";
 import AppRoutes from "./routes/index.js";
 import AutoTranslate from "./utils/AutoTranslate.js";
+import { LocalizationProvider } from "./context/LocalizationWrapper.js";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <Provider store={store}>
-      <BrowserRouter>
-        {/* <AutoTranslate /> */}
-        <AppRoutes />
-      </BrowserRouter>
+      <LocalizationProvider>
+        <BrowserRouter>
+          {/* <AutoTranslate /> */}
+          <AppRoutes />
+        </BrowserRouter>
+      </LocalizationProvider>
     </Provider>
   </React.StrictMode>
 );

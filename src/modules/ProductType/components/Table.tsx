@@ -15,6 +15,7 @@ import { useDispatch } from "react-redux";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import { showNotification } from "../../../redux/reducers/notificationReducer";
 import { deleteProductType, getAllProductType } from "../utils/services";
+import TranslateTing from "../../../components/Common/TranslateTing";
 
 export const TableCategory = () => {
   const [data, setData] = React.useState<any[]>([]);
@@ -38,18 +39,18 @@ export const TableCategory = () => {
 
   const columns: ColumnsType<any> = [
     {
-      title: "STT",
+      title: <TranslateTing text="STT" />,
       align: "center" as "center",
       width: 60,
       render: (_: any, record: any, index: number) => index + 1,
     },
     {
-      title: "Name",
+      title: <TranslateTing text="Name" />,
       dataIndex: "name",
       width: 400,
     },
     {
-      title: "Status",
+      title: <TranslateTing text="Status" />,
       dataIndex: "status",
       align: "center" as "center",
       width: 100,
@@ -62,7 +63,7 @@ export const TableCategory = () => {
       render: (_: any, record: any, index: number) => {
         return (
           <Space size="middle">
-            <Tooltip title="Edit">
+            <Tooltip title={<TranslateTing text="Edit" />}>
               <Button
                 icon={<TbEdit />}
                 onClick={() => {
@@ -71,12 +72,16 @@ export const TableCategory = () => {
                 }}
               />
             </Tooltip>
-            <Tooltip title="Delete">
+            <Tooltip title={<TranslateTing text="Delete" />}>
               <Popconfirm
-                title="Delete the Product type"
-                description="Are you sure to delete this Product type?"
+                title={<TranslateTing text="Delete the Product type" />}
+                description={
+                  <TranslateTing text="Are you sure to delete this Product type?" />
+                }
                 icon={<QuestionCircleOutlined style={{ color: "red" }} />}
                 onConfirm={() => handleDelete(record._id)}
+                okText={<TranslateTing text="OK" />}
+                cancelText={<TranslateTing text="Cancel" />}
               >
                 <Button icon={<RiDeleteBin5Line />} />
               </Popconfirm>
@@ -109,14 +114,16 @@ export const TableCategory = () => {
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <h2>Product Types</h2>
+        <h2>
+          <TranslateTing text="Product Types" />
+        </h2>
         <Button
-          icon={<CiCirclePlus />}
+          // icon={<CiCirclePlus />}
           onClick={() => {
             setOpen(true);
           }}
         >
-          Add new
+          <TranslateTing text="Add new" />
         </Button>
       </div>
       <Table columns={columns} bordered pagination={false} dataSource={data} />

@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { startLoading, stopLoading } from "../../redux/reducers/loadingReducer";
 import { showNotification } from "../../redux/reducers/notificationReducer";
 import { changeKeyChat, getKeyChat } from "./apis";
+import TranslateTing from "../../components/Common/TranslateTing";
 
 const Settings = () => {
   const dispatch = useDispatch();
@@ -46,7 +47,9 @@ const Settings = () => {
       if (rp.status) {
         dispatch(
           showNotification({
-            message: "Retrieving live chat key data success.",
+            message: (
+              <TranslateTing text="Retrieving live chat key data success." />
+            ),
             type: "success",
           })
         );
@@ -54,7 +57,9 @@ const Settings = () => {
     } catch (err) {
       dispatch(
         showNotification({
-          message: "Retrieving live chat key data failed.",
+          message: (
+            <TranslateTing text="Retrieving live chat key data failed." />
+          ),
           type: "error",
         })
       );
@@ -65,17 +70,21 @@ const Settings = () => {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-      <Card title="Logos" style={{ width: "100%" }}>
+      <Card title={<TranslateTing text="Logos" />} style={{ width: "100%" }}>
         <div style={{ display: "flex", flexDirection: "row", gap: 50 }}>
           <div>
-            <h3>Logo Header</h3>
+            <h3>
+              <TranslateTing text="Logo Header" />
+            </h3>
             <Image
               width={200}
               src="https://www.pasbuy.cyou/public/uploads/all/1AZ1FU1wB4TY7AwOvrhhaCHg8kLRsm1NV78YwxJC.png"
             />
           </div>
           <div>
-            <h3>Logo Footer</h3>
+            <h3>
+              <TranslateTing text="Logo Footer" />
+            </h3>
             <Image
               width={200}
               src="https://www.pasbuy.cyou/public/uploads/all/Pb40YAYGtG8kNwCDTQZZ3w84k1bufpt57NCcS9dj.jpg"
@@ -83,9 +92,18 @@ const Settings = () => {
           </div>
         </div>
       </Card>
-      <Card title="Banners" style={{ width: "100%" }}></Card>
-      <Card title="Images advertisement" style={{ width: "100%" }}></Card>
-      <Card title="Config live chat" style={{ width: "100%" }}>
+      <Card
+        title={<TranslateTing text="Banners" />}
+        style={{ width: "100%" }}
+      ></Card>
+      <Card
+        title={<TranslateTing text="Images advertisement" />}
+        style={{ width: "100%" }}
+      ></Card>
+      <Card
+        title={<TranslateTing text="Config live chat" />}
+        style={{ width: "100%" }}
+      >
         <Space.Compact style={{ width: "100%" }}>
           <Input
             placeholder="Enter key live chat"
@@ -93,7 +111,7 @@ const Settings = () => {
             onChange={handleInputChange}
           />
           <Button type="primary" onClick={handleSubmit}>
-            Submit
+            <TranslateTing text="Submit" />
           </Button>
         </Space.Compact>
       </Card>

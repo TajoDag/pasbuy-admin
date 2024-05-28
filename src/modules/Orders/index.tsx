@@ -21,6 +21,7 @@ import { TagsOrder } from "./components/TagsOrder";
 import { TbEdit } from "react-icons/tb";
 import { FaEye } from "react-icons/fa";
 import ModalItem from "./components/ModalItem";
+import TranslateTing from "../../components/Common/TranslateTing";
 
 const Orders = () => {
   const dispatch = useDispatch();
@@ -129,7 +130,7 @@ const Orders = () => {
 
   const columns: TableProps<any>["columns"] = [
     {
-      title: "STT",
+      title: <TranslateTing text="STT" />,
       dataIndex: "stt",
       key: "stt",
       width: 60,
@@ -137,7 +138,7 @@ const Orders = () => {
       fixed: "left",
     },
     {
-      title: "Name customer",
+      title: <TranslateTing text="Name customer" />,
       dataIndex: "customer",
       key: "customer",
       width: 200,
@@ -145,35 +146,35 @@ const Orders = () => {
       render: (text) => <>{text.name}</>,
     },
     {
-      title: "Phone number customer",
+      title: <TranslateTing text="Phone number customer" />,
       dataIndex: "phone",
       key: "phone",
       width: 100,
       align: "center",
     },
     {
-      title: "Note customer",
+      title: <TranslateTing text="Note customer" />,
       dataIndex: "note",
       key: "email",
       width: 250,
       align: "left",
     },
     {
-      title: "Status",
+      title: <TranslateTing text="Status" />,
       dataIndex: "orderStatus",
       align: "center" as "center",
-      width: 100,
+      width: 150,
       render: (value: any) => TagsOrder(value),
     },
     {
-      title: "Total Price ($)",
+      title: <TranslateTing text="Total Price ($)" />,
       dataIndex: "totalPrice",
       align: "center" as "center",
       width: 100,
     },
 
     {
-      title: "Order creator",
+      title: <TranslateTing text="Order creator" />,
       dataIndex: "user",
       align: "center" as "center",
       width: 100,
@@ -201,11 +202,16 @@ const Orders = () => {
                 setDataItems(record.orderItems);
               }}
             />
-            <Tooltip title="Change order status">
+            <Tooltip title={<TranslateTing text="Change order status" />}>
               <Popconfirm
-                title="Change order status"
-                description={`Do you want to change order status to ${keyC}?`}
+                title={<TranslateTing text="Change order status" />}
+                // description={`Do you want to change order status to ${keyC}?`}
+                description={
+                  <TranslateTing text="Do you want to change order status to?" />
+                }
                 onConfirm={() => handleUpdateProduct(record._id, keyC)}
+                okText={<TranslateTing text="OK" />}
+                cancelText={<TranslateTing text="Cancel" />}
               >
                 <Button icon={<TbEdit />} />
               </Popconfirm>
@@ -260,8 +266,12 @@ const Orders = () => {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
       <Card
-        title="Orders"
-        extra={<Button onClick={onAdd}>Add Orders</Button>}
+        title={<TranslateTing text="Orders" />}
+        extra={
+          <Button onClick={onAdd}>
+            <TranslateTing text="Add Orders" />
+          </Button>
+        }
         style={{ width: "100%" }}
       ></Card>
       <Table

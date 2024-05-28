@@ -101,24 +101,26 @@ import { MdCategory } from "react-icons/md";
 import { AiFillProduct } from "react-icons/ai";
 import { MdBrandingWatermark } from "react-icons/md";
 import { UserOutlined } from "@ant-design/icons";
+import TranslateTing from "../components/Common/TranslateTing";
+import { IoMdSettings } from "react-icons/io";
 
 export const routes_url = [
   {
     key: "1",
     path: "/dashboard",
-    label: "Dashboard",
+    label: <TranslateTing text="Dashboard" />,
     element: <Dashboard />,
     isPrivate: true,
     icon: <MdOutlineDashboard />,
   },
   {
     key: "usersManagemnet",
-    label: "Accounts Management",
+    label: <TranslateTing text="Accounts Management" />,
     children: [
       {
         key: "8",
         path: "/account",
-        label: "Accounts",
+        label: <TranslateTing text="Accounts" />,
         element: <Accounts />,
         isPrivate: true,
         icon: <UserOutlined />,
@@ -127,12 +129,12 @@ export const routes_url = [
   },
   {
     key: "productManagement",
-    label: "Products Management",
+    label: <TranslateTing text="Products Management" />,
     children: [
       {
         key: "2",
         path: "/products",
-        label: "Products",
+        label: <TranslateTing text="Products" />,
         element: <Products />,
         isPrivate: true,
         icon: <FaShoppingCart />,
@@ -140,7 +142,7 @@ export const routes_url = [
       {
         key: "3",
         path: "/category",
-        label: "Category",
+        label: <TranslateTing text="Category" />,
         element: <Category />,
         isPrivate: true,
         icon: <MdCategory />,
@@ -148,7 +150,7 @@ export const routes_url = [
       {
         key: "4",
         path: "/product-type",
-        label: "Product Types",
+        label: <TranslateTing text="Product Types" />,
         element: <ProductType />,
         isPrivate: true,
         icon: <AiFillProduct />,
@@ -156,7 +158,7 @@ export const routes_url = [
       {
         key: "5",
         path: "/brand",
-        label: "Brand",
+        label: <TranslateTing text="Brand" />,
         element: <Brand />,
         isPrivate: true,
         icon: <MdBrandingWatermark />,
@@ -173,12 +175,12 @@ export const routes_url = [
   },
   {
     key: "orderManagemnet",
-    label: "Orders Management",
+    label: <TranslateTing text="Orders Management" />,
     children: [
       {
         key: "6",
         path: "/order",
-        label: "Orders",
+        label: <TranslateTing text="Orders" />,
         element: <Orders />,
         isPrivate: true,
         icon: <FaShoppingCart />,
@@ -187,7 +189,7 @@ export const routes_url = [
   },
   {
     key: "configManagement",
-    label: "Config Website",
+    label: <TranslateTing text="Config Website" />,
     children: [
       // {
       //   key: "7",
@@ -201,10 +203,10 @@ export const routes_url = [
       {
         key: "8",
         path: "/settings",
-        label: "Settings",
+        label: <TranslateTing text="Settings" />,
         element: <Settings />,
         isPrivate: true,
-        icon: <FaShoppingCart />,
+        icon: <IoMdSettings />,
       },
     ],
   },

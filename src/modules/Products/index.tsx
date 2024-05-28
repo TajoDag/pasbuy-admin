@@ -28,6 +28,7 @@ import { EditOutlined, QuestionCircleOutlined } from "@ant-design/icons";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import useRefresh from "../../hooks/useRefresh";
 import { splitText } from "../../utils";
+import TranslateTing from "../../components/Common/TranslateTing";
 type Props = {};
 const Products = (props: Props) => {
   const dispatch = useDispatch();
@@ -299,7 +300,7 @@ const Products = (props: Props) => {
   };
   const columns: TableProps<IProductTable>["columns"] = [
     {
-      title: "STT",
+      title: <TranslateTing text="STT" />,
       dataIndex: "stt",
       key: "stt",
       width: 60,
@@ -307,7 +308,7 @@ const Products = (props: Props) => {
       fixed: "left",
     },
     {
-      title: "Images",
+      title: <TranslateTing text="Images" />,
       dataIndex: "images",
       key: "images",
       width: 90,
@@ -323,7 +324,7 @@ const Products = (props: Props) => {
       ),
     },
     {
-      title: "Name",
+      title: <TranslateTing text="Name" />,
       dataIndex: "name",
       key: "name",
       width: 250,
@@ -333,14 +334,14 @@ const Products = (props: Props) => {
       },
     },
     {
-      title: "Price",
+      title: <TranslateTing text="Price" />,
       dataIndex: "price",
       key: "price",
       width: 120,
       align: "center",
     },
     {
-      title: "Brand",
+      title: <TranslateTing text="Brand" />,
       dataIndex: "brand",
       key: "brand",
       width: 100,
@@ -348,7 +349,7 @@ const Products = (props: Props) => {
       render: (text) => <>{text.name}</>,
     },
     {
-      title: "Category",
+      title: <TranslateTing text="Category" />,
       dataIndex: "category",
       key: "category",
       width: 100,
@@ -364,14 +365,14 @@ const Products = (props: Props) => {
     //   render: (text) => <>{text.name}</>,
     // },
     {
-      title: "Stock",
+      title: <TranslateTing text="Stock" />,
       dataIndex: "Stock",
       key: "Stock",
       width: 100,
       align: "center",
     },
     {
-      title: "New product",
+      title: <TranslateTing text="New product" />,
       dataIndex: "isNew",
       key: "isNew",
       width: 100,
@@ -386,7 +387,7 @@ const Products = (props: Props) => {
       },
     },
     {
-      title: "Todays Deal",
+      title: <TranslateTing text="Todays Deal" />,
       dataIndex: "todayDeal",
       key: "todayDeal",
       width: 100,
@@ -402,7 +403,7 @@ const Products = (props: Props) => {
       },
     },
     {
-      title: "Featured",
+      title: <TranslateTing text="Featured" />,
       dataIndex: "featured",
       key: "featured",
       width: 100,
@@ -417,7 +418,7 @@ const Products = (props: Props) => {
       },
     },
     {
-      title: "Flash deal",
+      title: <TranslateTing text="Flash deal" />,
       dataIndex: "flashDeal",
       key: "flashDeal",
       width: 100,
@@ -432,7 +433,7 @@ const Products = (props: Props) => {
       },
     },
     {
-      title: "Status",
+      title: <TranslateTing text="Status" />,
       key: "status",
       dataIndex: "status",
       width: 100,
@@ -617,7 +618,7 @@ const Products = (props: Props) => {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
       <Card
-        title="Products"
+        title={<TranslateTing text="Products" />}
         extra={<Button onClick={onAdd}>Add Product</Button>}
         style={{ width: "100%" }}
       ></Card>

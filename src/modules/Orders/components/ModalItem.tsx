@@ -1,5 +1,6 @@
 import { Modal, Table } from "antd";
 import React from "react";
+import TranslateTing from "../../../components/Common/TranslateTing";
 
 type Props = {
   onClose?: any;
@@ -12,19 +13,19 @@ const ModalItem = (props: Props) => {
 
   const columns: any = [
     {
-      title: "Name",
+      title: <TranslateTing text="Name" />,
       dataIndex: "name",
       key: "name",
     },
     {
-      title: "Price ($)",
+      title: <TranslateTing text="Price ($)" />,
       dataIndex: "price",
       key: "price",
       width: 150,
       align: "center",
     },
     {
-      title: "Quantity",
+      title: <TranslateTing text="Quantity" />,
       dataIndex: "quantity",
       key: "quantity",
       align: "center",
@@ -32,7 +33,7 @@ const ModalItem = (props: Props) => {
   ];
   return (
     <Modal
-      title="Order detail"
+      title={<TranslateTing text="Order detail" />}
       // centered
       open={open}
       onCancel={onClose}

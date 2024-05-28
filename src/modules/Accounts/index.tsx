@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import useRefresh from "../../hooks/useRefresh";
 import { Card, Table, TableProps } from "antd";
 import { splitText } from "../../utils";
+import TranslateTing from "../../components/Common/TranslateTing";
 
 const Accounts = () => {
   const dispatch = useDispatch();
@@ -23,7 +24,7 @@ const Accounts = () => {
 
   const columns: TableProps<any>["columns"] = [
     {
-      title: "STT",
+      title: <TranslateTing text="STT" />,
       dataIndex: "stt",
       key: "stt",
       width: 60,
@@ -31,7 +32,7 @@ const Accounts = () => {
       fixed: "left",
     },
     {
-      title: "Username",
+      title: <TranslateTing text="Username" />,
       dataIndex: "username",
       key: "username",
       width: 100,
@@ -41,7 +42,7 @@ const Accounts = () => {
       },
     },
     {
-      title: "Name",
+      title: <TranslateTing text="Name" />,
       dataIndex: "name",
       key: "name",
       width: 100,
@@ -51,7 +52,7 @@ const Accounts = () => {
       },
     },
     {
-      title: "Email",
+      title: <TranslateTing text="Email" />,
       dataIndex: "email",
       key: "email",
       width: 100,
@@ -59,7 +60,7 @@ const Accounts = () => {
       render: (text) => <p>{text}</p>,
     },
     {
-      title: "Phone Number",
+      title: <TranslateTing text="Phone Number" />,
       dataIndex: "phone",
       key: "address",
       width: 100,
@@ -67,7 +68,7 @@ const Accounts = () => {
       render: (text) => <p>{text}</p>,
     },
     {
-      title: "Agency",
+      title: <TranslateTing text="Agency" />,
       dataIndex: "isShop",
       key: "isShop",
       width: 100,
@@ -75,7 +76,7 @@ const Accounts = () => {
       render: (text) => <p>{text ? "Shop" : "No"}</p>,
     },
     {
-      title: "InviteCode",
+      title: <TranslateTing text="InviteCode" />,
       dataIndex: "inviteCode",
       key: "inviteCode",
       width: 100,
@@ -83,7 +84,7 @@ const Accounts = () => {
       render: (text) => <a>{text}</a>,
     },
     {
-      title: "Role",
+      title: <TranslateTing text="Role" />,
       dataIndex: "role",
       key: "role",
       width: 100,
@@ -134,7 +135,10 @@ const Accounts = () => {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-      <Card title="Accounts" style={{ width: "100%" }}></Card>
+      <Card
+        title={<TranslateTing text="Accounts" />}
+        style={{ width: "100%" }}
+      ></Card>
       <Table
         columns={columns}
         dataSource={dataTable}

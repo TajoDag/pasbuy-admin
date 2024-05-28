@@ -30,6 +30,7 @@ import { getListProducts } from "../../Products/apis";
 import { showNotification } from "../../../redux/reducers/notificationReducer";
 import { useDispatch } from "react-redux";
 import { getListUserAll } from "../../Accounts/api";
+import TranslateTing from "../../../components/Common/TranslateTing";
 
 type Props = {
   title: string;
@@ -77,11 +78,11 @@ const ModalOrder = (props: Props) => {
   });
   const [dataProduct, setDataProduct] = useState<any[]>([]);
   const [dataUser, setDataUser] = useState<any[]>([]);
-  let newTitle = "";
+  let newTitle: any = "";
   if (title === "add") {
-    newTitle = "Add order";
+    newTitle = <TranslateTing text="Add order" />;
   } else if (title === "update") {
-    newTitle = "Update status of order";
+    newTitle = <TranslateTing text="Update status of order" />;
   }
 
   const handleInputChange = (e: any) => {
@@ -129,7 +130,7 @@ const ModalOrder = (props: Props) => {
 
   const columnProducts: any = [
     {
-      title: "Images",
+      title: <TranslateTing text="Images" />,
       dataIndex: "images",
       key: "images",
       width: 90,
@@ -145,14 +146,14 @@ const ModalOrder = (props: Props) => {
       ),
     },
     {
-      title: "Name",
+      title: <TranslateTing text="Name" />,
       dataIndex: "name",
       render: (text: string) => <a>{text}</a>,
     },
   ];
   const columnItems: any = [
     {
-      title: "Images",
+      title: <TranslateTing text="Images" />,
       dataIndex: "images",
       key: "images",
       width: 90,
@@ -168,7 +169,7 @@ const ModalOrder = (props: Props) => {
       ),
     },
     {
-      title: "Name",
+      title: <TranslateTing text="Name" />,
       dataIndex: "name",
       key: "name",
       width: 250,
@@ -178,7 +179,7 @@ const ModalOrder = (props: Props) => {
       },
     },
     {
-      title: "Price ($)",
+      title: <TranslateTing text="Price ($)" />,
       dataIndex: "price",
       key: "price",
       width: 120,
@@ -202,7 +203,7 @@ const ModalOrder = (props: Props) => {
     //     ),
     //   },
     {
-      title: "Quantity",
+      title: <TranslateTing text="Quantity" />,
       dataIndex: "quantity",
       key: "quantity",
       width: 120,
@@ -219,24 +220,28 @@ const ModalOrder = (props: Props) => {
       ),
     },
     {
-      title: "Total Amount",
+      title: <TranslateTing text="Total Amount" />,
       dataIndex: "totalAmount",
       align: "center",
     },
     {
-      title: "Action",
+      title: <TranslateTing text="Action" />,
       key: "action",
       width: 100,
       align: "center",
       fixed: "right",
       render: (_: any, record: any) => (
         <Space>
-          <Tooltip title="Delete">
+          <Tooltip title={<TranslateTing text="Delete" />}>
             <Popconfirm
-              title="Delete the Brand"
-              description="Are you sure to delete this Brand?"
+              title={<TranslateTing text="Delete the Brand" />}
+              description={
+                <TranslateTing text="Are you sure to delete this Brand?" />
+              }
               icon={<QuestionCircleOutlined style={{ color: "red" }} />}
               onConfirm={() => handleDelete(record)}
+              okText={<TranslateTing text="OK" />}
+              cancelText={<TranslateTing text="Cancel" />}
             >
               <RiDeleteBin5Line style={{ color: "red", fontSize: 20 }} />
             </Popconfirm>
@@ -349,7 +354,6 @@ const ModalOrder = (props: Props) => {
         footer={null}
         width="80%"
       >
-        {" "}
         <Form
           name="basic"
           layout="vertical"
@@ -367,12 +371,14 @@ const ModalOrder = (props: Props) => {
               <Row gutter={16}>
                 <Col span={12}>
                   <Form.Item
-                    label="Customer"
+                    label={<TranslateTing text="Customer" />}
                     name="customer"
                     rules={[
                       {
                         required: true,
-                        message: "Please input your customer!",
+                        message: (
+                          <TranslateTing text="Please input your customer!" />
+                        ),
                       },
                     ]}
                   >
@@ -387,12 +393,14 @@ const ModalOrder = (props: Props) => {
                 </Col>
                 <Col span={12}>
                   <Form.Item
-                    label="Phone number"
+                    label={<TranslateTing text="Phone number" />}
                     name="phone"
                     rules={[
                       {
                         required: true,
-                        message: "Please input your phone number!",
+                        message: (
+                          <TranslateTing text="Please input your phone number!" />
+                        ),
                       },
                     ]}
                   >
@@ -402,14 +410,15 @@ const ModalOrder = (props: Props) => {
               </Row>
               <Row gutter={16}>
                 <Col span={12}>
-                  <Form.Item label="Note" name="note">
+                  <Form.Item label={<TranslateTing text="Note" />} name="note">
                     <Input />
                   </Form.Item>
                 </Col>
                 <Col span={12}>
                   <Form.Item label=" ">
                     <div style={{ fontWeight: 550, fontSize: 20 }}>
-                      Total Price: <span>$ {totalPrice}</span>
+                      {<TranslateTing text="Total price" />}:
+                      <span>$ {totalPrice}</span>
                     </div>
                   </Form.Item>
                 </Col>
@@ -422,7 +431,9 @@ const ModalOrder = (props: Props) => {
                 <div
                   style={{ display: "flex", flexDirection: "column", gap: 10 }}
                 >
-                  <p style={{ marginBottom: -5 }}>Search for name</p>
+                  <p style={{ marginBottom: -5 }}>
+                    {<TranslateTing text="Search for name" />}
+                  </p>
                   <Input
                     placeholder="Search for name"
                     name="name"
@@ -438,14 +449,14 @@ const ModalOrder = (props: Props) => {
                     }}
                   >
                     <Button onClick={handleRefresh} icon={<CloseOutlined />}>
-                      Refresh
+                      <TranslateTing text="Refresh" />
                     </Button>
                     <Button
                       onClick={handleSearch}
                       type="primary"
                       icon={<SearchOutlined />}
                     >
-                      Search
+                      <TranslateTing text="Search" />
                     </Button>
                   </div>
                 </div>
@@ -471,14 +482,14 @@ const ModalOrder = (props: Props) => {
           <div style={{ display: "flex", justifyContent: "center" }}>
             <Space>
               <Button htmlType="button" onClick={onClose}>
-                Cancel
+                <TranslateTing text="Cancel" />
               </Button>
               <Button
                 type="primary"
                 htmlType="submit"
                 // onClick={() => form.submit()}
               >
-                Submit
+                <TranslateTing text="Submit" />
               </Button>
             </Space>
           </div>

@@ -20,12 +20,15 @@ import flagCn from "../../assets/images/flags/cn.png";
 import flagVn from "../../assets/images/flags/vn.png";
 import user from "../../assets/images/user.png";
 import AutoTranslate from "../../utils/AutoTranslate";
+import { useLocalization } from "../../context/LocalizationWrapper";
+
 const { Header, Content, Footer, Sider } = Layout;
 
 const MainLayout = (props: any) => {
   const { children } = props;
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
+  const { switchLocale } = useLocalization();
   const userData: any = localStorage.getItem("userData");
   const convertDtUser = JSON.parse(userData);
   const {
@@ -72,15 +75,19 @@ const MainLayout = (props: any) => {
   //   const event = new Event("languageChange");
   //   window.dispatchEvent(event);
   // };
+  // const handleChangeLanguages = (value: any) => {
+  //   setLanguage(value);
+  //   localStorage.setItem("language", value);
+  //   const event = new Event("languageChange");
+  //   window.dispatchEvent(event);
+  //   console.log("Language changed to:", value); // Log the language change
+  //   if ((window as any).googleTranslateElementInit) {
+  //     (window as any).googleTranslateElementInit();
+  //   }
+  // };
   const handleChangeLanguages = (value: any) => {
     setLanguage(value);
-    localStorage.setItem("language", value);
-    const event = new Event("languageChange");
-    window.dispatchEvent(event);
-    console.log("Language changed to:", value); // Log the language change
-    if ((window as any).googleTranslateElementInit) {
-      (window as any).googleTranslateElementInit();
-    }
+    switchLocale(value);
   };
 
   const languageMenu = (
