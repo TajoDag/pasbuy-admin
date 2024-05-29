@@ -3,7 +3,12 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { startLoading, stopLoading } from "../../redux/reducers/loadingReducer";
 import { showNotification } from "../../redux/reducers/notificationReducer";
-import { changeKeyChat, createLogoHeader, getKeyChat } from "./apis";
+import {
+  changeKeyChat,
+  createLogoHeader,
+  getKeyChat,
+  getLogoHeader,
+} from "./apis";
 import TranslateTing from "../../components/Common/TranslateTing";
 import { UploadOutlined } from "@ant-design/icons";
 
@@ -24,7 +29,7 @@ const Settings = () => {
   const dispatch = useDispatch();
   const [keyLiveChat, setKeyLiveChat] = useState("");
   const [logoHeader, setLogoHeader] = useState<string | null>(null);
-
+  const [detailLogoHeader, setDetailLogoHeader] = useState();
   const handleBeforeUploadLogoHeader = async (file: File) => {
     const base64 = await getBase64(file);
     setLogoHeader(base64);
@@ -50,7 +55,7 @@ const Settings = () => {
     dispatch(startLoading());
     const payload = { image: logoHeader };
     try {
-      const rp = await createLogoHeader(payload);
+      const rp = await createLogoHeader("6656784a2de1279e93bcc91a",payload);
 
       if (rp.status) {
         message.success("Logo uploaded successfully");
@@ -89,7 +94,25 @@ const Settings = () => {
         dispatch(stopLoading());
       }
     };
-
+    const getDetailLogoHeader = async () => {
+      dispatch(startLoading());
+      try {
+        const rp = await getLogoHeader("6656784a2de1279e93bcc91a");
+        if (rp.status) {
+          setDetailLogoHeader(rp.result.images.url);
+        }
+      } catch (err) {
+        dispatch(
+          showNotification({
+            message: "Retrieving data failed.",
+            type: "error",
+          })
+        );
+      } finally {
+        dispatch(stopLoading());
+      }
+    };
+    getDetailLogoHeader();
     getKey();
   }, [dispatch]);
 
@@ -136,7 +159,7 @@ const Settings = () => {
             <h3>
               <TranslateTing text="Logo Header" />
             </h3>
-            {logoHeader && (
+            {logoHeader ? (
               // <img
               //   src={logoHeader}
               //   alt="avatar"
@@ -144,7 +167,11 @@ const Settings = () => {
               // />
               <div style={{ display: "flex", flexDirection: "column" }}>
                 <Image width={200} src={logoHeader} />
-                <Button onClick={handleUpload}>Submit Logo</Button>
+                <Button onClick={handleUpload}>Xác nhận thay đổi</Button>
+              </div>
+            ) : (
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <Image width={200} src={detailLogoHeader} />
               </div>
             )}
           </div>
@@ -157,7 +184,7 @@ const Settings = () => {
             onChange={handleChangeLogoHeader}
             maxCount={1} // Allow only one file to be uploaded
           >
-            <Button icon={<UploadOutlined />}>Upload</Button>
+            <Button icon={<UploadOutlined />}>Tải ảnh</Button>
           </Upload>
 
           <div>
