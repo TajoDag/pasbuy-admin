@@ -300,7 +300,7 @@ const Products = (props: Props) => {
   };
   const columns: TableProps<IProductTable>["columns"] = [
     {
-      title: <TranslateTing text="STT" />,
+      title: <TranslateTing text="#" />,
       dataIndex: "stt",
       key: "stt",
       width: 60,
@@ -448,7 +448,7 @@ const Products = (props: Props) => {
       },
     },
     {
-      title: "Action",
+      title: <TranslateTing text="Action" />,
       key: "action",
       width: 100,
       align: "center",
@@ -459,10 +459,12 @@ const Products = (props: Props) => {
             style={{ fontSize: 20 }}
             onClick={() => onUpdate(record._id)}
           />
-          <Tooltip title="Delete">
+          <Tooltip title={<TranslateTing text="Delete the product" />}>
             <Popconfirm
-              title="Delete the Brand"
-              description="Are you sure to delete this Brand?"
+              title={<TranslateTing text="Delete the product" />}
+              description={
+                <TranslateTing text="Are you sure to delete this product?" />
+              }
               icon={<QuestionCircleOutlined style={{ color: "red" }} />}
               onConfirm={() => handleDelete(record._id)}
             >
@@ -619,7 +621,11 @@ const Products = (props: Props) => {
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
       <Card
         title={<TranslateTing text="Products" />}
-        extra={<Button onClick={onAdd}>Add Product</Button>}
+        extra={
+          <Button onClick={onAdd}>
+            <TranslateTing text="Add Product" />
+          </Button>
+        }
         style={{ width: "100%" }}
       ></Card>
       <Table

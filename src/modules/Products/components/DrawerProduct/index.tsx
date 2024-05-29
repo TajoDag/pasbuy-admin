@@ -22,6 +22,7 @@ import { useDispatch } from "react-redux";
 import { getAllProductType } from "../../../ProductType/utils/services";
 import { getAllBrand } from "../../../Brand/utils/services";
 import { IProduct } from "../../interfaces";
+import TranslateTing from "../../../../components/Common/TranslateTing";
 type Props = {
   title: string;
   onClose: () => void;
@@ -59,12 +60,11 @@ const DrawerProduct = (props: Props) => {
   const [listCate, setListCate] = useState([]);
   const [listBrand, setListBrand] = useState([]);
   const [listProductType, setListProductType] = useState([]);
-
-  let newTitle = "";
+  let newTitle: any = "";
   if (title === "add") {
-    newTitle = "Add product";
+    newTitle = <TranslateTing text="Add Product" />;
   } else if (title === "update") {
-    newTitle = "Update product";
+    newTitle = <TranslateTing text="Update product" />;
   }
 
   const filterOption = (
@@ -184,8 +184,6 @@ const DrawerProduct = (props: Props) => {
     }
   }, [title, dataDetail, form, setImagesPreview]);
 
-  console.log(dataDetail);
-
   return (
     <div>
       <Drawer
@@ -195,9 +193,11 @@ const DrawerProduct = (props: Props) => {
         open={open}
         extra={
           <Space>
-            <Button onClick={onClose}>Cancel</Button>
+            <Button onClick={onClose}>
+              <TranslateTing text="Cancel" />
+            </Button>
             <Button onClick={() => form.submit()} type="primary">
-              Submit
+              <TranslateTing text="Submit" />
             </Button>
           </Space>
         }
@@ -213,7 +213,7 @@ const DrawerProduct = (props: Props) => {
             <Col span={12}>
               <Form.Item
                 name="name"
-                label="Name"
+                label={<TranslateTing text="Name" />}
                 rules={[{ required: true, message: "Please enter user name" }]}
               >
                 <Input placeholder="Please enter user name" />
@@ -223,7 +223,7 @@ const DrawerProduct = (props: Props) => {
               <Space>
                 <Form.Item
                   name="featured"
-                  label="Featured"
+                  label={<TranslateTing text="Featured" />}
                   initialValue={false}
                 >
                   <Switch defaultChecked />

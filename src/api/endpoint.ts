@@ -47,5 +47,9 @@ export const endpoints = {
   keyChat: {
     get: `configLiveChat`,
     put: `admin/configLiveChat`
+  },
+  logoHeader: {
+    create: `admin/logo/header`,
+    getDetail: `admin/logo/header`
   }
 };

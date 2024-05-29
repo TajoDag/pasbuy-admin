@@ -8,17 +8,18 @@ import React, {
 import { IntlProvider } from "react-intl";
 import enLocale from "../locales/en.json";
 import viLocale from "../locales/vi.json";
+import zhLocale from "../locales/zh.json";
 
-interface LocalizationContextProps {
+type LocalizationContextType = {
   locale: string;
   switchLocale: (newLocale: string) => void;
-}
+};
 
-const LocalizationContext = createContext<LocalizationContextProps | undefined>(
+const LocalizationContext = createContext<LocalizationContextType | undefined>(
   undefined
 );
 
-export const useLocalization = (): LocalizationContextProps => {
+export const useLocalization = (): LocalizationContextType => {
   const context = useContext(LocalizationContext);
   if (!context) {
     throw new Error(
@@ -28,9 +29,9 @@ export const useLocalization = (): LocalizationContextProps => {
   return context;
 };
 
-interface LocalizationProviderProps {
+type LocalizationProviderProps = {
   children: ReactNode;
-}
+};
 
 export const LocalizationProvider: React.FC<LocalizationProviderProps> = ({
   children,
@@ -38,9 +39,10 @@ export const LocalizationProvider: React.FC<LocalizationProviderProps> = ({
   const storedLocale = localStorage.getItem("locale");
   const [locale, setLocale] = useState<string>(storedLocale || "en");
 
-  const messages: { [key: string]: any } = {
+  const messages: any = {
     en: enLocale,
     vi: viLocale,
+    zh: zhLocale,
   };
 
   const switchLocale = (newLocale: string) => {

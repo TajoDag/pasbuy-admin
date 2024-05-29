@@ -1,14 +1,74 @@
-import { Button, Card, Image, Input, Row, Space } from "antd";
+import { Button, Card, Image, Input, Row, Space, Upload, message } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { startLoading, stopLoading } from "../../redux/reducers/loadingReducer";
 import { showNotification } from "../../redux/reducers/notificationReducer";
-import { changeKeyChat, getKeyChat } from "./apis";
+import { changeKeyChat, createLogoHeader, getKeyChat } from "./apis";
 import TranslateTing from "../../components/Common/TranslateTing";
+import { UploadOutlined } from "@ant-design/icons";
+
+const getBase64 = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      resolve(reader.result as string);
+    };
+    reader.onerror = (error) => {
+      reject(error);
+    };
+  });
+};
 
 const Settings = () => {
   const dispatch = useDispatch();
   const [keyLiveChat, setKeyLiveChat] = useState("");
+  const [logoHeader, setLogoHeader] = useState<string | null>(null);
+
+  const handleBeforeUploadLogoHeader = async (file: File) => {
+    const base64 = await getBase64(file);
+    setLogoHeader(base64);
+    return false; // Prevent upload
+  };
+
+  const handleChangeLogoHeader = async (info: any) => {
+    if (info.file.status === "removed") {
+      setLogoHeader(null);
+    }
+  };
+  const handleUpload = async () => {
+    if (!logoHeader) {
+      dispatch(
+        showNotification({
+          message: "Please select an image to upload.",
+          type: "error",
+        })
+      );
+      return;
+    }
+
+    dispatch(startLoading());
+    const payload = { image: logoHeader };
+    try {
+      const rp = await createLogoHeader(payload);
+
+      if (rp.status) {
+        message.success("Logo uploaded successfully");
+        // setLogoHeader(null);
+      } else {
+        message.error("Failed to upload logo");
+      }
+    } catch (error) {
+      dispatch(
+        showNotification({
+          message: "An error occurred while uploading the logo",
+          type: "error",
+        })
+      );
+    } finally {
+      dispatch(stopLoading());
+    }
+  };
 
   useEffect(() => {
     const getKey = async () => {
@@ -67,7 +127,7 @@ const Settings = () => {
       dispatch(stopLoading());
     }
   };
-
+  console.log(logoHeader, "dsddd");
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
       <Card title={<TranslateTing text="Logos" />} style={{ width: "100%" }}>
@@ -76,11 +136,30 @@ const Settings = () => {
             <h3>
               <TranslateTing text="Logo Header" />
             </h3>
-            <Image
-              width={200}
-              src="https://www.pasbuy.cyou/public/uploads/all/1AZ1FU1wB4TY7AwOvrhhaCHg8kLRsm1NV78YwxJC.png"
-            />
+            {logoHeader && (
+              // <img
+              //   src={logoHeader}
+              //   alt="avatar"
+              //   style={{ marginTop: 10, width: "100%" }}
+              // />
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <Image width={200} src={logoHeader} />
+                <Button onClick={handleUpload}>Submit Logo</Button>
+              </div>
+            )}
           </div>
+          <Upload
+            name="avatar"
+            listType="picture"
+            className="avatar-uploader"
+            showUploadList={false}
+            beforeUpload={handleBeforeUploadLogoHeader}
+            onChange={handleChangeLogoHeader}
+            maxCount={1} // Allow only one file to be uploaded
+          >
+            <Button icon={<UploadOutlined />}>Upload</Button>
+          </Upload>
+
           <div>
             <h3>
               <TranslateTing text="Logo Footer" />

@@ -24,7 +24,7 @@ const Accounts = () => {
 
   const columns: TableProps<any>["columns"] = [
     {
-      title: <TranslateTing text="STT" />,
+      title: <TranslateTing text="#" />,
       dataIndex: "stt",
       key: "stt",
       width: 60,
@@ -60,7 +60,7 @@ const Accounts = () => {
       render: (text) => <p>{text}</p>,
     },
     {
-      title: <TranslateTing text="Phone Number" />,
+      title: <TranslateTing text="Phone number" />,
       dataIndex: "phone",
       key: "address",
       width: 100,
@@ -76,7 +76,7 @@ const Accounts = () => {
       render: (text) => <p>{text ? "Shop" : "No"}</p>,
     },
     {
-      title: <TranslateTing text="InviteCode" />,
+      title: <TranslateTing text="Invite Code" />,
       dataIndex: "inviteCode",
       key: "inviteCode",
       width: 100,

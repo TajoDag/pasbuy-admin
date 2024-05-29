@@ -21,6 +21,7 @@ import flagVn from "../../assets/images/flags/vn.png";
 import user from "../../assets/images/user.png";
 import AutoTranslate from "../../utils/AutoTranslate";
 import { useLocalization } from "../../context/LocalizationWrapper";
+import TranslateTing from "../../components/Common/TranslateTing";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -30,13 +31,12 @@ const MainLayout = (props: any) => {
   const navigate = useNavigate();
   const { switchLocale } = useLocalization();
   const userData: any = localStorage.getItem("userData");
+  const storedLanguage = localStorage.getItem("locale") || "en";
   const convertDtUser = JSON.parse(userData);
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
-  const [language, setLanguage] = useState(
-    localStorage.getItem("language") || "en"
-  );
+  const [language, setLanguage] = useState(storedLanguage);
   const languages: any = [
     {
       key: "en",
@@ -44,7 +44,7 @@ const MainLayout = (props: any) => {
       icon: <img style={{ marginRight: 8 }} src={flagEn} />,
     },
     {
-      key: "zh-CN",
+      key: "zh",
       label: "简体中文",
       icon: <img style={{ marginRight: 8 }} src={flagCn} />,
     },
@@ -56,14 +56,14 @@ const MainLayout = (props: any) => {
   ];
   const menuItems: any = [
     {
-      label: <p>Logout</p>,
+      label: (
+        <p>
+          <TranslateTing text="Logout" />
+        </p>
+      ),
       key: "0",
     },
   ];
-  useEffect(() => {
-    const lang = localStorage.getItem("language") || "en";
-    setLanguage(lang);
-  }, []);
   const handleLogout = () => {
     window.localStorage.clear();
     navigate("/login");

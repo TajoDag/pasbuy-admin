@@ -6,7 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import store from "./stores/index.js";
 import AppRoutes from "./routes/index.js";
 import AutoTranslate from "./utils/AutoTranslate.js";
-import { LocalizationProvider } from "./context/LocalizationWrapper.js";
+import { LocalizationProvider } from "./context/LocalizationWrapper";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

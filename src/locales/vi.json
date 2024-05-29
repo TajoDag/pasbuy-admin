@@ -11,6 +11,11 @@
   "blogs": "Blogs",
   "allBrands": "Thương hiệu",
   "allCategories": "Danh mục",
+  "Categories": "Danh mục",
+  "Home": "Trang chủ",
+  "Account": "Tài khoản",
+  "Notifications": "Thông báo",
+  "Cart": "Giỏ hàng",
   "dolla": "Đô la Mỹ ($)",
   "vnd": "Việt Nam đồng",
   "placeholderSearch": " Tìm kiếm sản phẩm ....",
@@ -212,6 +217,7 @@
   "Edit the ": "Chỉnh sửa ",
   "Active": "Hoạt động",
   "Deactive": "Ngừng hoạt động",
+  "Delete the product": "Xóa sản phẩm này",
   "Delete the Product type": "Xóa kiểu sản phẩm",
   "Are you sure to delete this Product type?": "Bạn có chắc muốn xóa kiểu sản phẩm này?",
   "Product Type": "Kiểu sản phẩm",
@@ -219,6 +225,7 @@
   "Product type name": "Tên kiểu sản phẩm",
   "Delete the Brand": "Xóa nhãn hiệu",
   "Are you sure to delete this Brand?": "Bạn có chắc muốn xóa nhãn hiệu này?",
+  "Are you sure to delete this product?": "Bạn chắc chắn xoá sản phẩm này ?",
   "Brand name": "Tên nhãn hiệu",
   "Phone number": "Số điện thoại",
   "Add Orders": "Thêm đơn hàng",
@@ -252,5 +259,8 @@
   "Logos": "Biểu tượng",
   "Banners": "Băng rôn",
   "Images advertisement": "Hình ảnh quảng cáo",
-  "Config live chat": "Cấu hình trò chuyện trực tiếp"
+  "Config live chat": "Cấu hình trò chuyện trực tiếp",
+  "Total": "Tổng số",
+  "Add Product": "Thêm sản phẩm mới",
+"Update product": "Chỉnh sửa sản phẩm"
 }
