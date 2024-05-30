@@ -22,6 +22,7 @@ import { TbEdit } from "react-icons/tb";
 import { FaEye } from "react-icons/fa";
 import ModalItem from "./components/ModalItem";
 import TranslateTing from "../../components/Common/TranslateTing";
+import ModalChangeStatusOrder from "./components/ChangeStatusOrder";
 
 const Orders = () => {
   const dispatch = useDispatch();
@@ -31,6 +32,7 @@ const Orders = () => {
   const [dataItems, setDataItems] = useState<any>([]);
   const [openType, setOpenType] = useState<string>("");
   const [open, setOpen] = useState(false);
+  const [openDetail, setOpenDetail] = useState(false);
   const [openItems, setOpenItems] = useState(false);
   const [refresh, refecth] = useRefresh();
   const [searchParams, setSearchParams] = useState<any>({
@@ -127,7 +129,10 @@ const Orders = () => {
       }
     } catch (error) {}
   };
-
+  const onCloseModalChangeStatus = () => {
+    setOpenDetail(false);
+    setDataItems([]);
+  };
   const columns: TableProps<any>["columns"] = [
     {
       title: <TranslateTing text="STT" />,
@@ -152,12 +157,19 @@ const Orders = () => {
       width: 100,
       align: "center",
     },
+    // {
+    //   title: <TranslateTing text="Note customer" />,
+    //   dataIndex: "note",
+    //   key: "email",
+    //   width: 250,
+    //   align: "left",
+    // },
     {
-      title: <TranslateTing text="Note customer" />,
-      dataIndex: "note",
+      title: <TranslateTing text="Order location" />,
+      dataIndex: "orderLocation",
       key: "email",
       width: 250,
-      align: "left",
+      align: "center",
     },
     {
       title: <TranslateTing text="Status" />,
@@ -202,7 +214,14 @@ const Orders = () => {
                 setDataItems(record.orderItems);
               }}
             />
-            <Tooltip title={<TranslateTing text="Change order status" />}>
+            <Button
+              icon={<TbEdit />}
+              onClick={() => {
+                setOpenDetail(true);
+                setDataItems(record);
+              }}
+            />
+            {/* <Tooltip title={<TranslateTing text="Change order status" />}>
               <Popconfirm
                 title={<TranslateTing text="Change order status" />}
                 // description={`Do you want to change order status to ${keyC}?`}
@@ -215,7 +234,7 @@ const Orders = () => {
               >
                 <Button icon={<TbEdit />} />
               </Popconfirm>
-            </Tooltip>
+            </Tooltip> */}
           </Space>
         );
       },
@@ -310,6 +329,12 @@ const Orders = () => {
         open={openItems}
         data={dataItems}
         onClose={onCloseModalDetail}
+      />
+      <ModalChangeStatusOrder
+        open={openDetail}
+        data={dataItems}
+        refecth={refecth}
+        onClose={onCloseModalChangeStatus}
       />
     </div>
   );

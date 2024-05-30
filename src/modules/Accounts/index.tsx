@@ -4,12 +4,16 @@ import { getListUser } from "./api";
 import { showNotification } from "../../redux/reducers/notificationReducer";
 import { useDispatch } from "react-redux";
 import useRefresh from "../../hooks/useRefresh";
-import { Card, Table, TableProps } from "antd";
+import { Button, Card, Space, Table, TableProps } from "antd";
 import { splitText } from "../../utils";
 import TranslateTing from "../../components/Common/TranslateTing";
+import { FaEye } from "react-icons/fa";
+import UserDetail from "./Modal/UserDetail";
 
 const Accounts = () => {
   const dispatch = useDispatch();
+  const [dataDetail, setDataDetail] = useState<any>({});
+  const [openDetail, setOpenDetail] = useState(false);
   const [searchParams, setSearchParams] = useState<any>({
     page: 0,
     size: 10,
@@ -22,6 +26,10 @@ const Accounts = () => {
   const [dataTable, setDataTable] = useState<any[]>([]);
   const [refresh, refecth] = useRefresh();
 
+  const onCloseModalDetail = () => {
+    setOpenDetail(false);
+    setDataDetail({});
+  };
   const columns: TableProps<any>["columns"] = [
     {
       title: <TranslateTing text="#" />,
@@ -91,6 +99,24 @@ const Accounts = () => {
       align: "center",
       render: (text) => <p>{text}</p>,
     },
+    {
+      title: "",
+      align: "center" as "center",
+      width: 100,
+      render: (_: any, record: any, index: number) => {
+        return (
+          <Space size="middle">
+            <Button
+              icon={<FaEye />}
+              onClick={() => {
+                setOpenDetail(true);
+                setDataDetail(record);
+              }}
+            />
+          </Space>
+        );
+      },
+    },
   ];
   useEffect(() => {
     const getList = async () => {
@@ -150,6 +176,11 @@ const Accounts = () => {
           total: pagination.total,
         }}
         onChange={handleTableChange}
+      />
+      <UserDetail
+        open={openDetail}
+        data={dataDetail}
+        onClose={onCloseModalDetail}
       />
     </div>
   );

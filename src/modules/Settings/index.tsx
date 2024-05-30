@@ -7,73 +7,20 @@ import {
   changeKeyChat,
   createLogoHeader,
   getKeyChat,
+  getLogoFooter,
   getLogoHeader,
 } from "./apis";
 import TranslateTing from "../../components/Common/TranslateTing";
 import { UploadOutlined } from "@ant-design/icons";
-
-const getBase64 = (file: File): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      resolve(reader.result as string);
-    };
-    reader.onerror = (error) => {
-      reject(error);
-    };
-  });
-};
+import LogoHeader from "./components/LogoHeader";
+import LogoFooter from "./components/LogoFooter";
+import Banner from "./components/Banner";
 
 const Settings = () => {
   const dispatch = useDispatch();
   const [keyLiveChat, setKeyLiveChat] = useState("");
-  const [logoHeader, setLogoHeader] = useState<string | null>(null);
   const [detailLogoHeader, setDetailLogoHeader] = useState();
-  const handleBeforeUploadLogoHeader = async (file: File) => {
-    const base64 = await getBase64(file);
-    setLogoHeader(base64);
-    return false; // Prevent upload
-  };
-
-  const handleChangeLogoHeader = async (info: any) => {
-    if (info.file.status === "removed") {
-      setLogoHeader(null);
-    }
-  };
-  const handleUpload = async () => {
-    if (!logoHeader) {
-      dispatch(
-        showNotification({
-          message: "Please select an image to upload.",
-          type: "error",
-        })
-      );
-      return;
-    }
-
-    dispatch(startLoading());
-    const payload = { image: logoHeader };
-    try {
-      const rp = await createLogoHeader("6656784a2de1279e93bcc91a",payload);
-
-      if (rp.status) {
-        message.success("Logo uploaded successfully");
-        // setLogoHeader(null);
-      } else {
-        message.error("Failed to upload logo");
-      }
-    } catch (error) {
-      dispatch(
-        showNotification({
-          message: "An error occurred while uploading the logo",
-          type: "error",
-        })
-      );
-    } finally {
-      dispatch(stopLoading());
-    }
-  };
+  const [detailLogoFooter, setDetailLogoFooter] = useState();
 
   useEffect(() => {
     const getKey = async () => {
@@ -112,7 +59,26 @@ const Settings = () => {
         dispatch(stopLoading());
       }
     };
+    const getDetailLogoFooter = async () => {
+      dispatch(startLoading());
+      try {
+        const rp = await getLogoFooter("665701da76b8c058a19a4780");
+        if (rp.status) {
+          setDetailLogoFooter(rp.result.images.url);
+        }
+      } catch (err) {
+        dispatch(
+          showNotification({
+            message: "Retrieving data failed.",
+            type: "error",
+          })
+        );
+      } finally {
+        dispatch(stopLoading());
+      }
+    };
     getDetailLogoHeader();
+    getDetailLogoFooter();
     getKey();
   }, [dispatch]);
 
@@ -150,62 +116,21 @@ const Settings = () => {
       dispatch(stopLoading());
     }
   };
-  console.log(logoHeader, "dsddd");
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
       <Card title={<TranslateTing text="Logos" />} style={{ width: "100%" }}>
         <div style={{ display: "flex", flexDirection: "row", gap: 50 }}>
-          <div>
-            <h3>
-              <TranslateTing text="Logo Header" />
-            </h3>
-            {logoHeader ? (
-              // <img
-              //   src={logoHeader}
-              //   alt="avatar"
-              //   style={{ marginTop: 10, width: "100%" }}
-              // />
-              <div style={{ display: "flex", flexDirection: "column" }}>
-                <Image width={200} src={logoHeader} />
-                <Button onClick={handleUpload}>Xác nhận thay đổi</Button>
-              </div>
-            ) : (
-              <div style={{ display: "flex", flexDirection: "column" }}>
-                <Image width={200} src={detailLogoHeader} />
-              </div>
-            )}
-          </div>
-          <Upload
-            name="avatar"
-            listType="picture"
-            className="avatar-uploader"
-            showUploadList={false}
-            beforeUpload={handleBeforeUploadLogoHeader}
-            onChange={handleChangeLogoHeader}
-            maxCount={1} // Allow only one file to be uploaded
-          >
-            <Button icon={<UploadOutlined />}>Tải ảnh</Button>
-          </Upload>
-
-          <div>
-            <h3>
-              <TranslateTing text="Logo Footer" />
-            </h3>
-            <Image
-              width={200}
-              src="https://www.pasbuy.cyou/public/uploads/all/Pb40YAYGtG8kNwCDTQZZ3w84k1bufpt57NCcS9dj.jpg"
-            />
-          </div>
+          <LogoHeader detailLogoHeader={detailLogoHeader} />
+          <LogoFooter detailLogoFooter={detailLogoFooter} />
         </div>
       </Card>
-      <Card
-        title={<TranslateTing text="Banners" />}
-        style={{ width: "100%" }}
-      ></Card>
-      <Card
+      <Card title={<TranslateTing text="Banners" />} style={{ width: "100%" }}>
+        <Banner />
+      </Card>
+      {/* <Card
         title={<TranslateTing text="Images advertisement" />}
         style={{ width: "100%" }}
-      ></Card>
+      ></Card> */}
       <Card
         title={<TranslateTing text="Config live chat" />}
         style={{ width: "100%" }}

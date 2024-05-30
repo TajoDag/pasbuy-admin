@@ -16,6 +16,7 @@ import { MdBrandingWatermark } from "react-icons/md";
 import { UserOutlined } from "@ant-design/icons";
 import TranslateTing from "../components/Common/TranslateTing";
 import { IoMdSettings } from "react-icons/io";
+import ReturnTheOrders from "../modules/ReturnTheOrders";
 
 export const routes_url = [
   {
@@ -98,6 +99,14 @@ export const routes_url = [
         isPrivate: true,
         icon: <FaShoppingCart />,
       },
+      {
+        key: "10",
+        path: "/return-the-orders",
+        label: <TranslateTing text="Return the orders" />,
+        element: <ReturnTheOrders />,
+        isPrivate: true,
+        icon: <FaShoppingCart />,
+      },
     ],
   },
   {
@@ -114,7 +123,7 @@ export const routes_url = [
       // },
 
       {
-        key: "8",
+        key: "9",
         path: "/settings",
         label: <TranslateTing text="Settings" />,
         element: <Settings />,

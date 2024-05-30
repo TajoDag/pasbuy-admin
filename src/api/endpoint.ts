@@ -13,7 +13,7 @@ export const endpoints = {
     create: `admin/products`,
     delete: `product`,
     getDetail: `product`,
-    getTotal: `product/total`
+    getTotal: `product/total`,
   },
   category: {
     getAll: `admin/categories/all`,
@@ -46,10 +46,19 @@ export const endpoints = {
   },
   keyChat: {
     get: `configLiveChat`,
-    put: `admin/configLiveChat`
+    put: `admin/configLiveChat`,
   },
   logoHeader: {
     create: `admin/logo/header`,
-    getDetail: `admin/logo/header`
-  }
+    getDetail: `admin/logo/header`,
+  },
+  logoFooter: {
+    create: `admin/logo/footer`,
+    getDetail: `logo/footer`,
+  },
+  banner: {
+    create: `admin/banner/create`,
+    update: `admin/banner`,
+    get: `banner`,
+  },
 };
