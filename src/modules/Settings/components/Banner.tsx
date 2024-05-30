@@ -125,7 +125,6 @@ const Banner: React.FC = () => {
     getAllBanner();
   }, []);
 
-  console.log(base64List);
   return (
     <div>
       <Upload
