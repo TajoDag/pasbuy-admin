@@ -5,6 +5,7 @@ import { RcFile } from "antd/es/upload/interface";
 import { createBanner, getBanner, publicBanner } from "../apis";
 import { useDispatch } from "react-redux";
 import { showNotification } from "../../../redux/reducers/notificationReducer";
+import TranslateTing from "../../../components/Common/TranslateTing";
 
 const getBase64 = (file: RcFile): Promise<string> =>
   new Promise((resolve, reject) => {
@@ -16,13 +17,16 @@ const getBase64 = (file: RcFile): Promise<string> =>
 
 const urlToBase64 = (url: string): Promise<string> =>
   fetch(url)
-    .then(response => response.blob())
-    .then(blob => new Promise<string>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result as string);
-      reader.onerror = reject;
-      reader.readAsDataURL(blob);
-    }));
+    .then((response) => response.blob())
+    .then(
+      (blob) =>
+        new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result as string);
+          reader.onerror = reject;
+          reader.readAsDataURL(blob);
+        })
+    );
 
 const Banner: React.FC = () => {
   const [previewOpen, setPreviewOpen] = useState(false);
@@ -63,7 +67,9 @@ const Banner: React.FC = () => {
   const uploadButton = (
     <button style={{ border: 0, background: "none" }} type="button">
       <PlusOutlined />
-      <div style={{ marginTop: 8 }}>Upload</div>
+      <div style={{ marginTop: 8 }}>
+        <TranslateTing text="Choose Images" />
+      </div>
     </button>
   );
 
@@ -149,7 +155,9 @@ const Banner: React.FC = () => {
         />
       )}
       <div style={{ marginTop: 10 }}>
-        <Button onClick={handleCreate}>Cập nhật</Button>
+        <Button onClick={handleCreate}>
+          <TranslateTing text="Update" />
+        </Button>
       </div>
     </div>
   );

@@ -23,6 +23,8 @@ import { FaEye } from "react-icons/fa";
 import ModalItem from "./components/ModalItem";
 import TranslateTing from "../../components/Common/TranslateTing";
 import ModalChangeStatusOrder from "./components/ChangeStatusOrder";
+import { formatPrice } from "../../utils";
+import { useCurrency } from "../../context/CurrencyContext";
 
 const Orders = () => {
   const dispatch = useDispatch();
@@ -47,6 +49,7 @@ const Orders = () => {
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [totalPrice, setTotalPrice] = useState(0);
+  const { currency } = useCurrency();
   const onClose = () => {
     form.resetFields();
     setOpenType("");
@@ -135,7 +138,7 @@ const Orders = () => {
   };
   const columns: TableProps<any>["columns"] = [
     {
-      title: <TranslateTing text="STT" />,
+      title: <TranslateTing text="#" />,
       dataIndex: "stt",
       key: "stt",
       width: 60,
@@ -179,10 +182,13 @@ const Orders = () => {
       render: (value: any) => TagsOrder(value),
     },
     {
-      title: <TranslateTing text="Total Price ($)" />,
+      title: <TranslateTing text="Total Price" />,
       dataIndex: "totalPrice",
       align: "center" as "center",
       width: 100,
+      render: (_, record: any) => (
+        <>{formatPrice(record.totalPrice, currency)}</>
+      ),
     },
 
     {

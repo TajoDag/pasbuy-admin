@@ -39,7 +39,7 @@ export const TableCategory = () => {
 
   const columns: ColumnsType<any> = [
     {
-      title: <TranslateTing text="STT" />,
+      title: <TranslateTing text="#" />,
       align: "center" as "center",
       width: 60,
       render: (_: any, record: any, index: number) => index + 1,

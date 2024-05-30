@@ -43,6 +43,7 @@ export const endpoints = {
     create: `admin/order/create`,
     getList: `admin/order/all`,
     updateStatus: `admin/order/status`,
+    getListOrderAdmin: `admin/order/admin-customers`
   },
   keyChat: {
     get: `configLiveChat`,
@@ -61,4 +62,12 @@ export const endpoints = {
     update: `admin/banner`,
     get: `banner`,
   },
+  deposit: {
+    addToUser: `user/wallet/deposit`,
+    getListDeposit: `admin/wallet/deposit-requests`
+  },
+  withdraw: {
+    getListWithdraw: `admin/wallet/withdraw-requests`,
+    confirm: `admin/wallet/confirm`
+  }
 };

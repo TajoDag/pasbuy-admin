@@ -1,4 +1,4 @@
-import { Row } from "antd";
+import { Card, Col, Row } from "antd";
 import { useEffect, useState } from "react";
 import { showNotification } from "../../redux/reducers/notificationReducer";
 import { startLoading, stopLoading } from "../../redux/reducers/loadingReducer";
@@ -186,10 +186,10 @@ const Dashboard = () => {
     },
   ];
   return (
-    <div>
-      <div className="row gutters-10">
+    <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+      <Row gutter={[16, 16]}>
         {data.map((item, index) => (
-          <div className="col-6" key={index}>
+          <Col xs={24} sm={12} md={8} lg={6} xl={4} key={index}>
             <div
               className={`text-white rounded-lg mb-4 overflow-hidden ${item.className}`}
             >
@@ -210,9 +210,10 @@ const Dashboard = () => {
                 ></path>
               </svg>
             </div>
-          </div>
+          </Col>
         ))}
-      </div>
+      </Row>
+      <Card></Card>
     </div>
   );
 };

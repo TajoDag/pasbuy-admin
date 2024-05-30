@@ -1,6 +1,8 @@
 import { Modal, Table } from "antd";
 import React from "react";
 import TranslateTing from "../../../components/Common/TranslateTing";
+import { formatPrice } from "../../../utils";
+import { useCurrency } from "../../../context/CurrencyContext";
 
 type Props = {
   onClose?: any;
@@ -10,7 +12,7 @@ type Props = {
 
 const ModalItem = (props: Props) => {
   const { onClose, open, data } = props;
-
+  const { currency } = useCurrency();
   const columns: any = [
     {
       title: <TranslateTing text="Name" />,
@@ -18,11 +20,19 @@ const ModalItem = (props: Props) => {
       key: "name",
     },
     {
-      title: <TranslateTing text="Price ($)" />,
+      title: (
+        <p>
+          {" "}
+          <TranslateTing text="Price" />
+        </p>
+      ),
       dataIndex: "price",
       key: "price",
       width: 150,
       align: "center",
+      render: (_: any, record: any) => (
+        <>{formatPrice(record.price, currency)}</>
+      ),
     },
     {
       title: <TranslateTing text="Quantity" />,

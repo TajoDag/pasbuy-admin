@@ -103,7 +103,9 @@ const LogoFooter = (props: Props) => {
           </div>
         )}
         {showConfirmLogoFooter && (
-          <Button onClick={handleUpload}>Xác nhận thay đổi</Button>
+          <Button onClick={handleUpload}>
+            <TranslateTing text="Confirm" />
+          </Button>
         )}
       </div>
       <Upload
@@ -115,7 +117,9 @@ const LogoFooter = (props: Props) => {
         onChange={handleChangeLogoHeader}
         maxCount={1} // Allow only one file to be uploaded
       >
-        <Button icon={<UploadOutlined />}>Tải ảnh</Button>
+        <Button icon={<UploadOutlined />}>
+          <TranslateTing text="Choose Images" />
+        </Button>
       </Upload>
     </>
   );

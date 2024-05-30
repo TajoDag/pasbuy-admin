@@ -23,6 +23,7 @@ import { getAllProductType } from "../../../ProductType/utils/services";
 import { getAllBrand } from "../../../Brand/utils/services";
 import { IProduct } from "../../interfaces";
 import TranslateTing from "../../../../components/Common/TranslateTing";
+import { useIntl } from "react-intl";
 type Props = {
   title: string;
   onClose: () => void;
@@ -183,7 +184,20 @@ const DrawerProduct = (props: Props) => {
       }
     }
   }, [title, dataDetail, form, setImagesPreview]);
-
+  const intl = useIntl();
+  const placeholderName = intl.formatMessage({ id: "Please enter name" });
+  const placeholderCate = intl.formatMessage({
+    id: "Please choose category",
+  });
+  const placeholderBrand = intl.formatMessage({ id: "Please choose brand" });
+  const placeholderPrice = intl.formatMessage({ id: "Please enter price" });
+  const placeholderImportPrice = intl.formatMessage({
+    id: "Please enter import price",
+  });
+  const placeholderStock = intl.formatMessage({ id: "Please enter stock" });
+  const placeholderDescription = intl.formatMessage({
+    id: "Please enter description",
+  });
   return (
     <div>
       <Drawer
@@ -214,9 +228,9 @@ const DrawerProduct = (props: Props) => {
               <Form.Item
                 name="name"
                 label={<TranslateTing text="Name" />}
-                rules={[{ required: true, message: "Please enter user name" }]}
+                rules={[{ required: true, message: placeholderName }]}
               >
-                <Input placeholder="Please enter user name" />
+                <Input placeholder={placeholderName} />
               </Form.Item>
             </Col>
             <Col span={12}>
@@ -230,14 +244,14 @@ const DrawerProduct = (props: Props) => {
                 </Form.Item>
                 <Form.Item
                   name="todayDeal"
-                  label="Today Deal"
+                  label={<TranslateTing text="Today Deal" />}
                   initialValue={false}
                 >
                   <Switch defaultChecked={false} />
                 </Form.Item>
                 <Form.Item
                   name="flashDeal"
-                  label="Flash Deal"
+                  label={<TranslateTing text="Flash Deal" />}
                   initialValue={false}
                 >
                   <Switch defaultChecked={false} />
@@ -249,14 +263,12 @@ const DrawerProduct = (props: Props) => {
             <Col span={12}>
               <Form.Item
                 name="category"
-                label="Category"
-                rules={[
-                  { required: true, message: "Please select a category" },
-                ]}
+                label={<TranslateTing text="Category" />}
+                rules={[{ required: true, message: placeholderCate }]}
               >
                 <Select
                   showSearch
-                  placeholder="Select a category"
+                  placeholder={placeholderCate}
                   optionFilterProp="children"
                   filterOption={filterOption}
                   options={listCate}
@@ -266,12 +278,12 @@ const DrawerProduct = (props: Props) => {
             <Col span={12}>
               <Form.Item
                 name="brand"
-                label="Brand"
-                rules={[{ required: true, message: "Please choose the brand" }]}
+                label={<TranslateTing text="Brand" />}
+                rules={[{ required: true, message: placeholderBrand }]}
               >
                 <Select
                   showSearch
-                  placeholder="Select the brand"
+                  placeholder={placeholderBrand}
                   optionFilterProp="children"
                   filterOption={filterOption}
                   options={listBrand}
@@ -283,21 +295,27 @@ const DrawerProduct = (props: Props) => {
             <Col span={12}>
               <Form.Item
                 name="price"
-                label="Price ($)"
-                rules={[{ required: true, message: "Please enter price" }]}
+                label={
+                  <p>
+                    <TranslateTing text="Price" /> ($)
+                  </p>
+                }
+                rules={[{ required: true, message: placeholderPrice }]}
               >
-                <Input placeholder="Please enter price ($)" />
+                <Input placeholder={placeholderPrice} />
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item
-                name="importPrice ($)"
-                label="Import price"
-                rules={[
-                  { required: true, message: "Please center import price" },
-                ]}
+                name="importPrice"
+                label={
+                  <p>
+                    <TranslateTing text="Import price" /> ($)
+                  </p>
+                }
+                rules={[{ required: true, message: placeholderImportPrice }]}
               >
-                <Input placeholder="Please enter import price ($)" />
+                <Input placeholder={placeholderImportPrice} />
               </Form.Item>
             </Col>
           </Row>
@@ -305,10 +323,10 @@ const DrawerProduct = (props: Props) => {
             <Col span={12}>
               <Form.Item
                 name="Stock"
-                label="Stock"
-                rules={[{ required: true, message: "Please enter stock" }]}
+                label={<TranslateTing text="Stock" />}
+                rules={[{ required: true, message: placeholderStock }]}
               >
-                <Input placeholder="Please enter stock" />
+                <Input placeholder={placeholderStock} />
               </Form.Item>
             </Col>
           </Row>
@@ -316,11 +334,11 @@ const DrawerProduct = (props: Props) => {
             <Col span={24}>
               <Form.Item
                 name="description"
-                label="Description"
+                label={<TranslateTing text="Description" />}
                 rules={[
                   {
                     required: true,
-                    message: "please enter url description",
+                    message: placeholderDescription,
                   },
                 ]}
               >

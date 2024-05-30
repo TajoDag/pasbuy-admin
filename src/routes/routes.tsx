@@ -8,15 +8,23 @@ const Size = lazy(() => import("../modules/Sizes"));
 const Orders = lazy(() => import("../modules/Orders"));
 const Accounts = lazy(() => import("../modules/Accounts"));
 const Settings = lazy(() => import("../modules/Settings"));
+const ReturnTheOrders = lazy(() => import("../modules/ReturnTheOrders"));
+const Deposit = lazy(() => import("../modules/Deposit"));
+const Withdraw = lazy(() => import("../modules/Withdraw"));
+
 import { MdFormatSize, MdOutlineDashboard } from "react-icons/md";
-import { FaShoppingCart } from "react-icons/fa";
+import { FaShoppingCart, FaUsers } from "react-icons/fa";
 import { MdCategory } from "react-icons/md";
 import { AiFillProduct } from "react-icons/ai";
 import { MdBrandingWatermark } from "react-icons/md";
 import { UserOutlined } from "@ant-design/icons";
 import TranslateTing from "../components/Common/TranslateTing";
 import { IoMdSettings } from "react-icons/io";
-import ReturnTheOrders from "../modules/ReturnTheOrders";
+import { LuUsers2 } from "react-icons/lu";
+import { RiMapPinUserLine } from "react-icons/ri";
+import { BiCartDownload } from "react-icons/bi";
+import { HiOutlineCash } from "react-icons/hi";
+import { BsCashCoin } from "react-icons/bs";
 
 export const routes_url = [
   {
@@ -35,9 +43,25 @@ export const routes_url = [
         key: "8",
         path: "/account",
         label: <TranslateTing text="Accounts" />,
-        element: <Accounts />,
+        element: <Accounts role={null} />,
         isPrivate: true,
         icon: <UserOutlined />,
+      },
+      {
+        key: "11",
+        path: "/users",
+        label: <TranslateTing text="Users" />,
+        element: <Accounts role="user" />,
+        isPrivate: true,
+        icon: <LuUsers2 />,
+      },
+      {
+        key: "12",
+        path: "/agency",
+        label: <TranslateTing text="Agency" />,
+        element: <Accounts role="agency" />,
+        isPrivate: true,
+        icon: <RiMapPinUserLine />,
       },
     ],
   },
@@ -105,7 +129,29 @@ export const routes_url = [
         label: <TranslateTing text="Return the orders" />,
         element: <ReturnTheOrders />,
         isPrivate: true,
-        icon: <FaShoppingCart />,
+        icon: <BiCartDownload />,
+      },
+    ],
+  },
+  {
+    key: "transactionManagemnet",
+    label: <TranslateTing text="Transactions" />,
+    children: [
+      {
+        key: "13",
+        path: "/deposit-requests",
+        label: <TranslateTing text="Deposit requests" />,
+        element: <Deposit />,
+        isPrivate: true,
+        icon: <HiOutlineCash />,
+      },
+      {
+        key: "14",
+        path: "/withdraw-requests",
+        label: <TranslateTing text="Withdraw requests" />,
+        element: <Withdraw />,
+        isPrivate: true,
+        icon: <BsCashCoin />,
       },
     ],
   },

@@ -19,7 +19,7 @@ import {
   QuestionCircleOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
-import { splitText } from "../../../utils";
+import { formatPrice, splitText } from "../../../utils";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { IProductTable, ISearchProduct } from "../../Products/interfaces";
 import {
@@ -31,6 +31,7 @@ import { showNotification } from "../../../redux/reducers/notificationReducer";
 import { useDispatch } from "react-redux";
 import { getListUserAll } from "../../Accounts/api";
 import TranslateTing from "../../../components/Common/TranslateTing";
+import { useCurrency } from "../../../context/CurrencyContext";
 
 type Props = {
   title: string;
@@ -343,7 +344,7 @@ const ModalOrder = (props: Props) => {
   const onFinish = (values: any) => {
     onSubmit(values, selectedRows, totalPrice);
   };
-  console.log(dataUser);
+  const { currency } = useCurrency();
   return (
     <div>
       <Modal
@@ -418,7 +419,7 @@ const ModalOrder = (props: Props) => {
                   <Form.Item label=" ">
                     <div style={{ fontWeight: 550, fontSize: 20 }}>
                       {<TranslateTing text="Total price" />}:
-                      <span>$ {totalPrice}</span>
+                      <span>{formatPrice(totalPrice, currency)}</span>
                     </div>
                   </Form.Item>
                 </Col>

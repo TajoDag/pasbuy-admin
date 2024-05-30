@@ -22,6 +22,7 @@ import user from "../../assets/images/user.png";
 import AutoTranslate from "../../utils/AutoTranslate";
 import { useLocalization } from "../../context/LocalizationWrapper";
 import TranslateTing from "../../components/Common/TranslateTing";
+import { useCurrency } from "../../context/CurrencyContext";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -30,6 +31,7 @@ const MainLayout = (props: any) => {
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
   const { switchLocale } = useLocalization();
+  const { currency, switchCurrency } = useCurrency();
   const userData: any = localStorage.getItem("userData");
   const storedLanguage = localStorage.getItem("locale") || "en";
   const convertDtUser = JSON.parse(userData);
@@ -54,6 +56,24 @@ const MainLayout = (props: any) => {
       icon: <img style={{ marginRight: 8 }} src={flagVn} />,
     },
   ];
+  const currencys: any = [
+    {
+      key: "USD",
+      label: <TranslateTing text="dolla" />,
+    },
+    {
+      key: "VND",
+      label: <TranslateTing text="vnd" />,
+    },
+    {
+      key: "CNY",
+      label: <TranslateTing text="cny" />,
+    },
+  ];
+  const handleChangeCurrencys = (value: any) => {
+    // setCurrency(value);
+    switchCurrency(value);
+  };
   const menuItems: any = [
     {
       label: (
@@ -64,27 +84,18 @@ const MainLayout = (props: any) => {
       key: "0",
     },
   ];
+  const currencyMenu: any = (
+    <Menu
+      onClick={(e) => handleChangeCurrencys(e.key)}
+      items={currencys}
+      selectedKeys={[currency]}
+    />
+  );
   const handleLogout = () => {
     window.localStorage.clear();
     navigate("/login");
   };
 
-  // const handleChangeLanguages = (value: any) => {
-  //   setLanguage(value);
-  //   localStorage.setItem("language", value);
-  //   const event = new Event("languageChange");
-  //   window.dispatchEvent(event);
-  // };
-  // const handleChangeLanguages = (value: any) => {
-  //   setLanguage(value);
-  //   localStorage.setItem("language", value);
-  //   const event = new Event("languageChange");
-  //   window.dispatchEvent(event);
-  //   console.log("Language changed to:", value); // Log the language change
-  //   if ((window as any).googleTranslateElementInit) {
-  //     (window as any).googleTranslateElementInit();
-  //   }
-  // };
   const handleChangeLanguages = (value: any) => {
     setLanguage(value);
     switchLocale(value);
@@ -195,6 +206,31 @@ const MainLayout = (props: any) => {
           <div style={{ display: "flex", gap: 30 }}>
             <div style={{ position: "relative", top: 8 }}>
               <CiBellOn size={24} />
+            </div>
+            <div>
+              <Dropdown
+                overlay={currencyMenu}
+                trigger={["click"]}
+                overlayStyle={{ width: 200 }}
+              >
+                <div
+                  className="selected-language"
+                  onClick={(e) => e.preventDefault()}
+                >
+                  <Space>
+                    <span>
+                      {
+                        currencys?.find((lang: any) => lang.key === currency)
+                          .icon
+                      }
+                      {getLabel(currencys, currency)}
+                    </span>
+                    <DownOutlined
+                      style={{ fontSize: 12, opacity: 0.6, color: "inherit" }}
+                    />
+                  </Space>
+                </div>
+              </Dropdown>
             </div>
             <div>
               <Dropdown

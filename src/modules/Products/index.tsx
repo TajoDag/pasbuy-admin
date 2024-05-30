@@ -27,8 +27,9 @@ import { startLoading, stopLoading } from "../../redux/reducers/loadingReducer";
 import { EditOutlined, QuestionCircleOutlined } from "@ant-design/icons";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import useRefresh from "../../hooks/useRefresh";
-import { splitText } from "../../utils";
+import { formatPrice, splitText } from "../../utils";
 import TranslateTing from "../../components/Common/TranslateTing";
+import { useCurrency } from "../../context/CurrencyContext";
 type Props = {};
 const Products = (props: Props) => {
   const dispatch = useDispatch();
@@ -44,6 +45,7 @@ const Products = (props: Props) => {
   });
   const [dataTable, setDataTable] = useState<IProductTable[]>([]);
   const [dataDetail, setDataDetail] = useState<IProduct | any>({});
+  const { currency } = useCurrency();
   const [idDataDetail, setIdDataDetail] = useState<string>("");
   const [openType, setOpenType] = useState<string>("");
   const [open, setOpen] = useState(false);
@@ -339,6 +341,7 @@ const Products = (props: Props) => {
       key: "price",
       width: 120,
       align: "center",
+      render: (_, record: any) => <>{formatPrice(record.price, currency)}</>,
     },
     {
       title: <TranslateTing text="Brand" />,

@@ -4,25 +4,33 @@ import { getListUser } from "./api";
 import { showNotification } from "../../redux/reducers/notificationReducer";
 import { useDispatch } from "react-redux";
 import useRefresh from "../../hooks/useRefresh";
-import { Button, Card, Space, Table, TableProps } from "antd";
+import { Button, Card, Input, Row, Space, Table, TableProps } from "antd";
 import { splitText } from "../../utils";
 import TranslateTing from "../../components/Common/TranslateTing";
 import { FaEye } from "react-icons/fa";
 import UserDetail from "./Modal/UserDetail";
+import { useIntl } from "react-intl";
 
-const Accounts = () => {
+type Props = {
+  role?: string | null;
+};
+const Accounts = (props: Props) => {
+  const { role } = props;
   const dispatch = useDispatch();
   const [dataDetail, setDataDetail] = useState<any>({});
   const [openDetail, setOpenDetail] = useState(false);
   const [searchParams, setSearchParams] = useState<any>({
     page: 0,
     size: 10,
+    name: "", // thêm giá trị name vào searchParams
   });
+  console.log(role);
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
     total: 0,
   });
+  const [name, setName] = useState<any>(null);
   const [dataTable, setDataTable] = useState<any[]>([]);
   const [refresh, refecth] = useRefresh();
 
@@ -118,11 +126,29 @@ const Accounts = () => {
       },
     },
   ];
+
+  const handleInputChange = (e: any) => {
+    setName(e.target.value);
+  };
+
+  const handleSubmit = () => {
+    setSearchParams({
+      ...searchParams,
+      page: 0,
+      name: name,
+    });
+    refecth();
+  };
+
   useEffect(() => {
     const getList = async () => {
       dispatch(startLoading());
+      let payload = {
+        ...searchParams,
+        role: role,
+      };
       try {
-        const response = await getListUser(searchParams);
+        const response = await getListUser(payload);
         if (response.status) {
           const updatedUsers: any = response.result.users.map(
             (item: any, i: any) => ({
@@ -149,7 +175,8 @@ const Accounts = () => {
       }
     };
     getList();
-  }, [searchParams, refresh]);
+  }, [searchParams, refresh, role]);
+
   const handleTableChange = (pagination: any) => {
     setSearchParams({
       ...searchParams,
@@ -158,13 +185,23 @@ const Accounts = () => {
     });
     setPagination(pagination);
   };
-
+  const intl = useIntl();
+  const placeholderText = intl.formatMessage({ id: "Enter name or username" });
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-      <Card
-        title={<TranslateTing text="Accounts" />}
-        style={{ width: "100%" }}
-      ></Card>
+      <Card title={<TranslateTing text="Accounts" />} style={{ width: "100%" }}>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <Input
+            placeholder={placeholderText}
+            value={name}
+            onChange={handleInputChange}
+            style={{ width: "90%" }}
+          />
+          <Button type="primary" onClick={handleSubmit}>
+            <TranslateTing text="Search" />
+          </Button>
+        </div>
+      </Card>
       <Table
         columns={columns}
         dataSource={dataTable}
