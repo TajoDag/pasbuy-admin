@@ -139,6 +139,38 @@ const Withdraw = (props: Props) => {
       width: 250,
       align: "left",
     },
+
+    {
+      title: <TranslateTing text="Bank" />,
+      key: "Bank",
+      width: 250,
+      align: "left",
+
+      render: (_: any, record: any, index: number) => {
+        return (
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <div>
+              Ngân hàng:
+              <span style={{ fontWeight: "bold" }}>
+                {record.customer.bankName}
+              </span>
+            </div>
+            <div>
+              Số tài khoản:{" "}
+              <span style={{ fontWeight: "bold" }}>
+                {record.customer.bankNumber}
+              </span>
+            </div>
+            <div>
+              Chủ tài khoản:{" "}
+              <span style={{ fontWeight: "bold" }}>
+                {record.customer.owner}
+              </span>
+            </div>
+          </div>
+        );
+      },
+    },
     {
       title: <TranslateTing text="Status" />,
       dataIndex: "status",
