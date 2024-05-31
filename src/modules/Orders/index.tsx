@@ -2,7 +2,9 @@ import {
   Button,
   Card,
   Form,
+  Input,
   Popconfirm,
+  Select,
   Space,
   Table,
   TableProps,
@@ -25,6 +27,7 @@ import TranslateTing from "../../components/Common/TranslateTing";
 import ModalChangeStatusOrder from "./components/ChangeStatusOrder";
 import { formatPrice } from "../../utils";
 import { useCurrency } from "../../context/CurrencyContext";
+import { useIntl } from "react-intl";
 
 const Orders = () => {
   const dispatch = useDispatch();
@@ -40,12 +43,16 @@ const Orders = () => {
   const [searchParams, setSearchParams] = useState<any>({
     page: 0,
     size: 10,
+    name: "",
+    status: "",
   });
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
     total: 0,
   });
+  const [name, setName] = useState<any>(null);
+  const [status, setStatus] = useState<string>("");
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -135,6 +142,29 @@ const Orders = () => {
   const onCloseModalChangeStatus = () => {
     setOpenDetail(false);
     setDataItems([]);
+  };
+
+  const handleInputChange = (e: any) => {
+    setName(e.target.value);
+  };
+
+  const handleSubmit = () => {
+    setSearchParams({
+      ...searchParams,
+      page: 0,
+      name: name,
+      status: status,
+    });
+    refecth();
+  };
+  const handleFilterByStatus = (value: string) => {
+    setStatus(value);
+    setSearchParams({
+      ...searchParams,
+      page: 0,
+      status: value,
+    });
+    refecth();
   };
   const columns: TableProps<any>["columns"] = [
     {
@@ -227,20 +257,6 @@ const Orders = () => {
                 setDataItems(record);
               }}
             />
-            {/* <Tooltip title={<TranslateTing text="Change order status" />}>
-              <Popconfirm
-                title={<TranslateTing text="Change order status" />}
-                // description={`Do you want to change order status to ${keyC}?`}
-                description={
-                  <TranslateTing text="Do you want to change order status to?" />
-                }
-                onConfirm={() => handleUpdateProduct(record._id, keyC)}
-                okText={<TranslateTing text="OK" />}
-                cancelText={<TranslateTing text="Cancel" />}
-              >
-                <Button icon={<TbEdit />} />
-              </Popconfirm>
-            </Tooltip> */}
           </Space>
         );
       },
@@ -288,6 +304,8 @@ const Orders = () => {
     };
     getList();
   }, [searchParams, refresh]);
+  const intl = useIntl();
+  const placeholderText = intl.formatMessage({ id: "Enter name or username" });
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
       <Card
@@ -298,7 +316,44 @@ const Orders = () => {
           </Button>
         }
         style={{ width: "100%" }}
-      ></Card>
+      >
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <Input
+            placeholder={placeholderText}
+            value={name}
+            onChange={handleInputChange}
+            style={{ width: "75%" }}
+          />
+          <Select
+            style={{ width: 220 }}
+            placeholder="status"
+            defaultValue=""
+            onChange={handleFilterByStatus}
+            options={[
+              {
+                value: "",
+                label: <TranslateTing text="All" />,
+              },
+              {
+                value: "Processing",
+                label: <TranslateTing text="Processing" />,
+              },
+              {
+                value: "Delivering",
+                label: <TranslateTing text="Delivering" />,
+              },
+              {
+                value: "Successful delivery",
+                label: <TranslateTing text="Successful delivery" />,
+              },
+              { value: "Cancel", label: <TranslateTing text="Cancel" /> },
+            ]}
+          />
+          <Button type="primary" onClick={handleSubmit}>
+            <TranslateTing text="Search" />
+          </Button>
+        </div>
+      </Card>
       <Table
         columns={columns}
         dataSource={dataTable}
