@@ -3,7 +3,7 @@ import TranslateTing from "../../../components/Common/TranslateTing";
 import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { showNotification } from "../../../redux/reducers/notificationReducer";
-import { updateStatusOrders } from "../apis";
+import { updateStatusOrders, updateStatusOrdersAgency } from "../apis";
 
 type Props = {
   onClose?: any;
@@ -33,6 +33,8 @@ const ModalChangeStatusOrder = (props: Props) => {
       status: status,
       orderLocation: orderLocation,
     };
+    console.log(data.user.role, 'ffff')
+    if(data.user.role === "admin"){
     try {
       const rp = await updateStatusOrders(data._id, payload);
       if (rp.status) {
@@ -53,6 +55,29 @@ const ModalChangeStatusOrder = (props: Props) => {
         })
       );
     }
+    }else {
+      try {
+        const rp = await updateStatusOrdersAgency(data._id, payload);
+        if (rp.status) {
+          dispatch(
+            showNotification({
+              message: "Success.",
+              type: "success",
+            })
+          );
+          refecth();
+          onClose();
+        }
+      } catch (err) {
+        dispatch(
+          showNotification({
+            message: "Lấy dữ liệu thất bại.",
+            type: "error",
+          })
+        );
+      }
+    }
+
   };
 
   return (
@@ -109,7 +134,7 @@ const ModalChangeStatusOrder = (props: Props) => {
                 <TranslateTing text="Cancel" />
               </Button>
             </div>
-            <div className="btn_submit">
+            {data?.orderStatus !== "Successful delivery" && <div className="btn_submit">
               <Button
                 type="primary"
                 htmlType="submit"
@@ -118,7 +143,8 @@ const ModalChangeStatusOrder = (props: Props) => {
               >
                 <TranslateTing text="Submit" />
               </Button>
-            </div>
+            </div>}
+            
           </Space>
         </div>
       </div>
