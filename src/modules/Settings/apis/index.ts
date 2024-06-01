@@ -27,3 +27,6 @@ export const createBanner = (body: any) =>
 
 export const publicBanner = (id: any, body: any) =>
   request<any>("put", `${API}/${endpoints.banner.update}/${id}`, body);
+
+export const getLiveChat = () =>
+  request<any>("get", `${API}/${endpoints.liveChat.get}`);

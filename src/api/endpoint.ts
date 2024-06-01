@@ -70,5 +70,8 @@ export const endpoints = {
   withdraw: {
     getListWithdraw: `admin/wallet/withdraw-requests`,
     confirm: `admin/wallet/confirm`
+  },
+  liveChat: {
+    get: `admin/livechat/token`
   }
 };

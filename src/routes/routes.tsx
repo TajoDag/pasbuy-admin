@@ -25,6 +25,7 @@ import { RiMapPinUserLine } from "react-icons/ri";
 import { BiCartDownload } from "react-icons/bi";
 import { HiOutlineCash } from "react-icons/hi";
 import { BsCashCoin } from "react-icons/bs";
+import LiveChat from "../modules/Settings/components/LiveChat";
 
 export const routes_url = [
   {
@@ -163,7 +164,7 @@ export const routes_url = [
       //   key: "7",
       //   path: "/hotline",
       //   label: "Hotline",
-      //   element: <Orders />,
+      //   element: <LiveChat />,
       //   isPrivate: true,
       //   icon: <FaShoppingCart />,
       // },
