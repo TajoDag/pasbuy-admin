@@ -3,9 +3,8 @@ import TranslateTing from "../../../components/Common/TranslateTing";
 import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { showNotification } from "../../../redux/reducers/notificationReducer";
-import { updateStatusOrders } from "../apis";
+import { updateStatusOrders, updateStatusOrdersAgency } from "../apis";
 import { useIntl } from "react-intl";
-
 type Props = {
   onClose?: any;
   open: boolean;
@@ -40,25 +39,48 @@ const ModalChangeStatusOrder = (props: Props) => {
       status: status,
       orderLocation: orderLocation,
     };
-    try {
-      const rp = await updateStatusOrders(data._id, payload);
-      if (rp.status) {
+    if (data.user.role === "admin") {
+      try {
+        const rp = await updateStatusOrders(data._id, payload);
+        if (rp.status) {
+          dispatch(
+            showNotification({
+              message: success,
+              type: "success",
+            })
+          );
+          refecth();
+          onClose();
+        }
+      } catch (err) {
         dispatch(
           showNotification({
-            message: success,
-            type: "success",
+            message: error,
+            type: "error",
           })
         );
-        refecth();
-        onClose();
       }
-    } catch (err) {
-      dispatch(
-        showNotification({
-          message: error,
-          type: "error",
-        })
-      );
+    } else {
+      try {
+        const rp = await updateStatusOrdersAgency(data._id, payload);
+        if (rp.status) {
+          dispatch(
+            showNotification({
+              message: "Success.",
+              type: "success",
+            })
+          );
+          refecth();
+          onClose();
+        }
+      } catch (err) {
+        dispatch(
+          showNotification({
+            message: "Lấy dữ liệu thất bại.",
+            type: "error",
+          })
+        );
+      }
     }
   };
 
@@ -116,16 +138,18 @@ const ModalChangeStatusOrder = (props: Props) => {
                 <TranslateTing text="Cancel" />
               </Button>
             </div>
-            <div className="btn_submit">
-              <Button
-                type="primary"
-                htmlType="submit"
-                onClick={handelChangeStatus}
-                style={{ background: "#e62e05" }}
-              >
-                <TranslateTing text="Submit" />
-              </Button>
-            </div>
+            {data?.orderStatus !== "Successful delivery" && (
+              <div className="btn_submit">
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  onClick={handelChangeStatus}
+                  style={{ background: "#e62e05" }}
+                >
+                  <TranslateTing text="Submit" />
+                </Button>
+              </div>
+            )}
           </Space>
         </div>
       </div>
