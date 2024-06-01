@@ -15,13 +15,20 @@ import { UploadOutlined } from "@ant-design/icons";
 import LogoHeader from "./components/LogoHeader";
 import LogoFooter from "./components/LogoFooter";
 import Banner from "./components/Banner";
+import { useIntl } from "react-intl";
 
 const Settings = () => {
   const dispatch = useDispatch();
   const [keyLiveChat, setKeyLiveChat] = useState("");
   const [detailLogoHeader, setDetailLogoHeader] = useState();
   const [detailLogoFooter, setDetailLogoFooter] = useState();
-
+  const intl = useIntl();
+  const success = intl.formatMessage({
+    id: "Success",
+  });
+  const error = intl.formatMessage({
+    id: "Error",
+  });
   useEffect(() => {
     const getKey = async () => {
       dispatch(startLoading());
@@ -33,7 +40,7 @@ const Settings = () => {
       } catch (err) {
         dispatch(
           showNotification({
-            message: "Retrieving live chat key data failed.",
+            message: error,
             type: "error",
           })
         );
@@ -51,7 +58,7 @@ const Settings = () => {
       } catch (err) {
         dispatch(
           showNotification({
-            message: "Retrieving data failed.",
+            message: error,
             type: "error",
           })
         );
@@ -69,7 +76,7 @@ const Settings = () => {
       } catch (err) {
         dispatch(
           showNotification({
-            message: "Retrieving data failed.",
+            message: error,
             type: "error",
           })
         );

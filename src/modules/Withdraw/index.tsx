@@ -12,6 +12,7 @@ import { showNotification } from "../../redux/reducers/notificationReducer";
 import { confirmWithdraw, getListWithdraw } from "./apis";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import { GiConfirmed } from "react-icons/gi";
+import { useIntl } from "react-intl";
 type Props = {};
 
 const Withdraw = (props: Props) => {
@@ -21,7 +22,13 @@ const Withdraw = (props: Props) => {
   const [openType, setOpenType] = useState<string>("");
   const [open, setOpen] = useState(false);
   const [refresh, refecth] = useRefresh();
-
+  const intl = useIntl();
+  const success = intl.formatMessage({
+    id: "Success",
+  });
+  const error = intl.formatMessage({
+    id: "Error",
+  });
   const onClose = () => {
     form.resetFields();
     setOpenType("");
@@ -52,18 +59,16 @@ const Withdraw = (props: Props) => {
       if (response.status) {
         dispatch(
           showNotification({
-            message: "Withdraw request cancelled successfully",
+            message: success,
             type: "success",
           })
         );
         refecth();
       } else {
-        dispatch(
-          showNotification({ message: response.message, type: "error" })
-        );
+        dispatch(showNotification({ message: error, type: "error" }));
       }
     } catch (err) {
-      dispatch(showNotification({ message: "Có lỗi xảy ra", type: "error" }));
+      dispatch(showNotification({ message: error, type: "error" }));
     } finally {
       dispatch(stopLoading());
     }
@@ -78,15 +83,13 @@ const Withdraw = (props: Props) => {
       if (response.status) {
         dispatch(
           showNotification({
-            message: "Withdraw request confirmed successfully",
+            message: success,
             type: "success",
           })
         );
         refecth();
       } else {
-        dispatch(
-          showNotification({ message: response.message, type: "error" })
-        );
+        dispatch(showNotification({ message: error, type: "error" }));
       }
     } catch (err) {
       dispatch(showNotification({ message: "Có lỗi xảy ra", type: "error" }));
@@ -235,7 +238,7 @@ const Withdraw = (props: Props) => {
         setDataTable([]);
         dispatch(
           showNotification({
-            message: "Lấy dữ liệu thất bại.",
+            message: error,
             type: "error",
           })
         );

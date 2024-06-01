@@ -13,6 +13,7 @@ import { getOrders, getOrdersAdmin } from "../Orders/apis";
 import { showNotification } from "../../redux/reducers/notificationReducer";
 import ModalChangeStatusOrder from "../Orders/components/ChangeStatusOrder";
 import ModalItem from "../Orders/components/ModalItem";
+import { useIntl } from "react-intl";
 
 const ReturnTheOrders = () => {
   const dispatch = useDispatch();
@@ -47,6 +48,13 @@ const ReturnTheOrders = () => {
     setSelectedRowKeys([]);
     setTotalPrice(0);
   };
+  const intl = useIntl();
+  const success = intl.formatMessage({
+    id: "Success",
+  });
+  const error = intl.formatMessage({
+    id: "Error",
+  });
   const onCloseModalDetail = () => {
     setOpenItems(false);
     setDataItems([]);
@@ -183,7 +191,7 @@ const ReturnTheOrders = () => {
         setDataTable([]);
         dispatch(
           showNotification({
-            message: "Lấy dữ liệu thất bại.",
+            message: error,
             type: "error",
           })
         );

@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { showNotification } from "../../../redux/reducers/notificationReducer";
 import { updateStatusOrders } from "../apis";
+import { useIntl } from "react-intl";
 
 type Props = {
   onClose?: any;
@@ -18,7 +19,13 @@ const ModalChangeStatusOrder = (props: Props) => {
   const dispatch = useDispatch();
   const [status, setStatus] = useState(data?.orderStatus || "");
   const [orderLocation, setOrderLocation] = useState(data?.orderLocation || "");
-
+  const intl = useIntl();
+  const success = intl.formatMessage({
+    id: "Success",
+  });
+  const error = intl.formatMessage({
+    id: "Error",
+  });
   useEffect(() => {
     setStatus(data?.orderStatus || "");
     setOrderLocation(data?.orderLocation || "");
@@ -38,7 +45,7 @@ const ModalChangeStatusOrder = (props: Props) => {
       if (rp.status) {
         dispatch(
           showNotification({
-            message: "Success.",
+            message: success,
             type: "success",
           })
         );
@@ -48,7 +55,7 @@ const ModalChangeStatusOrder = (props: Props) => {
     } catch (err) {
       dispatch(
         showNotification({
-          message: "Lấy dữ liệu thất bại.",
+          message: error,
           type: "error",
         })
       );

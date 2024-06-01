@@ -9,6 +9,7 @@ import {
 } from "../../../redux/reducers/loadingReducer";
 import { createLogoHeader } from "../apis";
 import { UploadOutlined } from "@ant-design/icons";
+import { useIntl } from "react-intl";
 
 type Props = {
   detailLogoHeader: any;
@@ -32,6 +33,14 @@ const LogoHeader = (props: Props) => {
   const [logoHeader, setLogoHeader] = useState<string | null>(null);
   const [showConfirmLogoHeader, setShowConfirmLogoHeader] =
     useState<boolean>(false);
+
+  const intl = useIntl();
+  const success = intl.formatMessage({
+    id: "Success",
+  });
+  const error = intl.formatMessage({
+    id: "Error",
+  });
   const handleBeforeUploadLogoHeader = async (file: File) => {
     const base64 = await getBase64(file);
     setLogoHeader(base64);
@@ -48,7 +57,7 @@ const LogoHeader = (props: Props) => {
     if (!logoHeader) {
       dispatch(
         showNotification({
-          message: "Please select an image to upload.",
+          message: error,
           type: "error",
         })
       );
@@ -63,7 +72,7 @@ const LogoHeader = (props: Props) => {
       if (rp.status) {
         dispatch(
           showNotification({
-            message: "Logo uploaded successfully",
+            message: success,
             type: "success",
           })
         );
@@ -71,7 +80,7 @@ const LogoHeader = (props: Props) => {
       } else {
         dispatch(
           showNotification({
-            message: "Failed to upload logo",
+            message: error,
             type: "error",
           })
         );
@@ -79,7 +88,7 @@ const LogoHeader = (props: Props) => {
     } catch (error) {
       dispatch(
         showNotification({
-          message: "An error occurred while uploading the logo",
+          message: error,
           type: "error",
         })
       );
@@ -87,6 +96,7 @@ const LogoHeader = (props: Props) => {
       dispatch(stopLoading());
     }
   };
+
   return (
     <>
       <div>

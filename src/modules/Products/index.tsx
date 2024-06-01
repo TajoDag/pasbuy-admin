@@ -30,6 +30,7 @@ import useRefresh from "../../hooks/useRefresh";
 import { formatPrice, splitText } from "../../utils";
 import TranslateTing from "../../components/Common/TranslateTing";
 import { useCurrency } from "../../context/CurrencyContext";
+import { useIntl } from "react-intl";
 type Props = {};
 const Products = (props: Props) => {
   const dispatch = useDispatch();
@@ -53,7 +54,16 @@ const Products = (props: Props) => {
   const [oldImages, setOldImages] = useState<any>([]);
   const [imagesPreview, setImagesPreview] = useState<any>([]);
   const [refresh, refecth] = useRefresh();
-
+  const intl = useIntl();
+  const success = intl.formatMessage({
+    id: "Success",
+  });
+  const error = intl.formatMessage({
+    id: "Error",
+  });
+  const errorImage = intl.formatMessage({
+    id: "Please select a photo.",
+  });
   const onClose = () => {
     form.resetFields();
     setImages([]);
@@ -80,7 +90,7 @@ const Products = (props: Props) => {
         setIdDataDetail("");
         dispatch(
           showNotification({
-            message: `${rp.message}`,
+            message: error,
             type: "error",
           })
         );
@@ -90,7 +100,7 @@ const Products = (props: Props) => {
       setOpenType("");
       dispatch(
         showNotification({
-          message: "Vui lòng thử lại.",
+          message: error,
           type: "error",
         })
       );
@@ -106,7 +116,7 @@ const Products = (props: Props) => {
         if (res.status) {
           dispatch(
             showNotification({
-              message: `${res.message}`,
+              message: success,
               type: "success",
             })
           );
@@ -116,7 +126,7 @@ const Products = (props: Props) => {
       .catch((err: any) => {
         dispatch(
           showNotification({
-            message: `Có lỗi xảy ra`,
+            message: error,
             type: "error",
           })
         );
@@ -136,7 +146,7 @@ const Products = (props: Props) => {
       if (rp.status) {
         dispatch(
           showNotification({
-            message: `${rp.message}`,
+            message: success,
             type: "success",
           })
         );
@@ -144,7 +154,7 @@ const Products = (props: Props) => {
       } else {
         dispatch(
           showNotification({
-            message: `${rp.message}`,
+            message: error,
             type: "error",
           })
         );
@@ -152,7 +162,7 @@ const Products = (props: Props) => {
     } catch (err) {
       dispatch(
         showNotification({
-          message: "Vui lòng thử lại.",
+          message: error,
           type: "error",
         })
       );
@@ -171,7 +181,7 @@ const Products = (props: Props) => {
       if (rp.status) {
         dispatch(
           showNotification({
-            message: `${rp.message}`,
+            message: success,
             type: "success",
           })
         );
@@ -179,7 +189,7 @@ const Products = (props: Props) => {
       } else {
         dispatch(
           showNotification({
-            message: `${rp.message}`,
+            message: error,
             type: "error",
           })
         );
@@ -187,7 +197,7 @@ const Products = (props: Props) => {
     } catch (err) {
       dispatch(
         showNotification({
-          message: "Vui lòng thử lại.",
+          message: error,
           type: "error",
         })
       );
@@ -206,7 +216,7 @@ const Products = (props: Props) => {
       if (rp.status) {
         dispatch(
           showNotification({
-            message: `${rp.message}`,
+            message: success,
             type: "success",
           })
         );
@@ -214,7 +224,7 @@ const Products = (props: Props) => {
       } else {
         dispatch(
           showNotification({
-            message: `${rp.message}`,
+            message: error,
             type: "error",
           })
         );
@@ -222,7 +232,7 @@ const Products = (props: Props) => {
     } catch (err) {
       dispatch(
         showNotification({
-          message: "Vui lòng thử lại.",
+          message: error,
           type: "error",
         })
       );
@@ -241,7 +251,7 @@ const Products = (props: Props) => {
       if (rp.status) {
         dispatch(
           showNotification({
-            message: `${rp.message}`,
+            message: success,
             type: "success",
           })
         );
@@ -249,7 +259,7 @@ const Products = (props: Props) => {
       } else {
         dispatch(
           showNotification({
-            message: `${rp.message}`,
+            message: error,
             type: "error",
           })
         );
@@ -257,7 +267,7 @@ const Products = (props: Props) => {
     } catch (err) {
       dispatch(
         showNotification({
-          message: "Vui lòng thử lại.",
+          message: error,
           type: "error",
         })
       );
@@ -276,7 +286,7 @@ const Products = (props: Props) => {
       if (rp.status) {
         dispatch(
           showNotification({
-            message: `${rp.message}`,
+            message: success,
             type: "success",
           })
         );
@@ -284,7 +294,7 @@ const Products = (props: Props) => {
       } else {
         dispatch(
           showNotification({
-            message: `${rp.message}`,
+            message: error,
             type: "error",
           })
         );
@@ -292,7 +302,7 @@ const Products = (props: Props) => {
     } catch (err) {
       dispatch(
         showNotification({
-          message: "Vui lòng thử lại.",
+          message: error,
           type: "error",
         })
       );
@@ -508,7 +518,7 @@ const Products = (props: Props) => {
     if (images.length < 1) {
       dispatch(
         showNotification({
-          message: "Vui lòng chọn ảnh.",
+          message: errorImage,
           type: "error",
         })
       );
@@ -519,7 +529,7 @@ const Products = (props: Props) => {
           if (res.status) {
             dispatch(
               showNotification({
-                message: `${res.message}`,
+                message: success,
                 type: "success",
               })
             );
@@ -530,7 +540,7 @@ const Products = (props: Props) => {
         .catch((err) => {
           dispatch(
             showNotification({
-              message: "Oop! Something wrong, try later!",
+              message: error,
               type: "error",
             })
           );
@@ -545,7 +555,7 @@ const Products = (props: Props) => {
     if (images.length < 1) {
       dispatch(
         showNotification({
-          message: "Vui lòng chọn ảnh.",
+          message: errorImage,
           type: "error",
         })
       );
@@ -556,7 +566,7 @@ const Products = (props: Props) => {
           if (res.status) {
             dispatch(
               showNotification({
-                message: `${res.message}`,
+                message: success,
                 type: "success",
               })
             );
@@ -567,7 +577,7 @@ const Products = (props: Props) => {
         .catch((err) => {
           dispatch(
             showNotification({
-              message: "Oop! Something wrong, try later!",
+              message: error,
               type: "error",
             })
           );
@@ -601,7 +611,7 @@ const Products = (props: Props) => {
         setDataTable([]);
         dispatch(
           showNotification({
-            message: "Lấy dữ liệu thất bại.",
+            message: error,
             type: "error",
           })
         );

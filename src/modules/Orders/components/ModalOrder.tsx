@@ -32,6 +32,7 @@ import { useDispatch } from "react-redux";
 import { getListUserAll } from "../../Accounts/api";
 import TranslateTing from "../../../components/Common/TranslateTing";
 import { useCurrency } from "../../../context/CurrencyContext";
+import { useIntl } from "react-intl";
 
 type Props = {
   title: string;
@@ -76,6 +77,14 @@ const ModalOrder = (props: Props) => {
     current: 1,
     pageSize: 5,
     total: 0,
+  });
+
+  const intl = useIntl();
+  const success = intl.formatMessage({
+    id: "Success",
+  });
+  const error = intl.formatMessage({
+    id: "Error",
   });
   const [dataProduct, setDataProduct] = useState<any[]>([]);
   const [dataUser, setDataUser] = useState<any[]>([]);
@@ -180,7 +189,11 @@ const ModalOrder = (props: Props) => {
       },
     },
     {
-      title: <TranslateTing text="Price ($)" />,
+      title: (
+        <p>
+          <TranslateTing text="Price" /> ($)
+        </p>
+      ),
       dataIndex: "price",
       key: "price",
       width: 120,
@@ -298,7 +311,7 @@ const ModalOrder = (props: Props) => {
         setDataProduct([]);
         dispatch(
           showNotification({
-            message: "Lấy dữ liệu thất bại.",
+            message: error,
             type: "error",
           })
         );
@@ -320,7 +333,7 @@ const ModalOrder = (props: Props) => {
         setDataUser([]);
         dispatch(
           showNotification({
-            message: "Lấy dữ liệu thất bại.",
+            message: error,
             type: "error",
           })
         );

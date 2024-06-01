@@ -7,6 +7,8 @@ import { setAuthenticated, setUser } from "../../../redux/reducers/userReducer";
 import { showNotification } from "../../../redux/reducers/notificationReducer";
 import { useDispatch } from "react-redux";
 import { useLocalStorage } from "../../../utils";
+import TranslateTing from "../../../components/Common/TranslateTing";
+import { useIntl } from "react-intl";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -14,9 +16,25 @@ const Login = () => {
   const { setValue: setToken } = useLocalStorage("user_token", "");
   const { setValue: setIsLogin } = useLocalStorage("isLogin", "");
   const { setValue: setUserData } = useLocalStorage("userData", "");
+  const intl = useIntl();
+  const placeholderUsername = intl.formatMessage({
+    id: "Please input your username!",
+  });
+  const placeholderPassword = intl.formatMessage({
+    id: "Please input your password!",
+  });
+  const placeholderError1 = intl.formatMessage({
+    id: "Wrong username or password",
+  });
+  const placeholderError2 = intl.formatMessage({
+    id: "Login failed, please try again.",
+  });
+  const placeholderError3 = intl.formatMessage({
+    id: "Your account does not have access rights",
+  });
   const validationSchema = Yup.object().shape({
-    username: Yup.string().required("Vui lòng nhập tên đăng nhập"),
-    password: Yup.string().required("Vui lòng nhập mật khẩu"),
+    username: Yup.string().required(placeholderUsername),
+    password: Yup.string().required(placeholderPassword),
   });
   const onFinish = async (values: any) => {
     try {
@@ -25,29 +43,33 @@ const Login = () => {
         setToken(response.result.token);
         setIsLogin(true);
         setUserData(response.result.user);
-        dispatch(
-          showNotification({ message: response.message, type: "success" })
-        );
+        // dispatch(
+        //   showNotification({ message: response.message, type: "success" })
+        // );
         if (response.result.user.role !== "admin") {
           dispatch(
             showNotification({
-              message: "Tài khoản của bạn không có quyền truy cập",
+              message: placeholderError3,
               type: "error",
             })
           );
+        } else {
+          navigate("/dashboard");
         }
-        navigate("/dashboard");
       } else {
         setIsLogin(false);
         dispatch(
-          showNotification({ message: response.message, type: "error" })
+          showNotification({
+            message: placeholderError1,
+            type: "error",
+          })
         );
       }
     } catch (err) {
       setIsLogin(false);
       dispatch(
         showNotification({
-          message: "Đăng nhập thất bại, vui lòng thử lại.",
+          message: placeholderError2,
           type: "error",
         })
       );
@@ -57,10 +79,13 @@ const Login = () => {
   const onChangeRegister = () => {
     navigate("/register");
   };
+
   return (
     <div className="login">
       <div className="login-title">
-        <h1>Đăng nhập</h1>
+        <h1>
+          <TranslateTing text="SIGN IN" />
+        </h1>
         {/* <p>
           Chưa có tài khoản?{" "}
           <span onClick={onChangeRegister}>Đăng ký ngay</span>
@@ -78,11 +103,13 @@ const Login = () => {
           {({ isSubmitting }) => (
             <Form>
               <div className="form-group">
-                <label htmlFor="username">Tên đăng nhập</label>
+                <label htmlFor="username">
+                  <TranslateTing text="Username" />
+                </label>
                 <Field
                   type="text"
                   name="username"
-                  placeholder="Tên đăng nhập"
+                  placeholder={placeholderUsername}
                 />
                 <ErrorMessage
                   name="username"
@@ -91,8 +118,14 @@ const Login = () => {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="password">Mật khẩu</label>
-                <Field type="password" name="password" placeholder="Mật khẩu" />
+                <label htmlFor="password">
+                  <TranslateTing text="Password" />
+                </label>
+                <Field
+                  type="password"
+                  name="password"
+                  placeholder={placeholderPassword}
+                />
                 <ErrorMessage
                   name="password"
                   component="div"
@@ -102,7 +135,7 @@ const Login = () => {
               <div className="form-group">
                 <label className="checkbox-container">
                   <Field type="checkbox" name="remember" />
-                  Nhớ tài khoản
+                  <TranslateTing text="Save account" />
                   <span className="checkmark"></span>
                 </label>
               </div>
@@ -111,7 +144,7 @@ const Login = () => {
                 disabled={isSubmitting}
                 className="submit-button"
               >
-                ĐĂNG NHẬP
+                <TranslateTing text="SIGN IN" />
               </button>
             </Form>
           )}

@@ -19,6 +19,7 @@ import {
   startLoading,
   stopLoading,
 } from "../../../redux/reducers/loadingReducer";
+import { useIntl } from "react-intl";
 
 type Props = {
   onClose?: any;
@@ -33,7 +34,13 @@ const DepositModal = (props: Props) => {
   const dispatch = useDispatch();
   const [dataUser, setDataUser] = useState<any[]>([]);
   const [isCurrencySelected, setIsCurrencySelected] = useState<boolean>(false);
-
+  const intl = useIntl();
+  const success = intl.formatMessage({
+    id: "Success",
+  });
+  const error = intl.formatMessage({
+    id: "Error",
+  });
   useEffect(() => {
     const getListUser = async () => {
       try {
@@ -49,7 +56,7 @@ const DepositModal = (props: Props) => {
         setDataUser([]);
         dispatch(
           showNotification({
-            message: "Lấy dữ liệu thất bại.",
+            message: error,
             type: "error",
           })
         );
@@ -91,7 +98,7 @@ const DepositModal = (props: Props) => {
       if (rp.status) {
         dispatch(
           showNotification({
-            message: "Deposit successful",
+            message: success,
             type: "success",
           })
         );
@@ -101,7 +108,7 @@ const DepositModal = (props: Props) => {
     } catch (err) {
       dispatch(
         showNotification({
-          message: "Deposit failed",
+          message: error,
           type: "error",
         })
       );
@@ -146,7 +153,7 @@ const DepositModal = (props: Props) => {
               >
                 <Select
                   showSearch
-                  placeholder="Select a person"
+                  // placeholder="Select a person"
                   optionFilterProp="children"
                   filterOption={filterOption}
                   options={dataUser}
@@ -168,7 +175,7 @@ const DepositModal = (props: Props) => {
               >
                 <Select
                   showSearch
-                  placeholder="Select a currency"
+                  // placeholder="Select a currency"
                   optionFilterProp="children"
                   options={[
                     { value: "USD", label: <TranslateTing text="dolla" /> },

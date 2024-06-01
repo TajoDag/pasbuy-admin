@@ -9,6 +9,7 @@ import { createLogoFooter, createLogoHeader } from "../apis";
 import TranslateTing from "../../../components/Common/TranslateTing";
 import { Button, Image, Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
+import { useIntl } from "react-intl";
 
 type Props = {
   detailLogoFooter: any;
@@ -32,6 +33,13 @@ const LogoFooter = (props: Props) => {
   const [logoFooter, setLogoFooter] = useState<string | null>(null);
   const [showConfirmLogoFooter, setShowConfirmLogoFooter] =
     useState<boolean>(false);
+  const intl = useIntl();
+  const success = intl.formatMessage({
+    id: "Success",
+  });
+  const error = intl.formatMessage({
+    id: "Error",
+  });
   const handleBeforeUploadLogoHeader = async (file: File) => {
     const base64 = await getBase64(file);
     setLogoFooter(base64);
@@ -48,7 +56,7 @@ const LogoFooter = (props: Props) => {
     if (!logoFooter) {
       dispatch(
         showNotification({
-          message: "Please select an image to upload.",
+          message: error,
           type: "error",
         })
       );
@@ -63,7 +71,7 @@ const LogoFooter = (props: Props) => {
       if (rp.status) {
         dispatch(
           showNotification({
-            message: "Logo uploaded successfully",
+            message: success,
             type: "success",
           })
         );
@@ -71,7 +79,7 @@ const LogoFooter = (props: Props) => {
       } else {
         dispatch(
           showNotification({
-            message: "Failed to upload logo",
+            message: error,
             type: "error",
           })
         );
@@ -79,7 +87,7 @@ const LogoFooter = (props: Props) => {
     } catch (error) {
       dispatch(
         showNotification({
-          message: "An error occurred while uploading the logo",
+          message: error,
           type: "error",
         })
       );

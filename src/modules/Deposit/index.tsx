@@ -11,6 +11,7 @@ import DepositModal from "./Modal/DepositModal";
 import { startLoading, stopLoading } from "../../redux/reducers/loadingReducer";
 import { showNotification } from "../../redux/reducers/notificationReducer";
 import { getListDeposit } from "./apis";
+import { useIntl } from "react-intl";
 type Props = {};
 
 const Deposit = (props: Props) => {
@@ -20,7 +21,13 @@ const Deposit = (props: Props) => {
   const [openType, setOpenType] = useState<string>("");
   const [open, setOpen] = useState(false);
   const [refresh, refecth] = useRefresh();
-
+  const intl = useIntl();
+  const success = intl.formatMessage({
+    id: "Success",
+  });
+  const error = intl.formatMessage({
+    id: "Error",
+  });
   const onClose = () => {
     form.resetFields();
     setOpenType("");
@@ -132,7 +139,7 @@ const Deposit = (props: Props) => {
         setDataTable([]);
         dispatch(
           showNotification({
-            message: "Lấy dữ liệu thất bại.",
+            message: error,
             type: "error",
           })
         );
@@ -142,7 +149,6 @@ const Deposit = (props: Props) => {
     };
     getList();
   }, [searchParams, refresh]);
-  console.log(dataTable);
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
       <Card

@@ -67,7 +67,13 @@ const DrawerProduct = (props: Props) => {
   } else if (title === "update") {
     newTitle = <TranslateTing text="Update product" />;
   }
-
+  const intl = useIntl();
+  const success = intl.formatMessage({
+    id: "Success",
+  });
+  const error = intl.formatMessage({
+    id: "Error",
+  });
   const filterOption = (
     input: string,
     option?: { label: string; value: string }
@@ -87,7 +93,7 @@ const DrawerProduct = (props: Props) => {
           setListCate([]);
           dispatch(
             showNotification({
-              message: "Lấy dữ liệu thất bại.",
+              message: error,
               type: "error",
             })
           );
@@ -96,7 +102,7 @@ const DrawerProduct = (props: Props) => {
         setListCate([]);
         dispatch(
           showNotification({
-            message: "Lấy dữ liệu thất bại.",
+            message: error,
             type: "error",
           })
         );
@@ -115,7 +121,7 @@ const DrawerProduct = (props: Props) => {
           setListProductType([]);
           dispatch(
             showNotification({
-              message: "Lấy dữ liệu thất bại.",
+              message: error,
               type: "error",
             })
           );
@@ -124,7 +130,7 @@ const DrawerProduct = (props: Props) => {
         setListProductType([]);
         dispatch(
           showNotification({
-            message: "Lấy dữ liệu thất bại.",
+            message: error,
             type: "error",
           })
         );
@@ -143,7 +149,7 @@ const DrawerProduct = (props: Props) => {
           setListBrand([]);
           dispatch(
             showNotification({
-              message: "Lấy dữ liệu thất bại.",
+              message: error,
               type: "error",
             })
           );
@@ -152,7 +158,7 @@ const DrawerProduct = (props: Props) => {
         setListBrand([]);
         dispatch(
           showNotification({
-            message: "Lấy dữ liệu thất bại.",
+            message: error,
             type: "error",
           })
         );
@@ -184,7 +190,6 @@ const DrawerProduct = (props: Props) => {
       }
     }
   }, [title, dataDetail, form, setImagesPreview]);
-  const intl = useIntl();
   const placeholderName = intl.formatMessage({ id: "Please enter name" });
   const placeholderCate = intl.formatMessage({
     id: "Please choose category",

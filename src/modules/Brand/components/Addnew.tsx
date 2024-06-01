@@ -11,6 +11,7 @@ import {
 } from "../../../redux/reducers/loadingReducer";
 import { createBrand, updateBrand } from "../utils/services";
 import TranslateTing from "../../../components/Common/TranslateTing";
+import { useIntl } from "react-intl";
 interface IProps {
   open: boolean;
   onCancel: () => void;
@@ -26,6 +27,13 @@ export const Addnew = (props: IProps) => {
   const { open, onCancel, refecth, detail } = props;
   const dispatch = useDispatch();
   const formikRef = React.useRef<any>(null);
+  const intl = useIntl();
+  const success = intl.formatMessage({
+    id: "Success",
+  });
+  const error = intl.formatMessage({
+    id: "Error",
+  });
   const handleSubmit = async (values: any) => {
     if (!detail._id) {
       await createBrand(values)
@@ -33,7 +41,7 @@ export const Addnew = (props: IProps) => {
           if (res.status) {
             dispatch(
               showNotification({
-                message: `${res.message}`,
+                message: success,
                 type: "success",
               })
             );
@@ -45,7 +53,7 @@ export const Addnew = (props: IProps) => {
         .catch((err: any) => {
           dispatch(
             showNotification({
-              message: "Oop! Something wrong, try later!",
+              message: error,
               type: "error",
             })
           );
@@ -56,7 +64,7 @@ export const Addnew = (props: IProps) => {
           if (res.status) {
             dispatch(
               showNotification({
-                message: `${res.message}`,
+                message: success,
                 type: "success",
               })
             );
@@ -68,7 +76,7 @@ export const Addnew = (props: IProps) => {
         .catch((err: any) => {
           dispatch(
             showNotification({
-              message: "Oop! Something wrong, try later!",
+              message: error,
               type: "error",
             })
           );

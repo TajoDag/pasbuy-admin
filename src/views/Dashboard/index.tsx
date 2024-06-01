@@ -9,6 +9,7 @@ import { getAllCategory } from "../../modules/Categories/utils/services";
 import { getListUser, getListUserAll } from "../../modules/Accounts/api";
 import { getOrders } from "../../modules/Orders/apis";
 import TranslateTing from "../../components/Common/TranslateTing";
+import { useIntl } from "react-intl";
 
 const Dashboard = () => {
   const [totalProduct, setTotalProduct] = useState(0);
@@ -18,6 +19,13 @@ const Dashboard = () => {
   const [totalUsers, setTotalUsers] = useState(0);
   const [totalOrders, setTotalOrders] = useState(0);
   const dispatch = useDispatch();
+  const intl = useIntl();
+  const success = intl.formatMessage({
+    id: "Success",
+  });
+  const error = intl.formatMessage({
+    id: "Error",
+  });
   useEffect(() => {
     const getList = async () => {
       dispatch(startLoading());
@@ -31,7 +39,7 @@ const Dashboard = () => {
         setTotalProduct(0);
         dispatch(
           showNotification({
-            message: "Lấy dữ liệu thất bại.",
+            message: error,
             type: "error",
           })
         );
@@ -51,7 +59,7 @@ const Dashboard = () => {
         setTotalBrand(0);
         dispatch(
           showNotification({
-            message: "Lấy dữ liệu thất bại.",
+            message: error,
             type: "error",
           })
         );
@@ -71,7 +79,7 @@ const Dashboard = () => {
         setTotalCate(0);
         dispatch(
           showNotification({
-            message: "Lấy dữ liệu thất bại.",
+            message: error,
             type: "error",
           })
         );
@@ -91,7 +99,7 @@ const Dashboard = () => {
         setTotalUsers(0);
         dispatch(
           showNotification({
-            message: "Lấy dữ liệu thất bại.",
+            message: error,
             type: "error",
           })
         );
@@ -115,7 +123,7 @@ const Dashboard = () => {
         setTotalAgency(0);
         dispatch(
           showNotification({
-            message: "Lấy dữ liệu thất bại.",
+            message: error,
             type: "error",
           })
         );
@@ -136,7 +144,7 @@ const Dashboard = () => {
         setTotalOrders(0);
         dispatch(
           showNotification({
-            message: "Lấy dữ liệu thất bại.",
+            message: error,
             type: "error",
           })
         );

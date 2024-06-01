@@ -57,6 +57,13 @@ const Orders = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const { currency } = useCurrency();
+  const intl = useIntl();
+  const success = intl.formatMessage({
+    id: "Success",
+  });
+  const error = intl.formatMessage({
+    id: "Error",
+  });
   const onClose = () => {
     form.resetFields();
     setOpenType("");
@@ -97,7 +104,7 @@ const Orders = () => {
       if (rp.status) {
         dispatch(
           showNotification({
-            message: rp.message || "Order created successfully",
+            message: success || "Order created successfully",
             type: "success",
           })
         );
@@ -108,7 +115,7 @@ const Orders = () => {
       } else {
         dispatch(
           showNotification({
-            message: rp.message || "Failed to create order",
+            message: error || "Failed to create order",
             type: "error",
           })
         );
@@ -116,7 +123,7 @@ const Orders = () => {
     } catch (error) {
       dispatch(
         showNotification({
-          message: "Failed to create order",
+          message: error,
           type: "error",
         })
       );
@@ -131,7 +138,7 @@ const Orders = () => {
       if (rp.status) {
         dispatch(
           showNotification({
-            message: rp.message || "Order update successfully",
+            message: success || "Order update successfully",
             type: "success",
           })
         );
@@ -294,7 +301,7 @@ const Orders = () => {
         setDataTable([]);
         dispatch(
           showNotification({
-            message: "Lấy dữ liệu thất bại.",
+            message: error,
             type: "error",
           })
         );
@@ -304,7 +311,6 @@ const Orders = () => {
     };
     getList();
   }, [searchParams, refresh]);
-  const intl = useIntl();
   const placeholderText = intl.formatMessage({ id: "Enter name or username" });
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
