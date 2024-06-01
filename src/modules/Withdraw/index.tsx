@@ -153,19 +153,19 @@ const Withdraw = (props: Props) => {
         return (
           <div style={{ display: "flex", flexDirection: "column" }}>
             <div>
-              Ngân hàng:
+              <TranslateTing text="Bank:" />
               <span style={{ fontWeight: "bold" }}>
                 {record.customer.bankName}
               </span>
             </div>
             <div>
-              Số tài khoản:{" "}
+              <TranslateTing text="Bank number:" />{" "}
               <span style={{ fontWeight: "bold" }}>
                 {record.customer.bankNumber}
               </span>
             </div>
             <div>
-              Chủ tài khoản:{" "}
+              <TranslateTing text="Bank account:" />{" "}
               <span style={{ fontWeight: "bold" }}>
                 {record.customer.owner}
               </span>

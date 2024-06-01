@@ -53,9 +53,8 @@ const Login = () => {
               type: "error",
             })
           );
-        } else {
-          navigate("/dashboard");
         }
+        navigate("/dashboard");
       } else {
         setIsLogin(false);
         dispatch(

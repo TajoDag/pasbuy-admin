@@ -315,5 +315,8 @@
 "Withdraw":  "Danh sách rút tiền",
 "success": "Thành công",
 "cancel": "Thất bại",
-"error": "Lỗi"
+"error": "Lỗi",
+"Bank:": "Ngân hàng",
+"Bank number:": "Số tài khoản",
+"Bank account:": "Chủ tài khoản"
 }

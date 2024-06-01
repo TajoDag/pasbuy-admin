@@ -16,6 +16,7 @@ import { useDispatch } from "react-redux";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import { showNotification } from "../../../redux/reducers/notificationReducer";
 import TranslateTing from "../../../components/Common/TranslateTing";
+import { useIntl } from "react-intl";
 
 export const TableCategory = () => {
   const [data, setData] = React.useState<any[]>([]);
@@ -23,12 +24,19 @@ export const TableCategory = () => {
   const [refresh, refecth] = useRefresh();
   const dispatch = useDispatch();
   const [detail, setDetail] = React.useState<any>({});
+  const intl = useIntl();
+  const success = intl.formatMessage({
+    id: "Success",
+  });
+  const error = intl.formatMessage({
+    id: "Error",
+  });
   const handleDelete = async (id: string) => {
     await deleteCategory(id)
       .then((res) => {
         dispatch(
           showNotification({
-            message: `${res.message}`,
+            message: success,
             type: "success",
           })
         );
