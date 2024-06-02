@@ -130,7 +130,6 @@ const Banner: React.FC = () => {
     };
     getAllBanner();
   }, []);
-  console.log(previewImage);
   return (
     <div>
       <Upload

@@ -30,3 +30,5 @@ export const publicBanner = (id: any, body: any) =>
 
 export const getLiveChat = () =>
   request<any>("get", `${API}/${endpoints.liveChat.get}`);
+
+
