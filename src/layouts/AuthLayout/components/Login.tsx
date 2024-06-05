@@ -9,12 +9,16 @@ import { useDispatch } from "react-redux";
 import { useLocalStorage } from "../../../utils";
 import TranslateTing from "../../../components/Common/TranslateTing";
 import { useIntl } from "react-intl";
+import {
+  startLoading,
+  stopLoading,
+} from "../../../redux/reducers/loadingReducer";
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { setValue: setToken } = useLocalStorage("user_token", "");
-  const { setValue: setIsLogin } = useLocalStorage("isLogin", "");
+  const { setValue: setIsLogin } = useLocalStorage("isLogin", false);
   const { setValue: setUserData } = useLocalStorage("userData", "");
   const intl = useIntl();
   const placeholderUsername = intl.formatMessage({
@@ -37,6 +41,7 @@ const Login = () => {
     password: Yup.string().required(placeholderPassword),
   });
   const onFinish = async (values: any) => {
+    dispatch(startLoading());
     try {
       const response = await loginUser(values);
       if (response.status) {
@@ -46,15 +51,15 @@ const Login = () => {
         // dispatch(
         //   showNotification({ message: response.message, type: "success" })
         // );
+        if (response.result.user.role !== "admin") {
+          dispatch(
+            showNotification({
+              message: placeholderError3,
+              type: "error",
+            })
+          );
+        }
         navigate("/dashboard");
-        // if (response.result.user.role !== "admin") {
-        //   dispatch(
-        //     showNotification({
-        //       message: placeholderError3,
-        //       type: "error",
-        //     })
-        //   );
-        // }
       } else {
         setIsLogin(false);
         dispatch(
@@ -72,6 +77,8 @@ const Login = () => {
       //     type: "error",
       //   })
       // );
+    } finally {
+      dispatch(stopLoading());
     }
   };
 

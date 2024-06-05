@@ -8,10 +8,14 @@ import { routes_url } from "./routes";
 import AppNotification from "../components/AppNotification";
 import AppLoading from "../components/AppLoading";
 
+type IsAuthenticated = boolean;
 const AppRoutes = () => {
   const loading = useSelector((state: any) => state.loading.loading);
   const notificationProps = useSelector((state: any) => state.notification);
-  const isAuthenticated = localStorage.getItem("isLogin");
+  const isAuthenticatedStr = localStorage.getItem("isLogin");
+  const isAuthenticated: IsAuthenticated = isAuthenticatedStr
+    ? JSON.parse(isAuthenticatedStr)
+    : null;
 
   const renderRoute = (route: any) => {
     if (route.isPrivate && isAuthenticated) {
