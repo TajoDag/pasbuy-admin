@@ -47,14 +47,14 @@ const Login = () => {
         //   showNotification({ message: response.message, type: "success" })
         // );
         navigate("/dashboard");
-        if (response.result.user.role !== "admin") {
-          dispatch(
-            showNotification({
-              message: placeholderError3,
-              type: "error",
-            })
-          );
-        }
+        // if (response.result.user.role !== "admin") {
+        //   dispatch(
+        //     showNotification({
+        //       message: placeholderError3,
+        //       type: "error",
+        //     })
+        //   );
+        // }
       } else {
         setIsLogin(false);
         dispatch(
