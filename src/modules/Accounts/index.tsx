@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { startLoading, stopLoading } from "../../redux/reducers/loadingReducer";
-import { getListUser } from "./api";
+import { getListCustomer, getListUser } from "./api";
 import { showNotification } from "../../redux/reducers/notificationReducer";
 import { useDispatch } from "react-redux";
 import useRefresh from "../../hooks/useRefresh";
@@ -10,22 +10,35 @@ import TranslateTing from "../../components/Common/TranslateTing";
 import { FaEye } from "react-icons/fa";
 import UserDetail from "./Modal/UserDetail";
 import { useIntl } from "react-intl";
+import { UserSwitchOutlined } from "@ant-design/icons";
 
 type Props = {
   role?: string | null;
 };
+
 const Accounts = (props: Props) => {
   const { role } = props;
   const dispatch = useDispatch();
   const [dataDetail, setDataDetail] = useState<any>({});
+  const [typeBtn, setTypeBtn] = useState<any>("");
   const [openDetail, setOpenDetail] = useState(false);
+  const [dataTableUser, setDataTableUser] = useState([]);
   const [searchParams, setSearchParams] = useState<any>({
     page: 0,
     size: 10,
-    name: "", // thêm giá trị name vào searchParams
+    name: "",
   });
-  console.log(role);
   const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 10,
+    total: 0,
+  });
+  const [searchParamsCustomer, setSearchParamsCustomer] = useState({
+    page: 0,
+    size: 10,
+    inviteCode: "",
+  });
+  const [paginationCustomer, setPaginationCustomer] = useState({
     current: 1,
     pageSize: 10,
     total: 0,
@@ -38,6 +51,50 @@ const Accounts = (props: Props) => {
     setOpenDetail(false);
     setDataDetail({});
   };
+
+  const onListCustomer = async (id: string) => {
+    setTypeBtn("list");
+    setSearchParamsCustomer((prevParams) => ({
+      ...prevParams,
+      page: 0,
+      inviteCode: id,
+    }));
+  };
+
+  useEffect(() => {
+    const fetchCustomers = async () => {
+      dispatch(startLoading());
+      try {
+        const response = await getListCustomer(searchParamsCustomer);
+        if (response.status) {
+          const cus = response.result.users.map((item: any, i: any) => ({
+            ...item,
+            stt: i + 1 + searchParamsCustomer.page * searchParamsCustomer.size,
+          }));
+          setOpenDetail(true);
+          setDataTableUser(cus);
+          setPaginationCustomer((prev) => ({
+            ...prev,
+            total: response.result.pagination?.total,
+          }));
+        }
+      } catch (err) {
+        dispatch(
+          showNotification({
+            message: "Lấy dữ liệu thất bại.",
+            type: "error",
+          })
+        );
+      } finally {
+        dispatch(stopLoading());
+      }
+    };
+
+    if (searchParamsCustomer.inviteCode) {
+      fetchCustomers();
+    }
+  }, [searchParamsCustomer]);
+
   const columns: TableProps<any>["columns"] = [
     {
       title: <TranslateTing text="#" />,
@@ -117,10 +174,17 @@ const Accounts = (props: Props) => {
             <Button
               icon={<FaEye />}
               onClick={() => {
+                setTypeBtn("detail");
                 setOpenDetail(true);
                 setDataDetail(record);
               }}
             />
+            {record.isShop && (
+              <Button
+                icon={<UserSwitchOutlined />}
+                onClick={() => onListCustomer(record.inviteCode)}
+              />
+            )}
           </Space>
         );
       },
@@ -185,6 +249,14 @@ const Accounts = (props: Props) => {
     });
     setPagination(pagination);
   };
+  const handleTableChangeCustomer = (pagination: any) => {
+    setSearchParamsCustomer({
+      ...searchParamsCustomer,
+      page: pagination.current - 1,
+      size: pagination.pageSize,
+    });
+    setPaginationCustomer(pagination);
+  };
   const intl = useIntl();
   const placeholderText = intl.formatMessage({ id: "Enter name or username" });
   return (
@@ -215,9 +287,13 @@ const Accounts = (props: Props) => {
         onChange={handleTableChange}
       />
       <UserDetail
+        typeBtn={typeBtn}
         open={openDetail}
         data={dataDetail}
+        paginationCustomer={paginationCustomer}
+        handleTableChangeCustomer={handleTableChangeCustomer}
         onClose={onCloseModalDetail}
+        dataTableUser={dataTableUser}
       />
     </div>
   );

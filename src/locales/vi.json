@@ -318,5 +318,7 @@
 "error": "Lỗi",
 "Bank:": "Ngân hàng",
 "Bank number:": "Số tài khoản",
-"Bank account:": "Chủ tài khoản"
+"Bank account:": "Chủ tài khoản",
+"Customers": "Danh sách khách hàng",
+"Detail User": "Chi tiết tài khoản"
 }

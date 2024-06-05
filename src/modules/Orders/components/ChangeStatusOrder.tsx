@@ -5,6 +5,10 @@ import { useEffect, useState } from "react";
 import { showNotification } from "../../../redux/reducers/notificationReducer";
 import { updateStatusOrders, updateStatusOrdersAgency } from "../apis";
 import { useIntl } from "react-intl";
+import {
+  startLoading,
+  stopLoading,
+} from "../../../redux/reducers/loadingReducer";
 type Props = {
   onClose?: any;
   open: boolean;
@@ -35,6 +39,7 @@ const ModalChangeStatusOrder = (props: Props) => {
   };
 
   const handelChangeStatus = async () => {
+    dispatch(startLoading());
     let payload = {
       status: status,
       orderLocation: orderLocation,
@@ -59,6 +64,8 @@ const ModalChangeStatusOrder = (props: Props) => {
             type: "error",
           })
         );
+      } finally {
+        dispatch(stopLoading());
       }
     } else {
       try {
@@ -80,6 +87,8 @@ const ModalChangeStatusOrder = (props: Props) => {
             type: "error",
           })
         );
+      } finally {
+        dispatch(stopLoading());
       }
     }
   };

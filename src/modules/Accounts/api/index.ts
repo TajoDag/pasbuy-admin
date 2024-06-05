@@ -6,3 +6,6 @@ export const getListUser = (body: any) =>
 
 export const getListUserAll = () =>
     request<any>("get", `${API}/${endpoints.user.all}`);
+
+export const getListCustomer = (body: any) =>
+    request("post", `${API}/${endpoints.user.getCustomers}`, body);

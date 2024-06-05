@@ -46,6 +46,7 @@ const Login = () => {
         // dispatch(
         //   showNotification({ message: response.message, type: "success" })
         // );
+        navigate("/dashboard");
         if (response.result.user.role !== "admin") {
           dispatch(
             showNotification({
@@ -54,7 +55,6 @@ const Login = () => {
             })
           );
         }
-        navigate("/dashboard");
       } else {
         setIsLogin(false);
         dispatch(
@@ -66,12 +66,12 @@ const Login = () => {
       }
     } catch (err) {
       setIsLogin(false);
-      dispatch(
-        showNotification({
-          message: placeholderError2,
-          type: "error",
-        })
-      );
+      // dispatch(
+      //   showNotification({
+      //     message: placeholderError2,
+      //     type: "error",
+      //   })
+      // );
     }
   };
 
