@@ -11,7 +11,7 @@ export const getOrders = (body: any) =>
 export const updateStatusOrders = (id: string, body: any) =>
   request<any>("put", `${API}/${endpoints.order.updateStatus}/${id}`, body);
 
-export const updateStatusOrdersAgency = (id: string, body:any) =>
+export const updateStatusOrdersAgency = (id: string, body: any) =>
   request("put", `${API}/${endpoints.order.updateStatusAgency}/${id}`, body);
 
 export const getOrdersAdmin = (body: any) =>
@@ -20,3 +20,7 @@ export const getOrdersAdmin = (body: any) =>
 
 export const getOrdersAgencyAdmin = (body: any) =>
   request<any>("post", `${API}/${endpoints.order.getListOrderAgency}`, body);
+
+export const updateOrdersAgencyAdmin = (body: any) =>
+  request<any>("put", `${API}/${endpoints.order.updateStatusOrdersAdmin}`, body);
+

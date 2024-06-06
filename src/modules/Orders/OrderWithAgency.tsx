@@ -17,7 +17,12 @@ import useRefresh from "../../hooks/useRefresh";
 import ModalOrder from "./components/ModalOrder";
 import { useDispatch } from "react-redux";
 import { showNotification } from "../../redux/reducers/notificationReducer";
-import { createOrder, getOrders, getOrdersAgencyAdmin, updateStatusOrders } from "./apis";
+import {
+  createOrder,
+  getOrders,
+  getOrdersAgencyAdmin,
+  updateStatusOrders,
+} from "./apis";
 import { startLoading, stopLoading } from "../../redux/reducers/loadingReducer";
 import { TagsOrder } from "./components/TagsOrder";
 import { TbEdit } from "react-icons/tb";
@@ -213,10 +218,7 @@ const OrderWithAgency = (props: any) => {
   const placeholderText = intl.formatMessage({ id: "Enter name or username" });
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-      <Card
-        title={<TranslateTing text="Orders" />}
-        style={{ width: "100%" }}
-      >
+      <Card title={<TranslateTing text="Orders" />} style={{ width: "100%" }}>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <Input
             placeholder={placeholderText}
@@ -271,6 +273,7 @@ const OrderWithAgency = (props: any) => {
         data={dataItems}
         refecth={refecth}
         onClose={onCloseModalChangeStatus}
+        CusAgency="agency"
       />
     </div>
   );

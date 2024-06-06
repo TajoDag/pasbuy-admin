@@ -46,6 +46,7 @@ export const endpoints = {
     updateStatus: `admin/order/status`,
     updateStatusAgency: `agency/order/status`,
     getListOrderAdmin: `admin/order/admin-customers`,
+    updateStatusOrdersAdmin: `admin/order/status-agency`,
     getListOrderAgency: `admin/order/get-orders-with-agency-customer`
   },
   keyChat: {
