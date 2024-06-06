@@ -45,7 +45,8 @@ export const endpoints = {
     getList: `admin/order/all`,
     updateStatus: `admin/order/status`,
     updateStatusAgency: `agency/order/status`,
-    getListOrderAdmin: `admin/order/admin-customers`
+    getListOrderAdmin: `admin/order/admin-customers`,
+    getListOrderAgency: `admin/order/get-orders-with-agency-customer`
   },
   keyChat: {
     get: `configLiveChat`,

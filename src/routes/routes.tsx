@@ -26,6 +26,7 @@ import { BiCartDownload } from "react-icons/bi";
 import { HiOutlineCash } from "react-icons/hi";
 import { BsCashCoin } from "react-icons/bs";
 import LiveChat from "../modules/Settings/components/LiveChat";
+import OrderWithAgency from "../modules/Orders/OrderWithAgency";
 
 export const routes_url = [
   {
@@ -121,6 +122,14 @@ export const routes_url = [
         path: "/order",
         label: <TranslateTing text="Orders" />,
         element: <Orders />,
+        isPrivate: true,
+        icon: <FaShoppingCart />,
+      },
+      {
+        key: "22",
+        path: "/order-agency",
+        label: <TranslateTing text="Orders Agency" />,
+        element: <OrderWithAgency />,
         isPrivate: true,
         icon: <FaShoppingCart />,
       },

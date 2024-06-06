@@ -16,3 +16,7 @@ export const updateStatusOrdersAgency = (id: string, body:any) =>
 
 export const getOrdersAdmin = (body: any) =>
   request<any>("post", `${API}/${endpoints.order.getListOrderAdmin}`, body);
+
+
+export const getOrdersAgencyAdmin = (body: any) =>
+  request<any>("post", `${API}/${endpoints.order.getListOrderAgency}`, body);

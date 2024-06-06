@@ -15,12 +15,25 @@ export const TagsOrder = (value: string) => {
           <TranslateTing text="Delivering" />
         </Tag>
       );
+    case "Pending Payment":
+      return (
+        <Tag color="geekblue">
+          <TranslateTing text="Pending Payment" />
+        </Tag>
+      );
+
     case "Successful delivery":
       return (
         <Tag color="green">
           <TranslateTing text="Successful delivery" />
         </Tag>
       );
+      case "Paid":
+        return (
+          <Tag color="green">
+            <TranslateTing text="Paid" />
+          </Tag>
+        );
     case "Cancel":
       return (
         <Tag color="red">
