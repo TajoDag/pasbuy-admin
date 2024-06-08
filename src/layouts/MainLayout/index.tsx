@@ -124,7 +124,7 @@ const MainLayout = (props: any) => {
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider
-        // style={{ background: "#141423" }}
+        style={{overflowY: "auto", height: "100vh" }}
         trigger={null}
         collapsible
         collapsed={collapsed}
@@ -139,17 +139,6 @@ const MainLayout = (props: any) => {
           selectedKeys={[`${location.pathname}`]}
           mode="inline"
         >
-          {/* {routes_url.map((item) => (
-            <Menu.Item
-              key={item.key}
-              icon={item.icon}
-              className={
-                location.pathname === item.path ? "ant-menu-item-selected" : ""
-              }
-            >
-              <Link to={item.path}>{item.label}</Link>
-            </Menu.Item>
-          ))} */}
           {routes_url.map((group) =>
             group.children ? (
               <Menu.ItemGroup key={group.key} title={group.label}>

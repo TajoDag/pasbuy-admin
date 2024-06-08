@@ -11,6 +11,7 @@ const Settings = lazy(() => import("../modules/Settings"));
 const ReturnTheOrders = lazy(() => import("../modules/ReturnTheOrders"));
 const Deposit = lazy(() => import("../modules/Deposit"));
 const Withdraw = lazy(() => import("../modules/Withdraw"));
+const Chats = lazy(() => import("../modules/Chats"));
 
 import { MdFormatSize, MdOutlineDashboard } from "react-icons/md";
 import { FaShoppingCart, FaUsers } from "react-icons/fa";
@@ -19,7 +20,7 @@ import { AiFillProduct } from "react-icons/ai";
 import { MdBrandingWatermark } from "react-icons/md";
 import { UserOutlined } from "@ant-design/icons";
 import TranslateTing from "../components/Common/TranslateTing";
-import { IoMdSettings } from "react-icons/io";
+import { IoMdCall, IoMdSettings } from "react-icons/io";
 import { LuUsers2 } from "react-icons/lu";
 import { RiMapPinUserLine } from "react-icons/ri";
 import { BiCartDownload } from "react-icons/bi";
@@ -166,18 +167,24 @@ export const routes_url = [
     ],
   },
   {
+    key: "CustomerCare",
+    path: "/chats",
+    label: <TranslateTing text="Customer care" />,
+    children: [
+      {
+        key: "7",
+        path: "/chats",
+        label: <TranslateTing text="Chats" />,
+        element: <Chats />,
+        isPrivate: true,
+        icon: <IoMdCall />,
+      },
+    ],
+  },
+  {
     key: "configManagement",
     label: <TranslateTing text="Config Website" />,
     children: [
-      // {
-      //   key: "7",
-      //   path: "/hotline",
-      //   label: "Hotline",
-      //   element: <LiveChat />,
-      //   isPrivate: true,
-      //   icon: <FaShoppingCart />,
-      // },
-
       {
         key: "9",
         path: "/settings",

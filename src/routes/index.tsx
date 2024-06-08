@@ -7,6 +7,7 @@ import "../App.scss";
 import { routes_url } from "./routes";
 import AppNotification from "../components/AppNotification";
 import AppLoading from "../components/AppLoading";
+import Chats from "../modules/Chats";
 
 type IsAuthenticated = boolean;
 const AppRoutes = () => {
@@ -74,6 +75,7 @@ const AppRoutes = () => {
         {renderRoutes(routes_url)}
         <Route path="/login" element={<AuthLayout />} />
         <Route path="/register" element={<AuthLayout />} />
+        {isAuthenticated && <Route path="/chats" element={<Chats />} />}
       </Routes>
     </Suspense>
   );
