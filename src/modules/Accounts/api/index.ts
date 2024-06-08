@@ -9,3 +9,12 @@ export const getListUserAll = () =>
 
 export const getListCustomer = (body: any) =>
     request("post", `${API}/${endpoints.user.getCustomers}`, body);
+
+export const getDetailUser = (id: string) =>
+    request<any>("get", `${API}/${endpoints.user.detailUsers}/${id}`,);
+
+export const updateDetailUser = (id: string, body: any) =>
+    request<any>("put", `${API}/${endpoints.user.detailUsers}/${id}`, body);
+
+export const deleteUser = (id: string) =>
+    request<any>("delete", `${API}/${endpoints.user.detailUsers}/${id}`);

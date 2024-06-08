@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { startLoading, stopLoading } from "../../redux/reducers/loadingReducer";
-import { getListCustomer, getListUser } from "./api";
+import { deleteUser, getDetailUser, getListCustomer, getListUser } from "./api";
 import { showNotification } from "../../redux/reducers/notificationReducer";
 import { useDispatch } from "react-redux";
 import useRefresh from "../../hooks/useRefresh";
 import { Button, Card, Input, Row, Space, Table, TableProps } from "antd";
 import { splitText } from "../../utils";
 import TranslateTing from "../../components/Common/TranslateTing";
-import { FaEye } from "react-icons/fa";
+import { FaEye, FaRegEdit } from "react-icons/fa";
 import UserDetail from "./Modal/UserDetail";
 import { useIntl } from "react-intl";
 import { UserSwitchOutlined } from "@ant-design/icons";
+import { MdDelete } from "react-icons/md";
+import UpdateUser from "./Modal/UpdateUser";
 
 type Props = {
   role?: string | null;
@@ -22,11 +24,12 @@ const Accounts = (props: Props) => {
   const [dataDetail, setDataDetail] = useState<any>({});
   const [typeBtn, setTypeBtn] = useState<any>("");
   const [openDetail, setOpenDetail] = useState(false);
+  const [openUpdate, setOpenUpdate] = useState(false);
   const [dataTableUser, setDataTableUser] = useState([]);
   const [searchParams, setSearchParams] = useState<any>({
     page: 0,
     size: 10,
-    name: "",
+    search: "",
   });
   const [pagination, setPagination] = useState({
     current: 1,
@@ -46,12 +49,17 @@ const Accounts = (props: Props) => {
   const [name, setName] = useState<any>(null);
   const [dataTable, setDataTable] = useState<any[]>([]);
   const [refresh, refecth] = useRefresh();
-
+  const [dataUpdate, setDataUpdate] = useState<any>();
   const onCloseModalDetail = () => {
     setOpenDetail(false);
     setDataDetail({});
   };
 
+  const onCloseModalUpdate = () => {
+    setTypeBtn("");
+    setDataUpdate({});
+    setOpenUpdate(false);
+  };
   const onListCustomer = async (id: string) => {
     setTypeBtn("list");
     setSearchParamsCustomer((prevParams) => ({
@@ -59,6 +67,38 @@ const Accounts = (props: Props) => {
       page: 0,
       inviteCode: id,
     }));
+  };
+
+  const getUpdateUser = async (id: string) => {
+    setTypeBtn("update");
+    try {
+      dispatch(startLoading());
+      const rp = await getDetailUser(id);
+      if (rp.status) {
+        setDataUpdate(rp.result);
+        setOpenUpdate(true);
+      } else {
+        setOpenUpdate(false);
+      }
+    } catch (err) {
+      setOpenUpdate(false);
+      setDataUpdate({});
+    } finally {
+      dispatch(stopLoading());
+    }
+  };
+
+  const deleteUserById = async (id: string) => {
+    try {
+      dispatch(startLoading());
+      const response = await deleteUser(id);
+      if (response.status) {
+        refecth();
+      }
+    } catch (err) {
+    } finally {
+      dispatch(stopLoading());
+    }
   };
 
   useEffect(() => {
@@ -167,7 +207,7 @@ const Accounts = (props: Props) => {
     {
       title: "",
       align: "center" as "center",
-      width: 100,
+      width: 110,
       render: (_: any, record: any, index: number) => {
         return (
           <Space size="middle">
@@ -177,6 +217,18 @@ const Accounts = (props: Props) => {
                 setTypeBtn("detail");
                 setOpenDetail(true);
                 setDataDetail(record);
+              }}
+            />
+            <Button
+              icon={<FaRegEdit />}
+              onClick={() => {
+                getUpdateUser(record._id);
+              }}
+            />
+            <Button
+              icon={<MdDelete />}
+              onClick={() => {
+                deleteUserById(record._id);
               }}
             />
             {record.isShop && (
@@ -199,7 +251,7 @@ const Accounts = (props: Props) => {
     setSearchParams({
       ...searchParams,
       page: 0,
-      name: name,
+      search: name,
     });
     refecth();
   };
@@ -294,6 +346,14 @@ const Accounts = (props: Props) => {
         handleTableChangeCustomer={handleTableChangeCustomer}
         onClose={onCloseModalDetail}
         dataTableUser={dataTableUser}
+      />
+      <UpdateUser
+        onClose={onCloseModalUpdate}
+        open={openUpdate}
+        typeBtn={typeBtn}
+        dataUpdate={dataUpdate}
+        width={"50%"}
+        refecth={refecth}
       />
     </div>
   );

@@ -316,5 +316,9 @@
   "Detail User": "帳號詳細資料",
   "Orders Agency": "的客戶",
   "Pending Payment": "等待付款",
-  "Paid": "付款成功"
+  "Paid": "付款成功",
+  "Update user": "更新用戶",
+  "Bank": "銀行",
+"Bank account": "銀行帳戶持有人",
+"Bank number": "銀行帳號"
 }

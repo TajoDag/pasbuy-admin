@@ -17,12 +17,12 @@ $color_error: #f61d18;
 
 /* Kiểu cho phần thumb (phần có thể di chuyển của scroll bar) */
 ::-webkit-scrollbar-thumb {
-  background: #f79400; /* Màu của thumb */
+  background: gray; /* Màu của thumb */
 }
 
 /* Kiểu cho phần thumb khi hover hoặc click vào */
 ::-webkit-scrollbar-thumb:hover {
-  background: #c37500; /* Màu của thumb khi hover */
+  background: gray; /* Màu của thumb khi hover */
 }
 
 .ant-table-thead .ant-table-cell {

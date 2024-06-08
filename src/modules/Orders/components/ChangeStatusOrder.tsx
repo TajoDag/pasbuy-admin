@@ -306,6 +306,7 @@ const ModalChangeStatusOrder = (props: Props) => {
     dispatch(startLoading());
     let payload = {
       status: status,
+      orderLocation: orderLocation,
     };
     try {
       const rp =
@@ -334,7 +335,6 @@ const ModalChangeStatusOrder = (props: Props) => {
       dispatch(stopLoading());
     }
   };
-  console.log(orderItems);
   const handleChangeStatusAgency = async () => {
     dispatch(startLoading());
     let payload = {

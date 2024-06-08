@@ -8,6 +8,7 @@ import { routes_url } from "./routes";
 import AppNotification from "../components/AppNotification";
 import AppLoading from "../components/AppLoading";
 import Chats from "../modules/Chats";
+import { ChatContextProvider } from "../context/ChatContext";
 
 type IsAuthenticated = boolean;
 const AppRoutes = () => {
@@ -17,7 +18,6 @@ const AppRoutes = () => {
   const isAuthenticated: IsAuthenticated = isAuthenticatedStr
     ? JSON.parse(isAuthenticatedStr)
     : null;
-
   const renderRoute = (route: any) => {
     if (route.isPrivate && isAuthenticated) {
       return route.element;
@@ -66,17 +66,19 @@ const AppRoutes = () => {
     <Suspense fallback={<h1>Loading....</h1>}>
       {notificationProps && <AppNotification {...notificationProps} />}
       {loading && <AppLoading />}
-      <Routes>
-        {isAuthenticated ? (
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
-        ) : (
-          <Route path="/" element={<Navigate to="/login" replace />} />
-        )}
-        {renderRoutes(routes_url)}
-        <Route path="/login" element={<AuthLayout />} />
-        <Route path="/register" element={<AuthLayout />} />
-        {isAuthenticated && <Route path="/chats" element={<Chats />} />}
-      </Routes>
+      <ChatContextProvider isLogin={isAuthenticated}>
+        <Routes>
+          {isAuthenticated ? (
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          ) : (
+            <Route path="/" element={<Navigate to="/login" replace />} />
+          )}
+          {renderRoutes(routes_url)}
+          <Route path="/login" element={<AuthLayout />} />
+          <Route path="/register" element={<AuthLayout />} />
+          {isAuthenticated && <Route path="/chats" element={<Chats />} />}
+        </Routes>
+      </ChatContextProvider>
     </Suspense>
   );
 };

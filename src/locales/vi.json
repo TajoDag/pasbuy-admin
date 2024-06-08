@@ -323,6 +323,10 @@
 "Detail User": "Chi tiết tài khoản",
 "Orders Agency": "Đơn hàng của đại lý",
 "Customers of": "Khách hàng của",
-"Pending Payment": "Chờ thanh toán", 
-"Paid": "Đã thanh toán"
+"Pending Payment": "Chờ thanh toán",
+"Paid": "Đã thanh toán",
+"Update user": "Cập nhật thông tin",
+"Bank": "Ngân hàng",
+"Bank account": "Tên tài khoản",
+"Bank number": "Số tài khoản"
 }

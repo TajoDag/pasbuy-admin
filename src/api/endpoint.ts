@@ -7,7 +7,8 @@ export const endpoints = {
   user: {
     list: `admin/findAllUsers`,
     all: `admin/users`,
-    getCustomers: `user/customers`
+    getCustomers: `user/customers`,
+    detailUsers: `admin/user`
   },
   product: {
     list: `admin/products/all`,
@@ -76,5 +77,13 @@ export const endpoints = {
   },
   liveChat: {
     get: `admin/livechat/token`
+  },
+  chat: {
+    createChat: "chat/create",
+    addMessage: "chat/message",
+    getUserChat: "chat/user",
+    findUserInChat: "chat/search",
+    getMessageUserChat: "chat",
+    createMessage: `chat/createMessage`
   }
 };
