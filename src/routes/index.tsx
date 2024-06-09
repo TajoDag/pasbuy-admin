@@ -1,5 +1,5 @@
-import React, { Suspense } from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
+import React, { Suspense, useContext, useEffect } from "react";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import AuthLayout from "../layouts/AuthLayout";
 import MainLayout from "../layouts/MainLayout";
@@ -8,7 +8,7 @@ import { routes_url } from "./routes";
 import AppNotification from "../components/AppNotification";
 import AppLoading from "../components/AppLoading";
 import Chats from "../modules/Chats";
-import { ChatContextProvider } from "../context/ChatContext";
+import { ChatContext, ChatContextProvider } from "../context/ChatContext";
 
 type IsAuthenticated = boolean;
 const AppRoutes = () => {
@@ -18,6 +18,7 @@ const AppRoutes = () => {
   const isAuthenticated: IsAuthenticated = isAuthenticatedStr
     ? JSON.parse(isAuthenticatedStr)
     : null;
+
   const renderRoute = (route: any) => {
     if (route.isPrivate && isAuthenticated) {
       return route.element;

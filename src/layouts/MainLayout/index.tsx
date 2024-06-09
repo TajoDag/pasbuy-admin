@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   DesktopOutlined,
   DownOutlined,
@@ -12,7 +12,7 @@ import {
 import type { MenuProps } from "antd";
 import { Breadcrumb, Button, Dropdown, Layout, Menu, Space, theme } from "antd";
 import { routes_url } from "../../routes/routes";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import logo from "../../assets/images/logoCMS.png";
 import { CiBellOn } from "react-icons/ci";
 import flagEn from "../../assets/images/flags/en.png";
@@ -23,6 +23,7 @@ import AutoTranslate from "../../utils/AutoTranslate";
 import { useLocalization } from "../../context/LocalizationWrapper";
 import TranslateTing from "../../components/Common/TranslateTing";
 import { useCurrency } from "../../context/CurrencyContext";
+import { ChatContext } from "../../context/ChatContext";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -35,6 +36,29 @@ const MainLayout = (props: any) => {
   const userData: any = localStorage.getItem("userData");
   const storedLanguage = localStorage.getItem("locale") || "en";
   const convertDtUser = JSON.parse(userData);
+
+  const { updateCurrentChat } = useContext(ChatContext);
+  const location = useLocation();
+  const defaultL = {
+    _id: "666592324a4422db7243fb6a",
+    members: [
+      {
+        _id: "665027dd285633ac87a38461",
+        username: "admin",
+      },
+      {
+        _id: "6663d582b4788233da09fb70",
+        username: "botchat",
+      },
+    ],
+    createdAt: "2024-06-09T11:29:54.270Z",
+    updatedAt: "2024-06-09T11:29:54.270Z",
+  };
+  useEffect(() => {
+    if (location.pathname !== "/chats") {
+      updateCurrentChat(defaultL);
+    }
+  }, [location.pathname]);
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -124,7 +148,7 @@ const MainLayout = (props: any) => {
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider
-        style={{overflowY: "auto", height: "100vh" }}
+        style={{ overflowY: "auto", height: "100vh" }}
         trigger={null}
         collapsible
         collapsed={collapsed}
