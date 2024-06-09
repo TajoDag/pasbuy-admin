@@ -1,5 +1,7 @@
 export const API = import.meta.env.VITE_API_BASE_URL;
 
+export const SOCKET_URL = import.meta.env.VITE_API_BASE_SOCKET;
+
 export const endpoints = {
   auth: {
     login: `login`,
