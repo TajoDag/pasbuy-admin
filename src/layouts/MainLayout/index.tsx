@@ -24,6 +24,7 @@ import { useLocalization } from "../../context/LocalizationWrapper";
 import TranslateTing from "../../components/Common/TranslateTing";
 import { useCurrency } from "../../context/CurrencyContext";
 import { ChatContext } from "../../context/ChatContext";
+import { getUserChat } from "../../api/utils/chat";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -37,7 +38,7 @@ const MainLayout = (props: any) => {
   const storedLanguage = localStorage.getItem("locale") || "en";
   const convertDtUser = JSON.parse(userData);
 
-  const { updateCurrentChat } = useContext(ChatContext);
+  const { updateCurrentChat, setUserChats } = useContext(ChatContext);
   const location = useLocation();
   const defaultL = {
     _id: "666592324a4422db7243fb6a",
@@ -58,6 +59,19 @@ const MainLayout = (props: any) => {
     if (location.pathname !== "/chats") {
       updateCurrentChat(defaultL);
     }
+    const getUserChats = async () => {
+      if (userData) {
+        try {
+          const response = await getUserChat("6663d582b4788233da09fb70");
+          if (response.status) {
+            setUserChats(response.result);
+          }
+        } catch (e: any) {
+        } finally {
+        }
+      }
+    };
+    getUserChats();
   }, [location.pathname]);
   const {
     token: { colorBgContainer, borderRadiusLG },

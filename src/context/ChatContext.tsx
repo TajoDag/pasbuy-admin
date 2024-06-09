@@ -421,6 +421,7 @@ interface ChatContextType {
   ) => void;
   setIsChatOpen: (isOpen: boolean) => void;
   isChatOpen: boolean;
+  setUserChats: any;
 }
 
 // Create the context with a default value
@@ -444,6 +445,7 @@ export const ChatContext = createContext<ChatContextType>({
   markThisUserNotificationsAsRead: () => {},
   setIsChatOpen: () => {},
   isChatOpen: false,
+  setUserChats: null,
 });
 
 interface ChatContextProviderProps {
@@ -532,6 +534,7 @@ export const ChatContextProvider: React.FC<ChatContextProviderProps> = ({
         setNotifications((prev: any) => [{ ...res, isRead: false }, ...prev]);
         notificationSound.play();
       }
+      notificationSound.play();
     });
 
     return () => {
@@ -641,7 +644,6 @@ export const ChatContextProvider: React.FC<ChatContextProviderProps> = ({
   );
 
   const updateCurrentChat = useCallback(async (chat: any) => {
-    console.log(chat);
     setCurrentChat(chat);
     setIsChatOpen(true); // Set chat open state to true when chat is updated
   }, []);
@@ -727,8 +729,9 @@ export const ChatContextProvider: React.FC<ChatContextProviderProps> = ({
         notifications,
         markNotificationsAsRead,
         markThisUserNotificationsAsRead,
-        isChatOpen, // Provide chat open state
-        setIsChatOpen, // Provide function to set chat open state
+        isChatOpen,
+        setIsChatOpen,
+        setUserChats,
       }}
     >
       {children}
