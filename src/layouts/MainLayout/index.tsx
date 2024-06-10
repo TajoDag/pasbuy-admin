@@ -25,6 +25,7 @@ import TranslateTing from "../../components/Common/TranslateTing";
 import { useCurrency } from "../../context/CurrencyContext";
 import { ChatContext } from "../../context/ChatContext";
 import { getUserChat } from "../../api/utils/chat";
+import Notification from "../../modules/Chats/components/Notification";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -59,19 +60,19 @@ const MainLayout = (props: any) => {
     if (location.pathname !== "/chats") {
       updateCurrentChat(defaultL);
     }
-    const getUserChats = async () => {
-      if (userData) {
-        try {
-          const response = await getUserChat("6663d582b4788233da09fb70");
-          if (response.status) {
-            setUserChats(response.result);
-          }
-        } catch (e: any) {
-        } finally {
-        }
-      }
-    };
-    getUserChats();
+    // const getUserChats = async () => {
+    //   if (convertDtUser && convertDtUser) {
+    //     try {
+    //       const response = await getUserChat("6663d582b4788233da09fb70");
+    //       if (response.status) {
+    //         setUserChats(response.result);
+    //       }
+    //     } catch (e: any) {
+    //     } finally {
+    //     }
+    //   }
+    // };
+    // getUserChats();
   }, [location.pathname]);
   const {
     token: { colorBgContainer, borderRadiusLG },
@@ -230,9 +231,17 @@ const MainLayout = (props: any) => {
               }}
             />
           </div>
-          <div style={{ display: "flex", gap: 30 }}>
+          <div
+            style={{
+              display: "flex",
+              gap: 30,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
             <div style={{ position: "relative", top: 8 }}>
-              <CiBellOn size={24} />
+              <Notification />
             </div>
             <div>
               <Dropdown

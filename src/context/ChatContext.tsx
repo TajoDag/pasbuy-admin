@@ -422,6 +422,7 @@ interface ChatContextType {
   setIsChatOpen: (isOpen: boolean) => void;
   isChatOpen: boolean;
   setUserChats: any;
+  allUsers: any;
 }
 
 // Create the context with a default value
@@ -446,6 +447,7 @@ export const ChatContext = createContext<ChatContextType>({
   setIsChatOpen: () => {},
   isChatOpen: false,
   setUserChats: null,
+  allUsers: [],
 });
 
 interface ChatContextProviderProps {
@@ -470,7 +472,8 @@ export const ChatContextProvider: React.FC<ChatContextProviderProps> = ({
   const [socket, setSocket] = useState<any>(null);
   const [onlineUsers, setOnlineUsers] = useState<any>(null);
   const [notifications, setNotifications] = useState<any>([]);
-  const [isChatOpen, setIsChatOpen] = useState<boolean>(false); // Add a state to track if the chat is open
+  const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
+  const [allUsers, setAllUsers] = useState<any>([]);
 
   const notificationSound = new Audio(audio);
 
@@ -530,11 +533,11 @@ export const ChatContextProvider: React.FC<ChatContextProviderProps> = ({
 
       if (isChatOpen) {
         setNotifications((prev: any) => [{ ...res, isRead: true }, ...prev]);
+        notificationSound.play();
       } else {
         setNotifications((prev: any) => [{ ...res, isRead: false }, ...prev]);
         notificationSound.play();
       }
-      notificationSound.play();
     });
 
     return () => {
@@ -563,6 +566,7 @@ export const ChatContextProvider: React.FC<ChatContextProviderProps> = ({
               return !isChatCreated;
             });
             setPotentialChats(pChats);
+            setAllUsers(response.result);
           }
         } catch (e: any) {
           console.error(e);
@@ -732,6 +736,7 @@ export const ChatContextProvider: React.FC<ChatContextProviderProps> = ({
         isChatOpen,
         setIsChatOpen,
         setUserChats,
+        allUsers,
       }}
     >
       {children}
