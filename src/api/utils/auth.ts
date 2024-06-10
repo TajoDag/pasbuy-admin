@@ -8,3 +8,6 @@ export const loginUser = (body: ILogin) =>
 
 // export const loginUser = (body: ILogin) =>
 //     request<IResultLogin>("post", `${API}/${endpoints.auth.login}`, body);
+
+export const updatePassword = (body: any) =>
+    request<any>("put", `${API}/${endpoints.user.updatePassword}`, body);

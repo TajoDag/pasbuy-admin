@@ -10,7 +10,18 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
-import { Breadcrumb, Button, Dropdown, Layout, Menu, Space, theme } from "antd";
+import {
+  Breadcrumb,
+  Button,
+  Dropdown,
+  Form,
+  Input,
+  Layout,
+  Menu,
+  Modal,
+  Space,
+  theme,
+} from "antd";
 import { routes_url } from "../../routes/routes";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import logo from "../../assets/images/logoCMS.png";
@@ -26,6 +37,11 @@ import { useCurrency } from "../../context/CurrencyContext";
 import { ChatContext } from "../../context/ChatContext";
 import { getUserChat } from "../../api/utils/chat";
 import Notification from "../../modules/Chats/components/Notification";
+import { useIntl } from "react-intl";
+import { updatePassword } from "../../api/utils/auth";
+import { useDispatch } from "react-redux";
+import { showNotification } from "../../redux/reducers/notificationReducer";
+import { startLoading, stopLoading } from "../../redux/reducers/loadingReducer";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -38,23 +54,24 @@ const MainLayout = (props: any) => {
   const userData: any = localStorage.getItem("userData");
   const storedLanguage = localStorage.getItem("locale") || "en";
   const convertDtUser = JSON.parse(userData);
-
+  const dispatch = useDispatch();
   const { updateCurrentChat, setUserChats } = useContext(ChatContext);
   const location = useLocation();
+  const [openChangePassword, setOpenChangePassword] = useState(false);
   const defaultL = {
-    _id: "666592324a4422db7243fb6a",
+    _id: "66672bfeb539c4644d49c876",
     members: [
       {
-        _id: "665027dd285633ac87a38461",
-        username: "admin",
+        _id: "66672bf219a44b9c0f219741",
+        username: "botchat2",
       },
       {
         _id: "6663d582b4788233da09fb70",
         username: "botchat",
       },
     ],
-    createdAt: "2024-06-09T11:29:54.270Z",
-    updatedAt: "2024-06-09T11:29:54.270Z",
+    createdAt: "2024-06-10T16:38:22.203+00:00",
+    updatedAt: "2024-06-10T16:38:22.203+00:00",
   };
   useEffect(() => {
     if (location.pathname !== "/chats") {
@@ -117,6 +134,14 @@ const MainLayout = (props: any) => {
     {
       label: (
         <p>
+          <TranslateTing text="Change password" />
+        </p>
+      ),
+      key: "3",
+    },
+    {
+      label: (
+        <p>
           <TranslateTing text="Logout" />
         </p>
       ),
@@ -130,11 +155,25 @@ const MainLayout = (props: any) => {
       selectedKeys={[currency]}
     />
   );
-  const handleLogout = () => {
-    window.localStorage.clear();
-    navigate("/login");
+
+  const handleMenuClick = (e: any) => {
+    if (e.key === "0") {
+      window.localStorage.clear();
+      window.location.href = "/login";
+    } else if (e.key === "3") {
+      handleChangePassword();
+    }
+  };
+  const handleChangePassword = () => {
+    setOpenChangePassword(true);
+  };
+  const handleChangePasswordOk = () => {
+    setOpenChangePassword(false);
   };
 
+  const handleChangePasswordCancel = () => {
+    setOpenChangePassword(false);
+  };
   const handleChangeLanguages = (value: any) => {
     setLanguage(value);
     switchLocale(value);
@@ -148,18 +187,37 @@ const MainLayout = (props: any) => {
     />
   );
 
-  const userMenu = (
-    <Menu
-      onClick={(e) => {
-        window.localStorage.clear();
-        window.location.href = "/login";
-      }}
-      items={menuItems}
-    />
-  );
+  const userMenu = <Menu onClick={handleMenuClick} items={menuItems} />;
   const getLabel = (list: any, key: any) =>
     list.find((item: any) => item.key === key)?.label;
-
+  const intl = useIntl();
+  const Success = intl.formatMessage({ id: "Success" });
+  const Error = intl.formatMessage({ id: "Error" });
+  const handleConfirmChangePassword = async (values: any) => {
+    try {
+      dispatch(startLoading());
+      const rp = await updatePassword(values);
+      if (rp.status) {
+        dispatch(
+          showNotification({
+            message: Success,
+            type: "success",
+          })
+        );
+        handleChangePasswordCancel();
+      } else {
+        dispatch(
+          showNotification({
+            message: Error,
+            type: "error",
+          })
+        );
+      }
+    } catch (err) {
+    } finally {
+      dispatch(stopLoading());
+    }
+  };
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider
@@ -306,7 +364,7 @@ const MainLayout = (props: any) => {
               <Dropdown
                 overlay={userMenu}
                 trigger={["click"]}
-                overlayStyle={{ width: 100 }}
+                overlayStyle={{ width: 150 }}
               >
                 <div
                   className="selected-language"
@@ -344,6 +402,71 @@ const MainLayout = (props: any) => {
           {/* Ant Design ©{new Date().getFullYear()} Created by Ant UED */}
         </Footer>
       </Layout>
+      <Modal
+        title={<TranslateTing text="Change password" />}
+        open={openChangePassword}
+        onOk={handleChangePasswordOk}
+        onCancel={handleChangePasswordCancel}
+        okText={<TranslateTing text="OK" />}
+        cancelText={<TranslateTing text="Cancel" />}
+        footer={null}
+        width="30%"
+      >
+        <Form
+          labelCol={{
+            span: 6,
+          }}
+          wrapperCol={{
+            span: 14,
+          }}
+          initialValues={{
+            oldPassword: "",
+            newPassword: "",
+            confirmPassword: "",
+          }}
+          onFinish={(value) => handleConfirmChangePassword(value)}
+          autoComplete="off"
+        >
+          <Form.Item
+            label={<TranslateTing text="Old Password" />}
+            name="oldPassword"
+          >
+            <Input.Password />
+          </Form.Item>
+          <Form.Item
+            label={<TranslateTing text="New Password" />}
+            name="newPassword"
+          >
+            <Input.Password />
+          </Form.Item>
+          <Form.Item
+            label={<TranslateTing text="Confirm Password" />}
+            name="confirmPassword"
+          >
+            <Input.Password />
+          </Form.Item>
+          <div
+            style={{ marginTop: 15, display: "flex", justifyContent: "center" }}
+          >
+            <Space>
+              <div className="btn_cancel">
+                <Button htmlType="button" onClick={handleChangePasswordCancel}>
+                  <TranslateTing text="Cancel" />
+                </Button>
+              </div>
+              <div className="btn_submit">
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  style={{ background: "#e62e05" }}
+                >
+                  <TranslateTing text="Submit" />
+                </Button>
+              </div>
+            </Space>
+          </div>
+        </Form>
+      </Modal>
     </Layout>
   );
 };

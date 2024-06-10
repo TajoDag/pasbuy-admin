@@ -320,5 +320,9 @@
   "Update user": "更新用戶",
   "Bank": "銀行",
 "Bank account": "銀行帳戶持有人",
-"Bank number": "銀行帳號"
+"Bank number": "銀行帳號",
+"Change password": "更改密碼",
+"Account has been deleted": "帳戶已刪除",
+"Old Password": "旧密码",
+"New Password": "新密码"
 }

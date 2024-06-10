@@ -14,7 +14,7 @@ import {
 } from "antd";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { UploadOutlined } from "@ant-design/icons";
+import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { getAllCategory } from "../../../Categories/utils/services";
 import { showNotification } from "../../../../redux/reducers/notificationReducer";
@@ -24,6 +24,29 @@ import { getAllBrand } from "../../../Brand/utils/services";
 import { IProduct } from "../../interfaces";
 import TranslateTing from "../../../../components/Common/TranslateTing";
 import { useIntl } from "react-intl";
+import { RcFile, UploadFile, UploadProps } from "antd/es/upload";
+
+const getBase64 = (file: RcFile): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
+  });
+
+const urlToBase64 = (url: string): Promise<string> =>
+  fetch(url)
+    .then((response) => response.blob())
+    .then(
+      (blob) =>
+        new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result as string);
+          reader.onerror = reject;
+          reader.readAsDataURL(blob);
+        })
+    );
+
 type Props = {
   title: string;
   onClose: () => void;
@@ -39,6 +62,10 @@ type Props = {
   imagesPreview?: string[];
   createProductImagesChange?: (e: any) => void;
   dataDetail?: IProduct;
+  base64List?: any;
+  setBase64List?: any;
+  fileList?: any;
+  setFileList?: any;
 };
 const DrawerProduct = (props: Props) => {
   const {
@@ -54,6 +81,10 @@ const DrawerProduct = (props: Props) => {
     images,
     setImagesPreview,
     imagesPreview,
+    base64List,
+    setBase64List,
+    fileList,
+    setFileList,
     createProductImagesChange,
     dataDetail,
   } = props;
@@ -61,6 +92,8 @@ const DrawerProduct = (props: Props) => {
   const [listCate, setListCate] = useState([]);
   const [listBrand, setListBrand] = useState([]);
   const [listProductType, setListProductType] = useState([]);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
   let newTitle: any = "";
   if (title === "add") {
     newTitle = <TranslateTing text="Add Product" />;
@@ -78,6 +111,15 @@ const DrawerProduct = (props: Props) => {
     input: string,
     option?: { label: string; value: string }
   ) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
+
+  const handlePreview = async (file: UploadFile) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj as RcFile);
+    }
+
+    setPreviewImage(file.url || (file.preview as string));
+    setPreviewOpen(true);
+  };
 
   useEffect(() => {
     const getListCategories = async () => {
@@ -168,6 +210,36 @@ const DrawerProduct = (props: Props) => {
     getListProductType();
     getListCategories();
   }, []);
+  const handleChange: UploadProps["onChange"] = async ({
+    fileList: newFileList,
+  }) => {
+    const base64Strings = await Promise.all(
+      newFileList.map(async (file) => {
+        if (file.originFileObj) {
+          return await getBase64(file.originFileObj as RcFile);
+        } else if (file.url) {
+          return await urlToBase64(file.url);
+        } else {
+          return "";
+        }
+      })
+    );
+
+    const validBase64Strings = base64Strings.filter((base64) => base64);
+    setBase64List(validBase64Strings);
+    setFileList(newFileList);
+  };
+
+  const uploadButton = (
+    <button style={{ border: 0, background: "none" }} type="button">
+      <PlusOutlined />
+      <div style={{ marginTop: 8 }}>Chọn hình ảnh</div>
+    </button>
+  );
+
+  const beforeUpload = (file: RcFile): boolean => {
+    return false; // Prevent automatic upload
+  };
 
   useEffect(() => {
     if (title === "update" && dataDetail) {
@@ -184,10 +256,10 @@ const DrawerProduct = (props: Props) => {
         flashDeal: dataDetail.flashDeal,
       });
 
-      if (dataDetail.images && setImagesPreview) {
-        const imagesURLs = dataDetail.images.map((image: any) => image.url);
-        setImagesPreview(imagesURLs);
-      }
+      // if (dataDetail.images && setImagesPreview) {
+      //   const imagesURLs = dataDetail.images.map((image: any) => image.url);
+      //   setImagesPreview(imagesURLs);
+      // }
     }
   }, [title, dataDetail, form, setImagesPreview]);
   const placeholderName = intl.formatMessage({ id: "Please enter name" });
@@ -357,9 +429,37 @@ const DrawerProduct = (props: Props) => {
               </Form.Item>
             </Col>
           </Row>
+          <Row gutter={16}>
+            <Col span={24}>
+              <Form.Item name="images" label={<TranslateTing text="Images" />}>
+                <Upload
+                  multiple
+                  listType="picture-card"
+                  fileList={fileList}
+                  onPreview={handlePreview}
+                  onChange={handleChange}
+                  beforeUpload={beforeUpload}
+                >
+                  {uploadButton}
+                </Upload>
+                {previewImage && (
+                  <Image
+                    wrapperStyle={{ display: "none" }}
+                    preview={{
+                      visible: previewOpen,
+                      onVisibleChange: (visible) => setPreviewOpen(visible),
+                      afterOpenChange: (visible) =>
+                        !visible && setPreviewImage(""),
+                    }}
+                    src={previewImage}
+                  />
+                )}
+              </Form.Item>
+            </Col>
+          </Row>
         </Form>
 
-        <div
+        {/* <div
           style={{
             display: "flex",
             flexDirection: "row",
@@ -386,9 +486,9 @@ const DrawerProduct = (props: Props) => {
                 />
               </div>
             ))}
-        </div>
+        </div> */}
 
-        <div style={{ marginTop: 30 }}>
+        {/* <div style={{ marginTop: 30 }}>
           <input
             type="file"
             name="images"
@@ -397,7 +497,7 @@ const DrawerProduct = (props: Props) => {
             onChange={createProductImagesChange}
             multiple
           />
-        </div>
+        </div> */}
       </Drawer>
     </div>
   );

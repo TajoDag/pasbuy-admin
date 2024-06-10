@@ -20,6 +20,9 @@ const Chats = (props: Props) => {
     currentChat,
     "6663d582b4788233da09fb70"
   );
+  const showUserChats =
+    userChats &&
+    userChats?.filter((chat: any) => chat._id !== "66672bfeb539c4644d49c876");
   return (
     <div className="chat-container">
       <div className="user-list">
@@ -27,7 +30,7 @@ const Chats = (props: Props) => {
         {userChats && userChats?.length < 1 ? null : (
           <div>
             {isUserChatsLoading && <p>Loading......</p>}
-            {userChats?.map((chat, index) => (
+            {showUserChats?.map((chat, index) => (
               <div key={index} onClick={() => updateCurrentChat(chat)}>
                 <UserChat
                   chat={chat}

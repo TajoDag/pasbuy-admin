@@ -84,6 +84,7 @@ import { unreadNotificationFunc } from "../../../utils/unreadNotifications";
 import { ChatContext } from "../../../context/ChatContext";
 import { useFetchLatestMessage } from "../../../hooks/useFetchLatestMessage";
 import DateTimeComponent from "../../../utils/DateTimeComponent";
+import TranslateTing from "../../../components/Common/TranslateTing";
 
 const UserChat = (props: any) => {
   const { chat, selectedUser, setSelectedUser, onlineUsers } = props;
@@ -118,7 +119,13 @@ const UserChat = (props: any) => {
     >
       <img src={avt} alt={recipientUser?.username} />
       <div className="user-info">
-        <div className="user-name">{recipientUser?.username}</div>
+        <div className="user-name">
+          {recipientUser?.username && recipientUser?.username ? (
+            recipientUser?.username
+          ) : (
+            <TranslateTing text="Account has been deleted" />
+          )}
+        </div>
         {thisUserNotifications?.length > 0 ? (
           <div className="last-message">
             <FiMessageSquare size={10} /> New

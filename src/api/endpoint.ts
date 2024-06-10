@@ -10,7 +10,8 @@ export const endpoints = {
     list: `admin/findAllUsers`,
     all: `admin/users`,
     getCustomers: `user/customers`,
-    detailUsers: `admin/user`
+    detailUsers: `admin/user`,
+    updatePassword: `password/update`,
   },
   product: {
     list: `admin/products/all`,

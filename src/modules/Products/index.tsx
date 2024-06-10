@@ -9,7 +9,7 @@ import {
   Tag,
   Tooltip,
 } from "antd";
-import type { TableProps } from "antd";
+import type { TableProps, UploadFile } from "antd";
 import { IProduct, IProductTable, ISearchProduct } from "./interfaces";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -32,6 +32,20 @@ import TranslateTing from "../../components/Common/TranslateTing";
 import { useCurrency } from "../../context/CurrencyContext";
 import { useIntl } from "react-intl";
 type Props = {};
+
+const urlToBase64 = (url: string): Promise<string> =>
+  fetch(url)
+    .then((response) => response.blob())
+    .then(
+      (blob) =>
+        new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result as string);
+          reader.onerror = reject;
+          reader.readAsDataURL(blob);
+        })
+    );
+
 const Products = (props: Props) => {
   const dispatch = useDispatch();
   const [form] = Form.useForm<any>();
@@ -53,6 +67,8 @@ const Products = (props: Props) => {
   const [images, setImages] = useState<any>([]);
   const [oldImages, setOldImages] = useState<any>([]);
   const [imagesPreview, setImagesPreview] = useState<any>([]);
+  const [base64List, setBase64List] = useState<string[]>([]);
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [refresh, refecth] = useRefresh();
   const intl = useIntl();
   const success = intl.formatMessage({
@@ -72,6 +88,8 @@ const Products = (props: Props) => {
     setOpen(false);
     setDataDetail({});
     setIdDataDetail("");
+    setBase64List([]);
+    setFileList([]);
   };
 
   const onUpdate = async (id: string) => {
@@ -82,6 +100,22 @@ const Products = (props: Props) => {
       const rp = await getProductDetail(id);
       if (rp.status) {
         setDataDetail(rp.result);
+        if (rp.result && rp.result.images) {
+          const imageUrls = rp.result.images.map((image: any) => ({
+            uid: image._id,
+            name: image.public_id,
+            status: "done",
+            url: image.url,
+          }));
+          setFileList(imageUrls);
+
+          const base64Strings = await Promise.all(
+            rp.result.images.map(async (image: any) => {
+              return await urlToBase64(image.url);
+            })
+          );
+          setBase64List(base64Strings);
+        }
         setOpen(true);
         setIdDataDetail(id);
       } else {
@@ -514,8 +548,7 @@ const Products = (props: Props) => {
     });
   };
   const handleAddProduct = async (values: any) => {
-    dispatch(startLoading());
-    if (images.length < 1) {
+    if (base64List.length < 1) {
       dispatch(
         showNotification({
           message: errorImage,
@@ -523,7 +556,8 @@ const Products = (props: Props) => {
         })
       );
     } else {
-      values.images = images;
+      values.images = base64List;
+      dispatch(startLoading());
       await createProduct(values)
         .then((res: any) => {
           if (res.status) {
@@ -551,8 +585,7 @@ const Products = (props: Props) => {
     }
   };
   const handleUpdateProduct = async (values: any) => {
-    dispatch(startLoading());
-    if (images.length < 1) {
+    if (base64List.length < 1) {
       dispatch(
         showNotification({
           message: errorImage,
@@ -560,7 +593,8 @@ const Products = (props: Props) => {
         })
       );
     } else {
-      values.images = images;
+      values.images = base64List;
+      dispatch(startLoading());
       await updateProduct(idDataDetail, values)
         .then((res: any) => {
           if (res.status) {
@@ -672,6 +706,10 @@ const Products = (props: Props) => {
         images={images}
         setImagesPreview={setImagesPreview}
         imagesPreview={imagesPreview}
+        base64List={base64List}
+        setBase64List={setBase64List}
+        fileList={fileList}
+        setFileList={setFileList}
         createProductImagesChange={createProductImagesChange}
         dataDetail={dataDetail && dataDetail}
       />

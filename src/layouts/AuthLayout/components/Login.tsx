@@ -51,7 +51,10 @@ const Login = () => {
         // dispatch(
         //   showNotification({ message: response.message, type: "success" })
         // );
-        if (response.result.user.role !== "admin") {
+        if (
+          response.result.user.role !== "admin" &&
+          response.result.user.role !== "Super Admin"
+        ) {
           dispatch(
             showNotification({
               message: placeholderError3,

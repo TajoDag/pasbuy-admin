@@ -119,7 +119,7 @@ const Withdraw = (props: Props) => {
       key: "customer",
       width: 200,
       align: "left",
-      render: (text) => <>{text.name}</>,
+      render: (text) => <>{text?.name}</>,
     },
     {
       title: <TranslateTing text="Amount" />,
@@ -155,19 +155,19 @@ const Withdraw = (props: Props) => {
             <div>
               <TranslateTing text="Bank:" />
               <span style={{ fontWeight: "bold" }}>
-                {record.customer.bankName}
+                {record?.customer.bankName}
               </span>
             </div>
             <div>
               <TranslateTing text="Bank number:" />{" "}
               <span style={{ fontWeight: "bold" }}>
-                {record.customer.bankNumber}
+                {record?.customer.bankNumber}
               </span>
             </div>
             <div>
               <TranslateTing text="Bank account:" />{" "}
               <span style={{ fontWeight: "bold" }}>
-                {record.customer.owner}
+                {record?.customer.owner}
               </span>
             </div>
           </div>
