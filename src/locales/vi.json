@@ -332,5 +332,6 @@
 "Change password": "Đổi mật khẩu",
 "Account has been deleted": "Tài khoản đã bị xóa",
 "Old Password":"Mật khẩu cũ",
-"New Password":"Mật khẩu mới"
+"New Password":"Mật khẩu mới",
+"Reset Password": "Cấp lại mật khẩu"
 }

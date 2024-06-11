@@ -13,6 +13,8 @@ import { useIntl } from "react-intl";
 import { UserSwitchOutlined } from "@ant-design/icons";
 import { MdDelete } from "react-icons/md";
 import UpdateUser from "./Modal/UpdateUser";
+import { RiLockPasswordLine } from "react-icons/ri";
+import ResetPassword from "./Modal/ResetPassword";
 
 type Props = {
   role?: string | null;
@@ -25,6 +27,7 @@ const Accounts = (props: Props) => {
   const [typeBtn, setTypeBtn] = useState<any>("");
   const [openDetail, setOpenDetail] = useState(false);
   const [openUpdate, setOpenUpdate] = useState(false);
+  const [openReset, setOpenReset] = useState(false);
   const [dataTableUser, setDataTableUser] = useState([]);
   const [searchParams, setSearchParams] = useState<any>({
     page: 0,
@@ -50,6 +53,7 @@ const Accounts = (props: Props) => {
   const [dataTable, setDataTable] = useState<any[]>([]);
   const [refresh, refecth] = useRefresh();
   const [dataUpdate, setDataUpdate] = useState<any>();
+  const [dataResetPassword, setDataResetPassword] = useState<any>();
   const onCloseModalDetail = () => {
     setOpenDetail(false);
     setDataDetail({});
@@ -59,6 +63,11 @@ const Accounts = (props: Props) => {
     setTypeBtn("");
     setDataUpdate({});
     setOpenUpdate(false);
+  };
+  const onCloseModalReset = () => {
+    setTypeBtn("");
+    setDataResetPassword({});
+    setOpenReset(false);
   };
   const onListCustomer = async (id: string) => {
     setTypeBtn("list");
@@ -83,6 +92,25 @@ const Accounts = (props: Props) => {
     } catch (err) {
       setOpenUpdate(false);
       setDataUpdate({});
+    } finally {
+      dispatch(stopLoading());
+    }
+  };
+
+  const resetPassword = async (id: string) => {
+    setTypeBtn("resetPassword");
+    try {
+      dispatch(startLoading());
+      const rp = await getDetailUser(id);
+      if (rp.status) {
+        setDataResetPassword(rp.result);
+        setOpenReset(true);
+      } else {
+        setOpenReset(false);
+      }
+    } catch (err) {
+      setOpenReset(false);
+      setDataResetPassword({});
     } finally {
       dispatch(stopLoading());
     }
@@ -207,7 +235,7 @@ const Accounts = (props: Props) => {
     {
       title: "",
       align: "center" as "center",
-      width: 110,
+      width: 140,
       render: (_: any, record: any, index: number) => {
         return (
           <Space size="middle">
@@ -224,6 +252,10 @@ const Accounts = (props: Props) => {
               onClick={() => {
                 getUpdateUser(record._id);
               }}
+            />
+            <Button
+              icon={<RiLockPasswordLine />}
+              onClick={() => resetPassword(record._id)}
             />
             <Button
               icon={<MdDelete />}
@@ -352,6 +384,14 @@ const Accounts = (props: Props) => {
         open={openUpdate}
         typeBtn={typeBtn}
         dataUpdate={dataUpdate}
+        width={"50%"}
+        refecth={refecth}
+      />
+      <ResetPassword
+        onClose={onCloseModalReset}
+        open={openReset}
+        typeBtn={typeBtn}
+        dataUpdate={dataResetPassword}
         width={"50%"}
         refecth={refecth}
       />
