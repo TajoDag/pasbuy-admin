@@ -453,11 +453,13 @@ export const ChatContext = createContext<ChatContextType>({
 interface ChatContextProviderProps {
   children: ReactNode;
   isLogin: boolean;
+  user: any;
 }
 
 export const ChatContextProvider: React.FC<ChatContextProviderProps> = ({
   children,
   isLogin,
+  user,
 }) => {
   const [userChats, setUserChats] = useState<Chat[] | null>(null);
   const [isUserChatsLoading, setIsUserChatsLoading] = useState<boolean>(false);
@@ -478,14 +480,27 @@ export const ChatContextProvider: React.FC<ChatContextProviderProps> = ({
   const notificationSound = new Audio(audio);
 
   //initial socket
-  useEffect(() => {
-    const newSocket = io(SOCKET_URL);
-    setSocket(newSocket);
+  // useEffect(() => {
+  //   const newSocket = io(SOCKET_URL);
+  //   setSocket(newSocket);
 
-    return () => {
-      newSocket.disconnect();
-    };
-  }, [isLogin]);
+  //   return () => {
+  //     newSocket.disconnect();
+  //   };
+  // }, [isLogin]);
+
+  useEffect(() => {
+    if ((user?._id, isLogin)) {
+      const newSocket = io(SOCKET_URL);
+      setSocket(newSocket);
+
+      newSocket.emit("addNewUser", { userId: user?._id, role: "admin" });
+
+      return () => {
+        newSocket.disconnect();
+      };
+    }
+  }, [user?._id, isLogin]);
 
   ///add online
   useEffect(() => {
@@ -501,14 +516,23 @@ export const ChatContextProvider: React.FC<ChatContextProviderProps> = ({
   }, [socket]);
 
   // send message
+  // useEffect(() => {
+  //   if (socket === null || !newMessage) return;
+  //   const recipient = currentChat?.members?.find(
+  //     (member: any) => member._id !== "6663d582b4788233da09fb70"
+  //   );
+  //   const recipientId = recipient?._id;
+  //   socket.emit("sendMessage", { ...newMessage, recipientId });
+  // }, [newMessage, currentChat, socket, "6663d582b4788233da09fb70"]);
+
   useEffect(() => {
     if (socket === null || !newMessage) return;
     const recipient = currentChat?.members?.find(
-      (member: any) => member._id !== "6663d582b4788233da09fb70"
+      (member: any) => member._id !== user?._id
     );
     const recipientId = recipient?._id;
-    socket.emit("sendMessage", { ...newMessage, recipientId });
-  }, [newMessage, currentChat, socket, "6663d582b4788233da09fb70"]);
+    socket.emit("sendMessage", { ...newMessage, recipientId, role: "admin" });
+  }, [newMessage, currentChat, socket, user?._id]);
 
   // receive message and notification
   useEffect(() => {

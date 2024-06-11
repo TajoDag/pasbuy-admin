@@ -18,7 +18,10 @@ const AppRoutes = () => {
   const isAuthenticated: IsAuthenticated = isAuthenticatedStr
     ? JSON.parse(isAuthenticatedStr)
     : null;
-
+    const userData = localStorage.getItem("userData");
+    const user: any = userData
+      ? JSON.parse(userData)
+      : null;
   const renderRoute = (route: any) => {
     if (route.isPrivate && isAuthenticated) {
       return route.element;
@@ -67,7 +70,7 @@ const AppRoutes = () => {
     <Suspense fallback={<h1>Loading....</h1>}>
       {notificationProps && <AppNotification {...notificationProps} />}
       {loading && <AppLoading />}
-      <ChatContextProvider isLogin={isAuthenticated}>
+      <ChatContextProvider isLogin={isAuthenticated} user={user}>
         <Routes>
           {isAuthenticated ? (
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
