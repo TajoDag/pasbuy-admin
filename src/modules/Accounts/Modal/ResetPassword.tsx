@@ -23,16 +23,16 @@ const ResetPassword = (props: any) => {
   const isAuthenticated: any = isAuthenticatedStr
     ? JSON.parse(isAuthenticatedStr)
     : null;
-    useEffect(() => {
-      if (isAuthenticated) {
-        const newSocket = io(SOCKET_URL);
-        setSocket(newSocket);
-  
-        return () => {
-          newSocket.disconnect();
-        };
-      }
-    }, [isAuthenticated]);
+  useEffect(() => {
+    if (isAuthenticated) {
+      const newSocket = io(SOCKET_URL);
+      setSocket(newSocket);
+
+      return () => {
+        newSocket.disconnect();
+      };
+    }
+  }, [isAuthenticated]);
   const onFinish = async (values: any) => {
     let payload = {
       userId: dataUpdate._id,
@@ -46,7 +46,9 @@ const ResetPassword = (props: any) => {
         onClose();
         form.resetFields();
         refecth();
-        socket.emit("forceLogout", { userId });
+        if (socket) {
+          socket.emit("forceLogout", { userId });
+        }
       }
     } catch (err) {
     } finally {
