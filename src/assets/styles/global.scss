@@ -133,3 +133,10 @@ $color_error: #f61d18;
 }
 
 //
+.image-preview img,
+.message-content-image img {
+  max-width: 100px; // Adjust this value as needed
+  max-height: 100px; // Adjust this value as needed
+  object-fit: cover;
+  border-radius: 8px; // Rounded corners
+}

@@ -101,7 +101,10 @@ const UserChat = (props: any) => {
   const thisUserNotifications = unreadNotifications?.filter(
     (n: any) => n.senderId === recipientUser?._id
   );
-
+  if (!recipientUser) {
+    // Không hiển thị tài khoản bị xóa hoặc gặp lỗi
+    return null;
+  }
   const handleUserItemClick = () => {
     if (thisUserNotifications?.length !== 0) {
       markThisUserNotificationsAsRead(thisUserNotifications, notifications);

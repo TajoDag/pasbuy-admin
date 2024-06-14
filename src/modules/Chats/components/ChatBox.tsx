@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { ChatContext } from "../../../context/ChatContext";
 import { useFetchRecipientUser } from "../../../hooks/useFetchRecipient";
 import DateTimeComponent from "../../../utils/DateTimeComponent";
+import { Image } from "antd";
 
 const ChatBox = (props: any) => {
   const { selectedUser, setSelectedUser } = props;
@@ -37,7 +38,15 @@ const ChatBox = (props: any) => {
                   : "recipient"
               }`}
             >
-              <div className="message-content">{message.text}</div>
+              <div className="message-content-image">
+                {message?.images?.url && (
+                  <Image src={message?.images.url} alt="Image" />
+                )}
+              </div>
+              {message.text && (
+                <div className="message-content">{message.text}</div>
+              )}
+
               <div className="message-timestamp">
                 <DateTimeComponent dateString={message.createdAt} />
               </div>
