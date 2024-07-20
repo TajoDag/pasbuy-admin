@@ -1,4 +1,3 @@
-
 // import React, { useContext, useEffect, useState, useRef } from "react";
 // import { useDispatch } from "react-redux";
 // import { useLocation } from "react-router-dom";
@@ -112,7 +111,7 @@
 //             type="text"
 //             placeholder="Search"
 //             value={searchTerm}
-//             onChange={(e) => setSearchTerm(e.target.value)} 
+//             onChange={(e) => setSearchTerm(e.target.value)}
 //           />
 //         </div>
 //         {isUserChatsLoading && <p>Loading......</p>}
@@ -206,8 +205,9 @@ const Chats: React.FC<Props> = () => {
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
 
-    if (location.pathname === "/cskh" && !hasTimeoutRun) {
+    if (location.pathname === "/chats" && !hasTimeoutRun) {
       dispatch(startLoading());
+      console.log("sss");
       timeoutId = setTimeout(() => {
         const sorted = sortChats(userChats || []);
         setSortedChats(sorted);
@@ -224,7 +224,7 @@ const Chats: React.FC<Props> = () => {
 
   // Đặt lại `hasTimeoutRun` khi rời khỏi trang `/cskh`
   useEffect(() => {
-    if (location.pathname !== "/cskh") {
+    if (location.pathname !== "/chats") {
       setHasTimeoutRun(false);
     }
   }, [location.pathname]);
@@ -261,6 +261,7 @@ const Chats: React.FC<Props> = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
+        
         {isUserChatsLoading && <p>Loading......</p>}
         {sortedChats.length === 0 ? (
           <p>No chats available</p>
