@@ -191,7 +191,7 @@ const ChatBox = (props: any) => {
         {isMessagesLoading && <p>Loading chat ...</p>}
         {!selectedUser && (
           <p style={{ textAlign: "center" }}>
-            Chưa có cuộc trò chuyện nào được chọn...
+            No chats available
           </p>
         )}
 
