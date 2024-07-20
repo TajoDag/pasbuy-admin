@@ -553,7 +553,7 @@ interface Chat {
   [key: string]: any;
 }
 
-interface Member {
+export interface Member {
   _id: string;
   username: string;
 }

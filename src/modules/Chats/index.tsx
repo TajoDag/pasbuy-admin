@@ -1,21 +1,22 @@
-// import React, { useContext, useEffect, useRef, useState } from "react";
 
+// import React, { useContext, useEffect, useState, useRef } from "react";
+// import { useDispatch } from "react-redux";
+// import { useLocation } from "react-router-dom";
+// import { FiSearch } from "react-icons/fi";
 // import { ChatContext } from "../../context/ChatContext";
-// import UserChat from "./components/UserChat";
 // import ChatBox from "./components/ChatBox";
 // import { useFetchRecipientUser } from "../../hooks/useFetchRecipient";
 // import { startLoading, stopLoading } from "../../redux/reducers/loadingReducer";
-// import { useDispatch } from "react-redux";
-// import { useLocation } from "react-router-dom";
+// import ChatList from "./ChatList";
 
 // type Props = {};
 
-// const Chats = (props: Props) => {
+// const Chats: React.FC<Props> = () => {
 //   const [selectedUser, setSelectedUser] = useState<string | null>(null);
 //   const [sortedChats, setSortedChats] = useState<any[]>([]);
 //   const [searchTerm, setSearchTerm] = useState<string>(""); // State để lưu từ khóa tìm kiếm
 //   const prevUserChatsRef = useRef<any>([]);
-//   const [hasTimeoutRun, setHasTimeoutRun] = useState<boolean>(false);
+//   const [hasTimeoutRun, setHasTimeoutRun] = useState<boolean>(false); // State để kiểm tra nếu timeout đã chạy
 //   const dispatch = useDispatch();
 //   const location = useLocation();
 //   const {
@@ -26,10 +27,13 @@
 //     onlineUsers,
 //     notifications,
 //   } = useContext(ChatContext);
+
 //   const { recipientUser } = useFetchRecipientUser(
 //     currentChat,
 //     "6663d582b4788233da09fb70"
 //   );
+
+//   // Hàm sắp xếp danh sách `userChats` dựa trên thời gian tin nhắn cuối cùng hoặc thông báo chưa đọc
 //   const sortChats = (chats: any[]) => {
 //     return [...chats].sort((a: any, b: any) => {
 //       const aLastMessageDate = new Date(a.lastMessageTime).getTime();
@@ -52,6 +56,7 @@
 //     });
 //   };
 
+//   // Cập nhật `sortedChats` khi `userChats` hoặc `notifications` thay đổi
 //   useEffect(() => {
 //     let timeoutId: NodeJS.Timeout;
 
@@ -71,11 +76,14 @@
 //     };
 //   }, [userChats, notifications, dispatch, location.pathname, hasTimeoutRun]);
 
+//   // Đặt lại `hasTimeoutRun` khi rời khỏi trang `/cskh`
 //   useEffect(() => {
-//     if (location.pathname !== "/chats") {
+//     if (location.pathname !== "/cskh") {
 //       setHasTimeoutRun(false);
 //     }
 //   }, [location.pathname]);
+
+//   // Lọc danh sách chats dựa trên từ khóa tìm kiếm
 //   useEffect(() => {
 //     if (searchTerm) {
 //       const filteredChats = sortChats(userChats || []).filter((chat) =>
@@ -94,72 +102,54 @@
 //     updateCurrentChat(chat);
 //     setSelectedUser(chat._id);
 //   };
+
 //   return (
 //     <div className="chat-container">
-//       <div className="user-list">
-//         {/* <input className="search-input" placeholder="Tìm kiếm người dùng..." /> */}
-//         <input
-//           type="text"
-//           placeholder="Search"
-//           value={searchTerm}
-//           onChange={(e) => setSearchTerm(e.target.value)}
-//         />
-//         {userChats && userChats?.length < 1 ? null : (
+//       <div className="chat-sidebar">
+//         <div className="search-bar">
+//           <FiSearch />
+//           <input
+//             type="text"
+//             placeholder="Search"
+//             value={searchTerm}
+//             onChange={(e) => setSearchTerm(e.target.value)} 
+//           />
+//         </div>
+//         {isUserChatsLoading && <p>Loading......</p>}
+//         {sortedChats.length === 0 ? (
+//           <p>No chats available</p>
+//         ) : (
 //           <div>
-//             {isUserChatsLoading && <p>Loading......</p>}
-//             {/* {showUserChats?.map((chat, index) => (
-//               <div key={index} onClick={() => updateCurrentChat(chat)}>
-//                 <UserChat
+//             {sortedChats.map((chat, index) => (
+//               <div key={index} onClick={() => handleChatClick(chat)}>
+//                 <ChatList
 //                   chat={chat}
+//                   onSelectChat={setSelectedUser}
 //                   selectedUser={selectedUser}
 //                   setSelectedUser={setSelectedUser}
 //                   onlineUsers={onlineUsers}
+//                   updateCurrentChat={updateCurrentChat}
 //                 />
 //               </div>
-//             ))} */}
-//             {sortedChats.length === 0 ? (
-//               <p>No chats available</p>
-//             ) : (
-//               <div>
-//                 {sortedChats.map((chat, index) => (
-//                   <div key={index} onClick={() => handleChatClick(chat)}>
-//                     <UserChat
-//                       chat={chat}
-//                       onSelectChat={setSelectedUser}
-//                       selectedUser={selectedUser}
-//                       setSelectedUser={setSelectedUser}
-//                       onlineUsers={onlineUsers}
-//                       updateCurrentChat={updateCurrentChat}
-//                     />
-//                   </div>
-//                 ))}
-//               </div>
-//             )}
+//             ))}
 //           </div>
 //         )}
 //       </div>
-//       <div className="chat-area">
-//         {selectedUser ? (
-//           <ChatBox
-//             selectedUser={selectedUser}
-//             onlineUsers={onlineUsers}
-//             recipientUser={recipientUser}
-//           />
-//         ) : (
-//           <div className="empty-state">No conversation selected yet...</div>
-//         )}
-//       </div>
+//       <ChatBox
+//         selectedUser={selectedUser}
+//         onlineUsers={onlineUsers}
+//         recipientUser={recipientUser}
+//       />
 //     </div>
 //   );
 // };
 
 // export default Chats;
-// export default Cskh;
 import React, { useContext, useEffect, useState, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { FiSearch } from "react-icons/fi";
-import { ChatContext } from "../../context/ChatContext";
+import { ChatContext, Member } from "../../context/ChatContext";
 import ChatBox from "./components/ChatBox";
 import { useFetchRecipientUser } from "../../hooks/useFetchRecipient";
 import { startLoading, stopLoading } from "../../redux/reducers/loadingReducer";
@@ -243,7 +233,7 @@ const Chats: React.FC<Props> = () => {
   useEffect(() => {
     if (searchTerm) {
       const filteredChats = sortChats(userChats || []).filter((chat) =>
-        chat.members.some((member) =>
+        chat.members.some((member: Member) =>
           member.username.toLowerCase().includes(searchTerm.toLowerCase())
         )
       );
@@ -268,7 +258,7 @@ const Chats: React.FC<Props> = () => {
             type="text"
             placeholder="Search"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)} 
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
         {isUserChatsLoading && <p>Loading......</p>}
