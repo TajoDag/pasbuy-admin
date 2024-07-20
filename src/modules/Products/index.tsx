@@ -393,7 +393,7 @@ const Products = (props: Props) => {
       key: "brand",
       width: 100,
       align: "center",
-      render: (text) => <>{text.name}</>,
+      render: (text) => <>{text?.name}</>,
     },
     {
       title: <TranslateTing text="Category" />,

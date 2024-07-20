@@ -76,7 +76,7 @@
 // };
 
 // export default UserChat;
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useFetchRecipientUser } from "../../../hooks/useFetchRecipient";
 import avt from "../../../assets/images/6596121.png";
 import { FiMessageSquare, FiClock } from "react-icons/fi";
@@ -85,17 +85,24 @@ import { ChatContext } from "../../../context/ChatContext";
 import { useFetchLatestMessage } from "../../../hooks/useFetchLatestMessage";
 import DateTimeComponent from "../../../utils/DateTimeComponent";
 import TranslateTing from "../../../components/Common/TranslateTing";
+import { detailChat, readChat } from "../../../api/utils/chat";
 
 const UserChat = (props: any) => {
-  const { chat, selectedUser, setSelectedUser, onlineUsers } = props;
+  const {   chat,
+    onSelectChat,
+    selectedUser,
+    setSelectedUser,
+    onlineUsers, } = props;
   const { notifications, markThisUserNotificationsAsRead, setIsChatOpen } =
     useContext(ChatContext);
 
-  const { latestMessage } = useFetchLatestMessage(chat);
+    const { latestMessage } = useFetchLatestMessage(chat);
   const { recipientUser } = useFetchRecipientUser(
     chat,
     "6663d582b4788233da09fb70"
   );
+
+  const [isReadReload, setIsReadReload] = useState<boolean>(true);
 
   const unreadNotifications = unreadNotificationFunc(notifications);
   const thisUserNotifications = unreadNotifications?.filter(
@@ -105,18 +112,52 @@ const UserChat = (props: any) => {
     // Không hiển thị tài khoản bị xóa hoặc gặp lỗi
     return null;
   }
-  const handleUserItemClick = () => {
+  useEffect(() => {
+    if (chat._id) {
+      const getChat = async () => {
+        try {
+          const rp = await detailChat(chat._id);
+          setIsReadReload(rp.result.isRead);
+        } catch (e) {}
+      };
+      getChat();
+    }
+  }, [chat._id]);
+
+  const handleUserItemClick = async () => {
     if (thisUserNotifications?.length !== 0) {
       markThisUserNotificationsAsRead(thisUserNotifications, notifications);
     }
     setSelectedUser(recipientUser?.username);
     setIsChatOpen(false); // Mark chat as closed when user item is clicked
+
+    try {
+      const rp = await readChat(chat._id);
+      if (rp.status) {
+        setIsReadReload(true);
+      }
+    } catch (e) {
+      console.error("Failed to mark chat as read:", e);
+    }
   };
+
+  if (!recipientUser) {
+    // Không hiển thị tài khoản bị xóa hoặc gặp lỗi
+    return null;
+  }
+
+  // const handleUserItemClick = () => {
+  //   if (thisUserNotifications?.length !== 0) {
+  //     markThisUserNotificationsAsRead(thisUserNotifications, notifications);
+  //   }
+  //   setSelectedUser(recipientUser?.username);
+  //   setIsChatOpen(false); // Mark chat as closed when user item is clicked
+  // };
 
   return (
     <div
       className={`user-item ${
-        selectedUser === recipientUser?.username ? "selected" : ""
+        selectedUser === recipientUser._id ? "selected" : ""
       }`}
       onClick={handleUserItemClick}
     >
@@ -129,7 +170,7 @@ const UserChat = (props: any) => {
             <TranslateTing text="Account has been deleted" />
           )}
         </div>
-        {thisUserNotifications?.length > 0 ? (
+        {thisUserNotifications?.length > 0 || !isReadReload ? (
           <div className="last-message">
             <FiMessageSquare size={10} /> New
           </div>

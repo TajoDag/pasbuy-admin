@@ -152,6 +152,21 @@ export const Addnew = (props: IProps) => {
                       </div>
                     )}
                 </Col>
+                <Col xs={24} sm={12} lg={8} xl={24}>
+                  <b>
+                    {" "}
+                    <TranslateTing text="Link Image" />
+                  </b>
+                  <Field name="img">
+                    {({ field }: any) => <Input {...field} />}
+                  </Field>
+                  {propsFormik.touched.img &&
+                    propsFormik.errors.img && (
+                      <div style={{ color: "red", fontStyle: "italic" }}>
+                        {String(propsFormik.errors.img)}
+                      </div>
+                    )}
+                </Col>
                 <Col
                   xs={24}
                   sm={12}

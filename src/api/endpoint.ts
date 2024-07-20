@@ -88,6 +88,8 @@ export const endpoints = {
     getUserChat: "chat/user",
     findUserInChat: "chat/search",
     getMessageUserChat: "chat",
-    createMessage: `chat/createMessage`
+    createMessage: `chat/createMessage`,
+    readMessage: `chat/read`,
+    detailChat: `chat/detail`,
   }
 };

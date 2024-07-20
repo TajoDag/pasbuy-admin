@@ -58,39 +58,26 @@ const MainLayout = (props: any) => {
   const { updateCurrentChat, setUserChats } = useContext(ChatContext);
   const location = useLocation();
   const [openChangePassword, setOpenChangePassword] = useState(false);
-  const defaultL = {
-    _id: "66672bfeb539c4644d49c876",
-    members: [
-      {
-        _id: "66672bf219a44b9c0f219741",
-        username: "botchat2",
-      },
-      {
-        _id: "6663d582b4788233da09fb70",
-        username: "botchat",
-      },
-    ],
-    createdAt: "2024-06-10T16:38:22.203+00:00",
-    updatedAt: "2024-06-10T16:38:22.203+00:00",
-  };
-  useEffect(() => {
-    if (location.pathname !== "/chats") {
-      updateCurrentChat(defaultL);
-    }
-    // const getUserChats = async () => {
-    //   if (convertDtUser && convertDtUser) {
-    //     try {
-    //       const response = await getUserChat("6663d582b4788233da09fb70");
-    //       if (response.status) {
-    //         setUserChats(response.result);
-    //       }
-    //     } catch (e: any) {
-    //     } finally {
-    //     }
-    //   }
-    // };
-    // getUserChats();
-  }, [location.pathname]);
+  // const defaultL = {
+  //   _id: "66672bfeb539c4644d49c876",
+  //   members: [
+  //     {
+  //       _id: "66672bf219a44b9c0f219741",
+  //       username: "botchat2",
+  //     },
+  //     {
+  //       _id: "6663d582b4788233da09fb70",
+  //       username: "botchat",
+  //     },
+  //   ],
+  //   createdAt: "2024-06-10T16:38:22.203+00:00",
+  //   updatedAt: "2024-06-10T16:38:22.203+00:00",
+  // };
+  // useEffect(() => {
+  //   if (location.pathname !== "/chats") {
+  //     updateCurrentChat(defaultL);
+  //   }
+  // }, [location.pathname]);
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();

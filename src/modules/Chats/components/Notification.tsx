@@ -10,9 +10,6 @@ const Notification = (props: any) => {
   const { notifications, userChats, allUsers } = useContext(ChatContext);
 
   const unreadNotifications = unreadNotificationFunc(notifications);
-  // const thisUserNotifications = unreadNotifications?.filter(
-  //   (n: any) => n.senderId === recipientUser?._id
-  // );
   const modifiedNotifications = notifications.map((n: any) => {
     const sender = allUsers.find((user: any) => user._id === n.senderId);
 
@@ -40,12 +37,6 @@ const Notification = (props: any) => {
           ></div>
         )}
       </div>
-
-      {/* <div className="notifications-box">
-        <div className="notifications-header">
-          <h3>Notifications</h3>
-        </div>
-      </div> */}
     </div>
   );
 };
