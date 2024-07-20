@@ -167,7 +167,7 @@ import ChatList from "./ChatList";
 
 type Props = {};
 
-const Cskh: React.FC<Props> = () => {
+const Chats: React.FC<Props> = () => {
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
   const [sortedChats, setSortedChats] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>(""); // State để lưu từ khóa tìm kiếm
@@ -300,4 +300,4 @@ const Cskh: React.FC<Props> = () => {
   );
 };
 
-export default Cskh;
+export default Chats;

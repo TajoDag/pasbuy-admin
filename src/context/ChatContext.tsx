@@ -548,8 +548,8 @@ import { getListUserAll } from "../modules/Accounts/api";
 
 interface Chat {
   _id: string;
-  members: Member[]; // Ensure this field exists
-  lastMessageTime: string;
+  members: Member[];
+  lastMessageTime: string; 
   [key: string]: any;
 }
 
@@ -714,7 +714,7 @@ export const ChatContextProvider: React.FC<ChatContextProviderProps> = ({
     const recipient = currentChat?.members?.find(
       (member: Member) => member._id !== user?._id
     );
-    const recipientId: any = recipient?._id;
+    const recipientId: string = recipient?._id || "";
     socket.emit("sendMessage", {
       ...newMessage,
       recipientId,
