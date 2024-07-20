@@ -12,52 +12,61 @@
 //   getMessageUserChat,
 //   getUserChat,
 // } from "../api/utils/chat";
-// import { getListUserAll } from "../modules/Accounts/api";
 // import { io } from "socket.io-client";
 // import audio from "../assets/sound-bet.mp3";
 // import { SOCKET_URL } from "../api/endpoint";
+// import { getListUserAll } from "../modules/Accounts/api";
 
-// // Define types for User and Chat
 // interface Chat {
 //   _id: string;
 //   members: string[];
-//   [key: string]: any; // Use this if the chat object can have other properties
+//   lastMessageTime: string; // Ensure this field exists
+//   [key: string]: any;
 // }
 
-// // Define the context type
+// interface Notification {
+//   chatId: string;
+//   isRead: boolean;
+//   senderId: string;
+//   [key: string]: any;
+// }
+
 // interface ChatContextType {
 //   userChats: Chat[] | null;
 //   isUserChatsLoading: boolean;
 //   userChatsError: string | null;
-//   potentialChats: [];
+//   potentialChats: Chat[];
 //   createChat: (firstId: string, secondId: string) => Promise<void>;
-//   updateCurrentChat: (chat: any) => Promise<void>;
-//   currentChat: any;
-//   messages: any;
+//   updateCurrentChat: (chat: Chat) => Promise<void>;
+//   currentChat: Chat | null;
+//   messages: any[];
 //   isMessagesLoading: boolean;
 //   messageError: string | null;
-//   sendTextMessageError: null;
-//   newMessage: null;
+//   sendTextMessageError: string | null;
+//   newMessage: any | null;
 //   sendTextMessage: (
-//     textMessage: any,
-//     senderId: any,
-//     currentChatId: any,
-//     setTextMessage: any
+//     textMessage: string,
+//     senderId: string,
+//     currentChatId: string,
+//     setTextMessage: React.Dispatch<React.SetStateAction<string>>
 //   ) => Promise<void>;
-//   onlineUsers: any;
-//   notifications: any;
-//   markNotificationsAsRead: (n: any, userChats: any, notifications: any) => void;
+//   onlineUsers: any[];
+//   notifications: Notification[];
+//   markNotificationsAsRead: (
+//     n: Notification,
+//     userChats: Chat[],
+//     notifications: Notification[]
+//   ) => void;
 //   markThisUserNotificationsAsRead: (
-//     thisUserNotifications: any,
-//     notifications: any
+//     thisUserNotifications: Notification[],
+//     notifications: Notification[]
 //   ) => void;
 //   setIsChatOpen: (isOpen: boolean) => void;
 //   isChatOpen: boolean;
-//   setUserChats: any;
-//   allUsers: any;
+//   setUserChats: React.Dispatch<React.SetStateAction<Chat[] | null>>;
+//   allUsers: any[];
 // }
 
-// // Create the context with a default value
 // export const ChatContext = createContext<ChatContextType>({
 //   userChats: null,
 //   isUserChatsLoading: false,
@@ -66,19 +75,19 @@
 //   createChat: async () => {},
 //   updateCurrentChat: async () => {},
 //   currentChat: null,
-//   messages: null,
+//   messages: [],
 //   isMessagesLoading: false,
 //   messageError: null,
 //   sendTextMessageError: null,
 //   newMessage: null,
 //   sendTextMessage: async () => {},
-//   onlineUsers: null,
+//   onlineUsers: [],
 //   notifications: [],
 //   markNotificationsAsRead: () => {},
 //   markThisUserNotificationsAsRead: () => {},
 //   setIsChatOpen: () => {},
 //   isChatOpen: false,
-//   setUserChats: null,
+//   setUserChats: () => {},
 //   allUsers: [],
 // });
 
@@ -96,45 +105,78 @@
 //   const [userChats, setUserChats] = useState<Chat[] | null>(null);
 //   const [isUserChatsLoading, setIsUserChatsLoading] = useState<boolean>(false);
 //   const [userChatsError, setUserChatsError] = useState<string | null>(null);
-//   const [potentialChats, setPotentialChats] = useState<any>([]);
-//   const [currentChat, setCurrentChat] = useState<any>(null);
-//   const [messages, setMessages] = useState<any>(null);
-//   const [isMessagesLoading, setIsMessagesLoading] = useState(false);
-//   const [messageError, setMessageError] = useState<any>(null);
-//   const [sendTextMessageError, setSendTextMessageError] = useState<any>(null);
-//   const [newMessage, setNewMessage] = useState<any>(null);
-//   const [socket, setSocket] = useState<any>(null);
-//   const [onlineUsers, setOnlineUsers] = useState<any>(null);
-//   const [notifications, setNotifications] = useState<any>([]);
+//   const [potentialChats, setPotentialChats] = useState<Chat[]>([]);
+//   const [currentChat, setCurrentChat] = useState<Chat | null>(null);
+//   const [messages, setMessages] = useState<any[]>([]);
+//   const [isMessagesLoading, setIsMessagesLoading] = useState<boolean>(false);
+//   const [messageError, setMessageError] = useState<string | null>(null);
+//   const [sendTextMessageError, setSendTextMessageError] = useState<
+//     string | null
+//   >(null);
+//   const [newMessage, setNewMessage] = useState<any | null>(null);
+//   const [socket, setSocket] = useState<any | null>(null);
+//   const [onlineUsers, setOnlineUsers] = useState<any[]>([]);
+//   const [notifications, setNotifications] = useState<Notification[]>([]);
 //   const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
-//   const [allUsers, setAllUsers] = useState<any>([]);
+//   const [allUsers, setAllUsers] = useState<any[]>([]);
 
 //   const notificationSound = new Audio(audio);
 
-//   //initial socket
-//   // useEffect(() => {
-//   //   const newSocket = io(SOCKET_URL);
-//   //   setSocket(newSocket);
+//   // const sortChats = (chats: Chat[]) => {
+//   //   return [...chats].sort((a, b) => {
+//   //     const aLastMessageDate = new Date(a.lastMessageTime).getTime();
+//   //     const bLastMessageDate = new Date(b.lastMessageTime).getTime();
 
-//   //   return () => {
-//   //     newSocket.disconnect();
-//   //   };
-//   // }, [isLogin]);
+//   //     const aHasUnreadNotification = notifications.some(
+//   //       (n) => n.chatId === a._id && !n.isRead
+//   //     );
+//   //     const bHasUnreadNotification = notifications.some(
+//   //       (n) => n.chatId === b._id && !n.isRead
+//   //     );
+
+//   //     if (aHasUnreadNotification && !bHasUnreadNotification) return -1;
+//   //     if (!aHasUnreadNotification && bHasUnreadNotification) return 1;
+
+//   //     return bLastMessageDate - aLastMessageDate;
+//   //   });
+//   // };
+
+//   const sortChats = (chats: Chat[]) => {
+//     return [...chats].sort((a, b) => {
+//       const aLastMessageDate = new Date(a.lastMessageTime).getTime();
+//       const bLastMessageDate = new Date(b.lastMessageTime).getTime();
+
+//       const aHasUnreadNotification = notifications.some(
+//         (n) => n.chatId === a._id && !n.isRead
+//       );
+//       const bHasUnreadNotification = notifications.some(
+//         (n) => n.chatId === b._id && !n.isRead
+//       );
+
+//       if (aHasUnreadNotification && !bHasUnreadNotification) return -1;
+//       if (!aHasUnreadNotification && bHasUnreadNotification) return 1;
+
+//       return bLastMessageDate - aLastMessageDate;
+//     });
+//   };
 
 //   useEffect(() => {
 //     if ((user?._id, isLogin)) {
 //       const newSocket = io(SOCKET_URL);
 //       setSocket(newSocket);
 
-//       newSocket.emit("addNewUser", { userId: user?._id, role: "admin" });
+//       newSocket.emit("addNewUser", {
+//         userId: user?._id,
+//         role: "Quản trị viên",
+//       });
 
+//       console.log("Socket connected");
 //       return () => {
 //         newSocket.disconnect();
 //       };
 //     }
 //   }, [user?._id, isLogin]);
 
-//   ///add online
 //   useEffect(() => {
 //     if (socket === null) return;
 //     socket.emit("addNewUser", "6663d582b4788233da09fb70");
@@ -147,35 +189,37 @@
 //     };
 //   }, [socket]);
 
-//   // send message
-//   // useEffect(() => {
-//   //   if (socket === null || !newMessage) return;
-//   //   const recipient = currentChat?.members?.find(
-//   //     (member: any) => member._id !== "6663d582b4788233da09fb70"
-//   //   );
-//   //   const recipientId = recipient?._id;
-//   //   socket.emit("sendMessage", { ...newMessage, recipientId });
-//   // }, [newMessage, currentChat, socket, "6663d582b4788233da09fb70"]);
-
 //   useEffect(() => {
 //     if (socket === null || !newMessage) return;
 //     const recipient = currentChat?.members?.find(
 //       (member: any) => member._id !== user?._id
 //     );
-//     const recipientId = recipient?._id;
-//     socket.emit("sendMessage", { ...newMessage, recipientId, role: "admin" });
+//     const recipientId: any = recipient?._id;
+//     socket.emit("sendMessage", {
+//       ...newMessage,
+//       recipientId,
+//       role: "Quản trị viên",
+//     });
 //   }, [newMessage, currentChat, socket, user?._id]);
 
-//   // receive message and notification
 //   useEffect(() => {
 //     if (socket === null) return;
 
 //     socket.on("getMessage", (res: any) => {
 //       if (currentChat?._id === res.chatId) {
-//         setMessages((prev: any) => [...prev, res]);
+//         setMessages((prev) => [...prev, res]);
 //       } else {
-//         // Add a notification if the chat is not open
-//         setNotifications((prev: any) => [res, ...prev]);
+//         setNotifications((prev) => [res, ...prev]);
+//         setUserChats((prevChats) => {
+//           const updatedChats =
+//             prevChats?.map((chat) => {
+//               if (chat._id === res.chatId) {
+//                 chat.lastMessageTime = res.createdAt;
+//               }
+//               return chat;
+//             }) || [];
+//           return sortChats(updatedChats);
+//         });
 //         if (!isChatOpen) {
 //           notificationSound.play();
 //         }
@@ -188,10 +232,10 @@
 //       );
 
 //       if (isChatOpen) {
-//         setNotifications((prev: any) => [{ ...res, isRead: true }, ...prev]);
+//         setNotifications((prev) => [{ ...res, isRead: true }, ...prev]);
 //         notificationSound.play();
 //       } else {
-//         setNotifications((prev: any) => [{ ...res, isRead: false }, ...prev]);
+//         setNotifications((prev) => [{ ...res, isRead: false }, ...prev]);
 //         notificationSound.play();
 //       }
 //     });
@@ -214,7 +258,7 @@
 //               if (u?._id === "6663d582b4788233da09fb70") return false;
 
 //               if (userChats) {
-//                 isChatCreated = userChats?.some((chat) => {
+//                 isChatCreated = userChats?.some((chat: Chat) => {
 //                   return chat?.members?.includes(u?._id);
 //                 });
 //               }
@@ -253,7 +297,6 @@
 //     getUserChats();
 //   }, ["6663d582b4788233da09fb70", isLogin]);
 
-//   // messages
 //   useEffect(() => {
 //     const getMessages = async () => {
 //       if (isLogin) {
@@ -266,7 +309,7 @@
 //             setMessageError(response.message);
 //           }
 //         } catch (e: any) {
-//           // setMessageError(e.message);
+//           setMessageError(e.message);
 //         } finally {
 //           setIsMessagesLoading(false);
 //         }
@@ -275,40 +318,127 @@
 //     getMessages();
 //   }, [currentChat, isLogin, "6663d582b4788233da09fb70"]);
 
+//   // const sendTextMessage = useCallback(
+//   //   async (
+//   //     textMessage: string,
+//   //     senderId: string,
+//   //     currentChatId: string,
+//   //     setTextMessage: any,
+//   //     setKey: any,
+//   //     image: any,
+//   //     setImage: any,
+//   //     setPreview: any,
+//   //     setSelectedFile: any
+//   //   ) => {
+//   //     let payload: any = {
+//   //       chatId: currentChatId,
+//   //       senderId: senderId,
+//   //       // text: textMessage,
+//   //     };
+
+//   //     if (textMessage && textMessage !== "") {
+//   //       payload.text = textMessage;
+//   //     }
+
+//   //     if (image) {
+//   //       payload.image = image;
+//   //     }
+//   //     try {
+//   //       setKey(true);
+//   //       const response = await createMessageUserChat(payload);
+//   //       if (response.status) {
+//   //         setNewMessage(response.result);
+//   //         setMessages((prev) => [...prev, response.result]);
+//   //         setTextMessage("");
+//   //         setKey(false);
+//   //         setImage(null);
+//   //         setPreview(null);
+//   //         setSelectedFile(null);
+//   //         setUserChats((prevChats) => {
+//   //           const updatedChats =
+//   //             prevChats?.map((chat) => {
+//   //               if (chat._id === response.result.chatId) {
+//   //                 chat.lastMessageTime = response.result.createdAt;
+//   //               }
+//   //               return chat;
+//   //             }) || [];
+//   //           return sortChats(updatedChats);
+//   //         });
+//   //       } else {
+//   //         setSendTextMessageError(response.message);
+//   //       }
+//   //     } catch (e: any) {
+//   //       setSendTextMessageError(e.message);
+//   //     } finally {
+//   //       setKey(false);
+//   //     }
+//   //   },
+//   //   []
+//   // );
+
 //   const sendTextMessage = useCallback(
 //     async (
-//       textMessage: any,
-//       senderId: any,
-//       currentChatId: any,
-//       setTextMessage: any
+//       textMessage: string,
+//       senderId: string,
+//       currentChatId: string,
+//       setTextMessage: any,
+//       setKey: any,
+//       image: any,
+//       setImage: any,
+//       setPreview: any,
+//       setSelectedFile: any
 //     ) => {
-//       let payload = {
+//       let payload: any = {
 //         chatId: currentChatId,
 //         senderId: senderId,
-//         text: textMessage,
 //       };
+
+//       if (textMessage && textMessage !== "") {
+//         payload.text = textMessage;
+//       }
+
+//       if (image) {
+//         payload.image = image;
+//       }
 //       try {
+//         setKey(true);
 //         const response = await createMessageUserChat(payload);
 //         if (response.status) {
 //           setNewMessage(response.result);
-//           setMessages((prev: any) => [...prev, response.result]);
+//           setMessages((prev) => [...prev, response.result]);
 //           setTextMessage("");
+//           setKey(false);
+//           setImage(null);
+//           setPreview(null);
+//           setSelectedFile(null);
+
+//           setUserChats((prevChats) => {
+//             const updatedChats =
+//               prevChats?.map((chat) => {
+//                 if (chat._id === response.result.chatId) {
+//                   chat.lastMessageTime = response.result.createdAt;
+//                 }
+//                 return chat;
+//               }) || [];
+//             return sortChats(updatedChats);
+//           });
 //         } else {
 //           setSendTextMessageError(response.message);
 //         }
 //       } catch (e: any) {
+//         setSendTextMessageError(e.message);
 //       } finally {
+//         setKey(false);
 //       }
 //     },
 //     []
 //   );
 
-//   const updateCurrentChat = useCallback(async (chat: any) => {
+//   const updateCurrentChat = useCallback(async (chat: Chat) => {
 //     setCurrentChat(chat);
-//     setIsChatOpen(true); // Set chat open state to true when chat is updated
+//     setIsChatOpen(true);
 //   }, []);
 
-//   // Tạo cuộc trò chuyện mới
 //   const createChat = useCallback(async (firstId: string, secondId: string) => {
 //     let payload = {
 //       firstId: firstId,
@@ -320,41 +450,39 @@
 //         setUserChats((prev: any) => [...prev, response.result]);
 //       }
 //     } catch (e: any) {
-//     } finally {
+//       console.error(e.message);
 //     }
 //   }, []);
 
 //   const markNotificationsAsRead = useCallback(
-//     (n: any, userChats: any, notifications: any) => {
-//       // FIND CHAT TO OPEN
-//       const desiredChat = userChats.find((chat: any) => {
+//     (n: Notification, userChats: Chat[], notifications: Notification[]) => {
+//       const desiredChat = userChats.find((chat) => {
 //         const chatMembers = ["6663d582b4788233da09fb70", n.senderId];
-//         const isDesiredChat = chat?.members.every((member: any) => {
+//         const isDesiredChat = chat?.members.every((member) => {
 //           return chatMembers.includes(member);
 //         });
 
 //         return isDesiredChat;
 //       });
 
-//       //mark notification add read
-//       const mNotifications = notifications.map((el: any) => {
+//       const mNotifications = notifications.map((el) => {
 //         if (n.senderId === el.senderId) {
 //           return { ...n, isRead: true };
 //         } else {
 //           return el;
 //         }
 //       });
-//       updateCurrentChat(desiredChat);
+//       updateCurrentChat(desiredChat as Chat);
 //       setNotifications(mNotifications);
 //     },
 //     []
 //   );
 
 //   const markThisUserNotificationsAsRead = useCallback(
-//     (thisUserNotifications: any, notifications: any) => {
-//       const mNotifications = notifications.map((el: any) => {
+//     (thisUserNotifications: Notification[], notifications: Notification[]) => {
+//       const mNotifications: any = notifications.map((el: any) => {
 //         let notification;
-//         thisUserNotifications.forEach((n: any) => {
+//         thisUserNotifications.forEach((n) => {
 //           if (n.senderId === el.senderId) {
 //             notification = { ...n, isRead: true };
 //           } else {
@@ -369,6 +497,7 @@
 //     },
 //     []
 //   );
+
 //   return (
 //     <ChatContext.Provider
 //       value={{
@@ -419,9 +548,14 @@ import { getListUserAll } from "../modules/Accounts/api";
 
 interface Chat {
   _id: string;
-  members: string[];
-  lastMessageTime: string; // Ensure this field exists
+  members: Member[]; // Ensure this field exists
+  lastMessageTime: string;
   [key: string]: any;
+}
+
+interface Member {
+  _id: string;
+  username: string;
 }
 
 interface Notification {
@@ -448,7 +582,12 @@ interface ChatContextType {
     textMessage: string,
     senderId: string,
     currentChatId: string,
-    setTextMessage: React.Dispatch<React.SetStateAction<string>>
+    setTextMessage: React.Dispatch<React.SetStateAction<string>>,
+    setKey?: any,
+    image?: any,
+    setImage?: any,
+    setPreview?: any,
+    setSelectedFile?: any
   ) => Promise<void>;
   onlineUsers: any[];
   notifications: Notification[];
@@ -522,25 +661,6 @@ export const ChatContextProvider: React.FC<ChatContextProviderProps> = ({
 
   const notificationSound = new Audio(audio);
 
-  // const sortChats = (chats: Chat[]) => {
-  //   return [...chats].sort((a, b) => {
-  //     const aLastMessageDate = new Date(a.lastMessageTime).getTime();
-  //     const bLastMessageDate = new Date(b.lastMessageTime).getTime();
-
-  //     const aHasUnreadNotification = notifications.some(
-  //       (n) => n.chatId === a._id && !n.isRead
-  //     );
-  //     const bHasUnreadNotification = notifications.some(
-  //       (n) => n.chatId === b._id && !n.isRead
-  //     );
-
-  //     if (aHasUnreadNotification && !bHasUnreadNotification) return -1;
-  //     if (!aHasUnreadNotification && bHasUnreadNotification) return 1;
-
-  //     return bLastMessageDate - aLastMessageDate;
-  //   });
-  // };
-
   const sortChats = (chats: Chat[]) => {
     return [...chats].sort((a, b) => {
       const aLastMessageDate = new Date(a.lastMessageTime).getTime();
@@ -592,7 +712,7 @@ export const ChatContextProvider: React.FC<ChatContextProviderProps> = ({
   useEffect(() => {
     if (socket === null || !newMessage) return;
     const recipient = currentChat?.members?.find(
-      (member: any) => member._id !== user?._id
+      (member: Member) => member._id !== user?._id
     );
     const recipientId: any = recipient?._id;
     socket.emit("sendMessage", {
@@ -628,7 +748,7 @@ export const ChatContextProvider: React.FC<ChatContextProviderProps> = ({
 
     socket.on("getNotification", (res: any) => {
       const isChatOpen = currentChat?.members?.some(
-        (member: any) => member?._id === res.senderId
+        (member: Member) => member?._id === res.senderId
       );
 
       if (isChatOpen) {
@@ -659,7 +779,9 @@ export const ChatContextProvider: React.FC<ChatContextProviderProps> = ({
 
               if (userChats) {
                 isChatCreated = userChats?.some((chat: Chat) => {
-                  return chat?.members?.includes(u?._id);
+                  return chat?.members?.some(
+                    (member) => member._id === u._id
+                  );
                 });
               }
 
@@ -718,75 +840,17 @@ export const ChatContextProvider: React.FC<ChatContextProviderProps> = ({
     getMessages();
   }, [currentChat, isLogin, "6663d582b4788233da09fb70"]);
 
-  // const sendTextMessage = useCallback(
-  //   async (
-  //     textMessage: string,
-  //     senderId: string,
-  //     currentChatId: string,
-  //     setTextMessage: any,
-  //     setKey: any,
-  //     image: any,
-  //     setImage: any,
-  //     setPreview: any,
-  //     setSelectedFile: any
-  //   ) => {
-  //     let payload: any = {
-  //       chatId: currentChatId,
-  //       senderId: senderId,
-  //       // text: textMessage,
-  //     };
-
-  //     if (textMessage && textMessage !== "") {
-  //       payload.text = textMessage;
-  //     }
-
-  //     if (image) {
-  //       payload.image = image;
-  //     }
-  //     try {
-  //       setKey(true);
-  //       const response = await createMessageUserChat(payload);
-  //       if (response.status) {
-  //         setNewMessage(response.result);
-  //         setMessages((prev) => [...prev, response.result]);
-  //         setTextMessage("");
-  //         setKey(false);
-  //         setImage(null);
-  //         setPreview(null);
-  //         setSelectedFile(null);
-  //         setUserChats((prevChats) => {
-  //           const updatedChats =
-  //             prevChats?.map((chat) => {
-  //               if (chat._id === response.result.chatId) {
-  //                 chat.lastMessageTime = response.result.createdAt;
-  //               }
-  //               return chat;
-  //             }) || [];
-  //           return sortChats(updatedChats);
-  //         });
-  //       } else {
-  //         setSendTextMessageError(response.message);
-  //       }
-  //     } catch (e: any) {
-  //       setSendTextMessageError(e.message);
-  //     } finally {
-  //       setKey(false);
-  //     }
-  //   },
-  //   []
-  // );
-
   const sendTextMessage = useCallback(
     async (
       textMessage: string,
       senderId: string,
       currentChatId: string,
       setTextMessage: any,
-      setKey: any,
-      image: any,
-      setImage: any,
-      setPreview: any,
-      setSelectedFile: any
+      setKey?: any,
+      image?: any,
+      setImage?: any,
+      setPreview?: any,
+      setSelectedFile?: any
     ) => {
       let payload: any = {
         chatId: currentChatId,
@@ -801,16 +865,16 @@ export const ChatContextProvider: React.FC<ChatContextProviderProps> = ({
         payload.image = image;
       }
       try {
-        setKey(true);
+        setKey && setKey(true);
         const response = await createMessageUserChat(payload);
         if (response.status) {
           setNewMessage(response.result);
           setMessages((prev) => [...prev, response.result]);
           setTextMessage("");
-          setKey(false);
-          setImage(null);
-          setPreview(null);
-          setSelectedFile(null);
+          setKey && setKey(false);
+          setImage && setImage(null);
+          setPreview && setPreview(null);
+          setSelectedFile && setSelectedFile(null);
 
           setUserChats((prevChats) => {
             const updatedChats =
@@ -828,7 +892,7 @@ export const ChatContextProvider: React.FC<ChatContextProviderProps> = ({
       } catch (e: any) {
         setSendTextMessageError(e.message);
       } finally {
-        setKey(false);
+        setKey && setKey(false);
       }
     },
     []
@@ -859,7 +923,7 @@ export const ChatContextProvider: React.FC<ChatContextProviderProps> = ({
       const desiredChat = userChats.find((chat) => {
         const chatMembers = ["6663d582b4788233da09fb70", n.senderId];
         const isDesiredChat = chat?.members.every((member) => {
-          return chatMembers.includes(member);
+          return chatMembers.includes(member._id);
         });
 
         return isDesiredChat;
